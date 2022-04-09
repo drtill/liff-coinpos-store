@@ -13,7 +13,18 @@ import FeatureCategory from '@component/category/FeatureCategory';
 
 import UserServices from '@services/UserServices';
 
-const Details = ({ products, liffEndpoint }) => {
+const Details = ({params,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,
+    groupIdData, liffOrderId, liffCompanyId,liffLocationId,countPage,currentPage,
+    products,salesOrder, orderDetails,categories,shippingServices,bankNameAndAccounts,
+    currencySign, companyName, locationName,companyLogo,
+    customerFirstName,customerLastName,customerEmail, customerPhoneNumber,
+    address1,countryId,provinceId,cityId,districtId,postalcode,
+    countrys,provinces,cities,districts,
+    promotions,
+    locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode,
+    locationEmail,locationTel,
+    companyFacebook,companyLine
+    }) => {
   const [value, set] = useSessionstorage('products', products);
 
   return (
@@ -123,7 +134,7 @@ const Details = ({ products, liffEndpoint }) => {
 
 export const getServerSideProps = async ({req, res,params }) => {
   //const products = await ProductServices.getShowingProducts();
-  const provinces = await ProductServices.fetchGetStateProvince();
+  //const provinces = await ProductServices.fetchGetStateProvince();
 
   var dataParam = params.id;
     var coinPOSLiffData = req.url.replace('/','');
@@ -282,12 +293,101 @@ export const getServerSideProps = async ({req, res,params }) => {
   //const popularProducts = products.filter((p) => p.discount === 0);
   //const discountProducts = products.filter((p) => p.discount >= 5);
 
+  var promotions = [];
+  promotions = products.promotions;
+  var shippingServices = products.shippingServices;
+  var bankNameAndAccounts = products.bankNameAndAccounts;
+  var countPage = products.countPage;
+  var currentPage = products.currentPage;
+  var currencySign = products.currencySign;
+  var customerFirstName = products.firstName;
+  var customerLastName = products.lastName;
+  var customerEmail = products.email;
+  var customerPhoneNumber = products.mobile;
+
+  var address1 = products.address1;
+  var countryId = products.countryId;
+  var provinceId = products.provinceId;
+  var cityId = products.cityId;
+  var districtId = products.districtId;
+  var postalcode = products.postalcode;
+  var countrys = products.countrys;
+  var provinces = products.provinces;
+  var cities = products.cities;
+  var districts = products.districts;
+
+  var companyLogo = products.companyLogoUrl;
+
+  var locationAddress1 = products.locationAddress1;
+  var locationAddress2 = products.locationAddress2;
+  var locationCity = products.locationCity;
+  var locationStateOrProvince = products.locationStateOrProvince;
+  var locationCountry = products.locationCountry;
+  var locationPostalCode = products.locationPostalCode;
+  var locationEmail = products.locationEmail;
+  var locationTel = products.locationTel;
+
+  var companyFacebook = products.companyFacebook;
+  var companyLine = products.companyLine;
+
+
+  companyName = products.companyName;
+  locationName = products.locationName;
+
   return {
     props: {
-      products: products,
-      //popularProducts: popularProducts.slice(0, 50),
-      //discountProducts: discountProducts,
-      liffEndpoint:liffEndpoint,
+        params: dataParam,
+        dataPath:dataPath,
+        title:title,
+        description:description,
+        liffEndpoint:liffEndpoint,
+        liffData:liffData,
+        linePOSIdData:linePOSId,
+        groupIdData:groupId,
+        liffOrderId:liffOrderId,
+        liffCompanyId:liffCompanyId,
+        liffLocationId:liffLocationId,
+        countPage:countPage,
+        currentPage:currentPage,
+        //products: productVariants,
+        //salesOrder:orderData,
+        //orderDetails:orderDetailDatas,
+        shippingServices:shippingServices,
+        bankNameAndAccounts:bankNameAndAccounts,
+        currencySign:currencySign,
+        companyName:companyName,
+        companyLogo:companyLogo,
+        companyFacebook:companyFacebook,
+        companyLine:companyLine,
+
+        locationName:locationName,
+        //categories:productCategories,
+        customerFirstName:customerFirstName,
+        customerLastName:customerLastName,
+        customerEmail:customerEmail,
+        customerPhoneNumber:customerPhoneNumber,
+
+        address1:address1,
+        countryId:countryId,
+        provinceId:provinceId,
+        cityId:cityId,
+        districtId:districtId,
+        postalcode:postalcode,
+        countrys:countrys,
+        provinces:provinces,
+        cities:cities,
+        districts:districts,
+
+        promotions:promotions,
+
+        locationAddress1:locationAddress1,
+        locationAddress2:locationAddress2,
+        locationCity:locationCity,
+        locationStateOrProvince:locationStateOrProvince,
+        locationCountry:locationCountry,
+        locationPostalCode:locationPostalCode,
+        locationEmail:locationEmail,
+        locationTel:locationTel
     },
     
   };
