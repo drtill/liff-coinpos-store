@@ -120,6 +120,7 @@ const Details = ({ products, popularProducts, discountProducts }) => {
 
 export const getServerSideProps = async ({req, res,params }) => {
   const products = await ProductServices.getShowingProducts();
+  const countrys = await ProductServices.getStateProvince();
 
   const popularProducts = products.filter((p) => p.discount === 0);
   const discountProducts = products.filter((p) => p.discount >= 5);
