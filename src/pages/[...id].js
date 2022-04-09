@@ -1,6 +1,15 @@
-import useSessionstorage from '@rooks/use-sessionstorage';
+import { useContext,useEffect, useState } from 'react';
+import { useCart} from 'react-use-cart';
+import { useRouter } from 'next/router'
 
-//internal import
+import Cookies from 'js-cookie';
+
+import UserServices from '@services/UserServices';
+import OrderServices from '@services/OrderServices';
+
+import Link from 'next/link';
+import Image from 'next/image';
+
 import Layout from '@layout/Layout';
 import Banner from '@component/banner/Banner';
 import CardTwo from '@component/cta-card/CardTwo';
@@ -11,7 +20,15 @@ import ProductCard from '@component/product/ProductCard';
 import MainCarousel from '@component/carousel/MainCarousel';
 import FeatureCategory from '@component/category/FeatureCategory';
 
-import UserServices from '@services/UserServices';
+import useCheckoutSubmit from '@hooks/useCheckoutSubmit';
+import { UserContext } from '@context/UserContext';
+
+import Loading from '@component/preloader/Loading';
+
+import useLoginSubmit from '@hooks/useLoginSubmit';
+
+const isLiffLogin = true;//process.env.NEXT_PUBLIC_ISLOGIN
+var itemPerPage = 30;
 
 const Details = ({params,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,
     groupIdData, liffOrderId, liffCompanyId,liffLocationId,countPage,currentPage,
@@ -25,7 +42,818 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
     locationEmail,locationTel,
     companyFacebook,companyLine
     }) => {
-  const [value, set] = useSessionstorage('products', products);
+        const {
+            couponInfo,
+            couponRef,
+            setCouponData,
+            clearCouponData,
+            discountAmount,
+            
+          } = useCheckoutSubmit();
+      
+          const router = useRouter();
+      
+          const [liffId, setLiffId] = useState(liffData);
+          const [linePOSId, setLinePOSId] = useState(linePOSIdData);
+          const [groupId, setGroupId] = useState(groupIdData);
+          const [companyId, setCompanyId] = useState(liffCompanyId);
+          const [locationId, setLocationId] = useState(liffLocationId);
+          const [orderId, setOrderId] = useState(liffOrderId);
+      
+          const [loading, setLoading] = useState(true);
+      
+          const [categoryLoading, setCategoryLoading] = useState(true);
+          const [newProductLoading, setNewProductLoading] = useState(true);
+      
+          const [promotionLoading, setPromotionLoading] = useState(false);
+      
+          //this.setState({liffId:liffData});
+          const [productList, setProductList] = useState([]);
+          const [newProductList, setNewProductList] = useState([]);
+          const [categoryList, setCategoryList] = useState([]);
+          const [lineProfileImage, setProfileImage] = useState('');
+          const [lineUserId, setLineUserId] = useState('');
+          const [lineUsername, setLineUsername] = useState('');
+          const [pagingIndent, setPaging] = useState([]);
+          const [companyNameData, setCompanyName] = useState(companyName);
+      
+          const [companyFacebookData, setCompanyFacebook] = useState(companyFacebook);
+          const [companyLineData, setCompanyLine] = useState(companyLine);
+      
+          const [locationNameData, setLocationName] = useState(locationName);
+          const [locationAddress1Data, setLocationAddress1] = useState(locationAddress1);
+          const [locationAddress2Data, setLocationAddress2] = useState(locationAddress2);
+          const [locationCityData, setLocationCity] = useState(locationCity);
+          const [locationStateOrProvinceData, setLocationStateOrProvince] = useState(locationStateOrProvince);
+          const [locationCountryData, setLocationCountry] = useState(locationCountry);
+          const [locationPostalCodeData, setLocationPostalCode] = useState(locationPostalCode);
+          const [locationEmailData, setLocationEmail] = useState(locationEmail);
+          const [locationTelData, setLocationTel] = useState(locationTel);
+      
+          const [discountDataDetails,setDiscountDetail] = useState('');
+          const [promotionCode,setPromotionCode] = useState('');
+      
+          const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
+          const {dispatch} = useContext(UserContext);
+      
+          const { handleSubmit, submitHandler, register, errors } =
+          useLoginSubmit();
+          
+          useEffect(async () => {
+            //alert("companyName = " + companyNameData)
+      
+            //var getPromotionCode = localStorage.getItem('promotionCode')
+      
+            //alert("getPromotionCode = " + getPromotionCode);
+            setPromotionLoading(true);
+      
+      
+            sessionStorage.setItem('dataPath',dataPath);
+            sessionStorage.setItem('companyLogo',companyLogo);
+            sessionStorage.setItem('companyName',companyNameData);
+      
+            sessionStorage.setItem('companyFacebook',companyFacebookData);
+            sessionStorage.setItem('companyLine',companyLineData);
+      
+      
+            sessionStorage.setItem('locationName',locationNameData);
+            sessionStorage.setItem('locationAddress1',locationAddress1Data);
+            sessionStorage.setItem('locationAddress2',locationAddress2Data);
+            sessionStorage.setItem('locationCity',locationCityData);
+            sessionStorage.setItem('locationStateOrProvince',locationStateOrProvinceData);
+            sessionStorage.setItem('locationCountry',locationCountryData);
+            sessionStorage.setItem('locationPostalCode',locationPostalCodeData);
+            sessionStorage.setItem('locationEmail',locationEmailData);
+            sessionStorage.setItem('locationTel',locationTelData);
+      
+      
+      
+      
+            sessionStorage.setItem('title', title);
+            sessionStorage.setItem('description', description);
+      
+      
+            sessionStorage.setItem('shippings', JSON.stringify(shippingServices));
+            sessionStorage.setItem('bankNameAndAccounts', JSON.stringify(bankNameAndAccounts));
+            sessionStorage.setItem('categories', JSON.stringify(categories));
+            sessionStorage.setItem('currencySign', currencySign);
+            sessionStorage.setItem('linePOSId', linePOSIdData);
+            sessionStorage.setItem('liffId', liffData);
+            
+            sessionStorage.setItem('groupId', groupIdData);
+            sessionStorage.setItem('companyId', liffCompanyId);
+            sessionStorage.setItem('locationId', liffLocationId);
+            sessionStorage.setItem('orderId', liffOrderId);
+      
+            sessionStorage.setItem('customerFirstName', customerFirstName);
+            sessionStorage.setItem('customerLastName', customerLastName);
+            sessionStorage.setItem('customerEmail', customerEmail);
+            sessionStorage.setItem('customerPhoneNumber', customerPhoneNumber);
+      
+            sessionStorage.setItem('address1', address1);
+            sessionStorage.setItem('countryId', countryId);
+            sessionStorage.setItem('provinceId', provinceId);
+            sessionStorage.setItem('cityId', cityId);
+            sessionStorage.setItem('districtId', districtId);
+            sessionStorage.setItem('postalcode', postalcode);
+      
+            //alert(JSON.stringify(countrys))
+            sessionStorage.setItem('countrys', 'JSON.stringify(countrys)');
+            sessionStorage.setItem('countrysJSON', JSON.stringify(countrys));
+            sessionStorage.setItem('provinces', JSON.stringify(provinces));
+            sessionStorage.setItem('cities', JSON.stringify(cities));
+            sessionStorage.setItem('districts', JSON.stringify(districts));
+      
+      
+            var lineLiffUserId = '';
+            
+            if(isLiffLogin === true)
+            {
+              if(liffData.length === 0)
+              {
+                //alert("Liff Data is not found.");
+                router.push('/404');
+              }
+              const liff = (await import('@line/liff')).default
+              try {
+                await liff.init({ liffId:liffData });
+              } catch (error) {
+                console.error('liff init error', error.message)
+              }
+              if (!liff.isLoggedIn()) {
+                //alert("Will Login")
+                var url = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+                //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
+                //alert(url);
+                liff.login({ redirectUri: url});
+              }
+              else
+              {
+                //alert("Logined")
+                let getProfile = await liff.getProfile();
+      
+                //alert("GetProfile")
+                lineUsername = getProfile.displayName;
+                
+                
+                lineLiffUserId = getProfile.userId;
+                
+                lineProfileImage = getProfile.pictureUrl;
+                //alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
+                setLineUsername(lineUsername);
+                setLineUserId(lineLiffUserId);
+                setProfileImage(lineProfileImage);
+      
+                sessionStorage.setItem('lineUsername', lineUsername);
+                sessionStorage.setItem('lineUserId', lineLiffUserId);
+                sessionStorage.setItem('lineProfileImage', lineProfileImage);
+      
+                var dataUser = {};
+                dataUser['image'] = lineProfileImage;
+                dataUser['name'] = lineUsername;
+      
+                //orderData['_id']
+                //Cookies.set('lineUserName', lineUsername);
+                Cookies.set('userInfo', JSON.stringify(dataUser));
+                sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
+                localStorage.setItem('userInfo', JSON.stringify(dataUser));
+                dispatch({ type: 'USER_LOGIN', payload: dataUser });
+                //Cookies.set('lineUserId', lineUserId);
+                //Cookies.set('lineProfileImage', lineProfileImage);
+                var data = {};
+      
+                var liffId = liffData;
+                var lineUserId = lineLiffUserId;
+                var linePOSId = linePOSIdData;
+                if(liffId.length > 0 &&  lineUserId.length > 0)
+                {
+                  data["liffId"] = liffId;
+                  data["lineUserId"] = lineUserId;
+                  data["linePOSId"] = linePOSId;
+                  var companyId = Number(liffCompanyId);
+                  var paramPath = dataPath;
+                
+                  data["companyId"] = companyId;
+                  data["paramPath"] = paramPath;
+      
+                
+                
+      
+                  submitHandler(data)
+        
+                }
+              }
+            }
+            else
+            {
+              //alert("None")
+              //Cookies.set('lineUserName', "drtill007");
+              //Cookies.set('lineUserId', "Ucc91941c54b99372c3c37dbfce7e3a51");
+              //Cookies.set('lineProfileImage', "https://profile.line-scdn.net/0hijMbw1BrNkVwGx1VWnFJEkxeOCgHNTANCC97Il1OPHVYLXZGG3V_dlBObXQJLnERGXx4J1wYOnZZ");
+            }
+        
+            //alert("Liff Init = " + lineUserId);
+            var orderId = liffOrderId;
+            var companyId = liffCompanyId;
+            var locationId = liffLocationId;
+            var companyName = '';
+            var locationName = '';
+            var lineUserId = lineLiffUserId;
+            try
+            {
+              //alert("Get Order");
+              const salesOrder = await ProductServices.fetchGetCoinPOSOrder({
+                  liffId,
+                  lineUserId,
+                  linePOSId,
+                  groupId,
+                  orderId,
+                  companyId,locationId,
+                  companyName,
+                  locationName
+                });
+          
+                //alert("Get SaleOrder");
+                //alert(JSON.stringify(salesOrder));
+                if(salesOrder.orderStatusId !== 1)
+                {
+                  alert("Goto Order")
+                  router.push('/order/' + salesOrder.orderId);
+      
+                  return ;
+                }
+                
+          
+                sessionStorage.setItem('customerTypeId',salesOrder.customerTypeId);
+      
+                var salesOrderDetails = salesOrder.orderDetails;
+      
+                var promotionCode = salesOrder.promotionCode;
+                
+                const productDs = [];
+                const discountDetails = [];
+      
+                for(var i = 0;i<salesOrderDetails.length;i++)
+                {
+                  var detail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    slug:salesOrderDetails[i].productId,
+                    name: salesOrderDetails[i].upc,
+                    title:salesOrderDetails[i].productVariantName,
+                    sku: salesOrderDetails[i].sku,
+                    quantity:salesOrderDetails[i].quantity,
+                    price: salesOrderDetails[i].productVariantPrice,
+                    image:salesOrderDetails[i].imageUrl,
+                    //key.push(orderDetails[i].upc)
+                  }
+                  var discountDetail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    discount:Number(salesOrderDetails[i].discount),
+                    discountRate:Number(salesOrderDetails[i].discountRate)
+                  }
+                  //alert("add");
+                  productDs.push(detail);
+                  discountDetails.push(discountDetail);
+                }
+                //alert("Set Cart")
+                setItems(productDs);
+                if(promotionCode !== undefined && promotionCode !== null)
+                {
+                  //alert("Set Promo")
+                  sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
+                  sessionStorage.setItem('promotionCode', promotionCode);
+                  SetPromotionData(promotionCode,'',0,discountDetails[0].discountRate, true);
+                  setDiscountDetail(JSON.stringify(discountDetails))
+                }
+                
+      
+                //alert("Get Product")
+                await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
+                //setProductList([]);
+                //alert("Set Product")
+                //pagingManager();
+                //setProductList(products);
+      
+                setPromotionLoading(false);
+                setCategoryLoading(false);
+                setNewProductLoading(false);
+                setLoading(false);
+      
+            }
+            catch (err) 
+            {
+              alert(err.message);
+            }
+            
+      
+            
+          }, [])
+      
+          
+      
+          const GetProductData = async(liffId,
+            lineUserId,
+            linePOSId,
+            groupId,
+            orderId,
+            companyId,
+            locationId,
+            companyName,
+            locationName,
+            companyCode,
+            catalogName,
+            promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
+          {
+            //alert('locationId = ' + locationId);
+            const products = await ProductServices.fetchGetCoinPOSProductService({
+              liffId,
+              lineUserId,
+              linePOSId,
+              groupId,
+              orderId,
+              companyId,
+              locationId,
+              companyName,
+              locationName,
+              companyCode,
+              catalogName,
+              promotionId,customerTypeId,page,itemPerPage,query,category,product
+            });
+      
+            currentPage = products.currentPage;
+            countPage = products.countPage;
+      
+            var productVariants = [];//products.productVariantPresenters;
+            var productCategories = [];
+      
+            var newProductVariants = [];
+      
+            if(products.productVariantPresenters !== null)
+            {
+              for(var i = 0;i < products.productVariantPresenters.length; i++)
+              {
+                var productItem = {};
+                productItem['_id'] = Number(products.productVariantPresenters[i].ProductVariantId);
+                productItem['title'] = products.productVariantPresenters[i].Name;
+                productItem['quantity'] = products.productVariantPresenters[i].StockLevel;
+                productItem['image'] = products.productVariantPresenters[i].ImageUrl;
+                productItem['unit'] = products.productVariantPresenters[i].UPC;
+                productItem['slug'] = products.productVariantPresenters[i].UPC;
+                productItem['tag'] = products.productVariantPresenters[i].ProductId;
+                productItem['originalPrice'] = products.productVariantPresenters[i].Price;
+                productItem['price'] = products.productVariantPresenters[i].Price;
+                productItem['type'] = 'W';
+                productItem['sku'] = products.productVariantPresenters[i].SKU;
+                productItem['discount'] = 0;
+                productItem['description'] = products.productVariantPresenters[i].Description;
+                productItem['currencySign'] = products.currencySign;
+              
+      
+      
+                productVariants.push(productItem);
+              }
+            }
+      
+            if(products.newProductVariantPresenters !== null)
+            {
+              for(var i = 0;i < products.newProductVariantPresenters.length; i++)
+              {
+                var productItem = {};
+                productItem['_id'] = Number(products.newProductVariantPresenters[i].ProductVariantId);
+                productItem['title'] = products.newProductVariantPresenters[i].Name;
+                productItem['quantity'] = products.newProductVariantPresenters[i].StockLevel;
+                productItem['image'] = products.newProductVariantPresenters[i].ImageUrl;
+                productItem['unit'] = products.newProductVariantPresenters[i].UPC;
+                productItem['slug'] = products.newProductVariantPresenters[i].UPC;
+                productItem['tag'] = products.newProductVariantPresenters[i].ProductId;
+                productItem['originalPrice'] = products.newProductVariantPresenters[i].Price;
+                productItem['price'] = products.newProductVariantPresenters[i].Price;
+                productItem['type'] = 'W';
+                productItem['sku'] = products.newProductVariantPresenters[i].SKU;
+                productItem['discount'] = 0;
+                productItem['description'] = products.newProductVariantPresenters[i].Description;
+                productItem['currencySign'] = products.currencySign;
+              
+      
+      
+                newProductVariants.push(productItem);
+              }
+            }
+        
+      
+            if(products.productCategoryPresenters !== null)
+            {
+              for(var j = 0;j < products.productCategoryPresenters.length; j++)
+              {
+      
+              
+                var nests = [];
+                for(var k = 0;k < products.productCategoryPresenters[j].Products.length; k++)
+                {
+                  var children = {};
+                  children['_id'] = Number(products.productCategoryPresenters[j].Products[k].ProductId);
+                  children['title'] = products.productCategoryPresenters[j].Products[k].Name;
+                  nests.push(children);
+                }
+                
+      
+                
+                var productCategory = {};
+                productCategory['_id'] = Number(products.productCategoryPresenters[j].CategoryId);
+                productCategory['parent'] = products.productCategoryPresenters[j].Name;
+                productCategory['icon'] = products.productCategoryPresenters[j].ImageUrl;
+                productCategory['children'] = nests;
+      
+                productCategories.push(productCategory);
+      
+      
+              }
+            }
+            var orderData = {};
+            var orderDetailDatas = [];
+            if(products.orderDetails !== null)
+            {
+              for(var i = 0;i < products.orderDetails.length; i++)
+              {
+                var orderDetailItem = {};
+                orderDetailItem['_id'] = products.orderDetails[i].orderDetailId;
+                orderDetailItem['upc'] = products.orderDetails[i].upc;
+                orderDetailItem['orderId'] = products.orderDetails[i].orderId;
+                orderDetailItem['productVariantId'] = products.orderDetails[i].productVariantId;
+                orderDetailItem['productVariantName'] = products.orderDetails[i].productVariantName;
+                orderDetailItem['sku'] = products.orderDetails[i].sku;
+                orderDetailItem['productVariantPrice'] = products.orderDetails[i].productVariantPrice;
+                orderDetailItem['locationId'] = products.orderDetails[i].locationId;
+                orderDetailItem['discount'] = products.orderDetails[i].discount;
+                orderDetailItem['quantity'] = products.orderDetails[i].quantity;
+                orderDetailItem['imageUrl'] = products.orderDetails[i].imageUrl;
+                orderDetailItem['lineOrder'] = products.orderDetails[i].lineOrder;
+      
+                orderDetailDatas.push(orderDetailItem);
+      
+              }
+            }
+      
+            //alert(JSON.stringify("category Data = " + productCategories))
+            sessionStorage.setItem('categories', JSON.stringify(productCategories));
+      
+            //alert("pagingManager")
+            pagingManager();
+            //alert("setCategoryList")
+            setCategoryList(productCategories);
+            //alert("setProductList")
+            setProductList(productVariants);
+            setNewProductList(newProductVariants);
+            //alert("End")
+          
+      
+      }
+      
+      const CancelPromotionCode = async(promotionCode) =>
+      {
+        setPromotionLoading(true);
+        var orderId = liffOrderId;
+            var companyId = liffCompanyId;
+            var locationId = liffLocationId;
+            var qrPromotion = promotionCode;
+            var pictureUrl = '';
+            var orderDetails = []
+      
+            for(var i = 0; i<items.length;i++)
+            {
+              var itemData = items[i];
+              var orderDetail = {
+                VariantId:itemData.id,
+                Quantity:itemData.quantity,
+                ProductVariantLabel:itemData.title,
+                UnitPrice:itemData.price
+              };
+               
+              orderDetails.push(orderDetail);
+            }
+            const promotionJson = await ProductServices.fetchCancelPromotionCode({
+              companyId,
+              locationId,
+              orderId,
+              qrPromotion,
+              lineUserId,
+              linePOSId,
+              liffId,
+              pictureUrl,
+              catalogName:'',
+              orderDetails:JSON.stringify(orderDetails)
+            });
+            var promotion = JSON.parse(promotionJson);
+            var salesOrderDetails = promotion.orderDetails;
+      
+                const productDs = [];
+                const discountDetails = [];
+                
+                for(var i = 0;i<salesOrderDetails.length;i++)
+                {
+                  var detail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    slug:salesOrderDetails[i].productId,
+                    name: salesOrderDetails[i].upc,
+                    title:salesOrderDetails[i].productVariantName,
+                    sku: salesOrderDetails[i].sku,
+                    quantity:salesOrderDetails[i].quantity,
+                    price: salesOrderDetails[i].productVariantPrice,
+                    image:salesOrderDetails[i].imageUrl,
+                  }
+                  var discountDetail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    discount:Number(salesOrderDetails[i].discount),
+                    discountRate:Number(salesOrderDetails[i].discountRate)
+                  }
+                  productDs.push(detail);
+                  discountDetails.push(discountDetail);
+                }
+            //alert("Apply Promotion2 = " + promotionCode + " " + lineUserId);
+            
+            setItems(productDs);
+                sessionStorage.removeItem('discountDetails')
+                sessionStorage.removeItem('discountRate');
+                sessionStorage.removeItem('promotionCode');
+                sessionStorage.removeItem('promotionMinimumAmount');
+                sessionStorage.removeItem('promotionProductIdList');
+                sessionStorage.removeItem('isForAllProduct');
+      
+                setPromotionCode(undefined);
+      
+                localStorage.removeItem('discountDetails');
+                localStorage.removeItem('discountRate');
+                localStorage.removeItem('promotionCode');
+                localStorage.removeItem('promotionMinimumAmount');
+                localStorage.removeItem('promotionProductIdList');
+                localStorage.removeItem('isForAllProduct');
+      
+                setDiscountDetail(undefined)
+      
+                clearCouponData();
+      
+                setPromotionLoading(false);
+      
+                SetPromotionData(promotionCode,promotion.endTime,promotion.minimumAmount,promotion.discountRate,false);
+      }
+          const ApplyPromotionCode = async(promotionCode,discountPercentage, isForAllProduct, minimumAmount, productIdList) =>
+          {
+            //return;
+            setPromotionLoading(true);
+            var orderId = liffOrderId;
+            var companyId = liffCompanyId;
+            var locationId = liffLocationId;
+            var qrPromotion = promotionCode;
+            var pictureUrl = '';
+            var orderDetails = []
+      
+            for(var i = 0; i<items.length;i++)
+            {
+              var itemData = items[i];
+              var orderDetail = {
+                VariantId:itemData.id,
+                Quantity:itemData.quantity,
+                ProductVariantLabel:itemData.title,
+                UnitPrice:itemData.price
+              };
+               
+              orderDetails.push(orderDetail);
+            }
+            const promotionJson = await ProductServices.fetchApplyPromotionCode({
+              companyId,
+              locationId,
+              orderId,
+              qrPromotion,
+              lineUserId,
+              linePOSId,
+              liffId,
+              pictureUrl,
+              catalogName:'',
+              orderDetails:JSON.stringify(orderDetails)
+            });
+            var promotion = JSON.parse(promotionJson);
+            var salesOrderDetails = promotion.orderDetails;
+      
+            //alert("promotion = " + JSON.stringify(promotion));
+            //alert("SalesOrderDetails = " + JSON.stringify(salesOrderDetails));
+                const productDs = [];
+                const discountDetails = [];
+                
+                for(var i = 0;i<salesOrderDetails.length;i++)
+                {
+                  var detail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    slug:salesOrderDetails[i].productId,
+                    name: salesOrderDetails[i].upc,
+                    title:salesOrderDetails[i].productVariantName,
+                    sku: salesOrderDetails[i].sku,
+                    quantity:salesOrderDetails[i].quantity,
+                    price: salesOrderDetails[i].productVariantPrice,
+                    image:salesOrderDetails[i].imageUrl,
+                  }
+                  var discountDetail = {
+                    id: Number(salesOrderDetails[i].productVariantId),
+                    discount:Number(salesOrderDetails[i].discount),
+                    discountRate:Number(salesOrderDetails[i].discountRate)
+                  }
+                  productDs.push(detail);
+                  discountDetails.push(discountDetail);
+                }
+            //alert("Apply Promotion2 = " + promotionCode + " " + lineUserId);
+            //alert(productIdList);
+            setItems(productDs);
+                sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
+                sessionStorage.setItem('discountRate', (discountPercentage/100));
+                sessionStorage.setItem('promotionCode', promotionCode);
+                sessionStorage.setItem('promotionMinimumAmount', minimumAmount);
+                sessionStorage.setItem('promotionProductIdList', JSON.stringify(productIdList));
+                sessionStorage.setItem('isForAllProduct', isForAllProduct);
+      
+                setPromotionCode(promotionCode);
+      
+                localStorage.setItem('discountDetails',JSON.stringify(discountDetails));
+                localStorage.setItem('discountRate', (discountPercentage/100));
+                localStorage.setItem('promotionCode', promotionCode);
+                localStorage.setItem('promotionMinimumAmount', minimumAmount);
+                localStorage.setItem('promotionProductIdList', JSON.stringify(productIdList));
+                localStorage.setItem('isForAllProduct', isForAllProduct);
+      
+                setDiscountDetail(JSON.stringify(discountDetails))
+                setPromotionLoading(false);
+          }
+      
+          const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,promotionDiscountRate, isAuto) =>
+            {
+              var couponData = [];
+              
+              var couponDetail = {
+                couponCode:promotionCode,
+                endTime:promotionEndTime,
+                minimumAmount:promotionMinimumAmount,
+                discountPercentage:promotionDiscountRate,
+            
+              };
+              couponData.push(couponDetail);
+                      
+              sessionStorage.setItem('couponInfo', JSON.stringify(couponData));
+              setCouponData(promotionCode, couponData, isAuto);
+            }
+          const SearchProduct = async (searchText) => 
+          {
+            //alert("Searching = " + searchText);
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,searchText)
+          }
+          const FilterCategory = async (categoty) => 
+          {
+            //alert("categoty = " + categoty);
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',categoty)
+          }
+          const FilterProduct = async (category,product) => 
+          {
+            //alert("product = " + product);
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',category,product)
+          }
+          const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,locationId,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
+          {
+            setLoading(true);
+            //alert("Refresh");
+            query = query === undefined ? 'null' : query;
+            category = category === undefined ? 'null' : category;
+            product = product === undefined ? 'null' : product;
+            const products = await ProductServices.fetchRefreshCoinPOSProductService({
+              liffId,
+              lineUserId,
+              linePOSId,
+              groupId,
+              orderId,
+              companyId,
+              companyCode:"",
+              locationId,
+              companyName,
+              locationName,
+              catalogName:"",
+              promotionId,customerTypeId,page,itemPerPage,query,category,product
+            });
+      
+            //alert(products);
+            currentPage = products.currentPage;
+            countPage = products.countPage;
+            
+            var productVariants = [];//products.productVariantPresenters;
+            for(var i = 0;i < products.productVariantPresenters.length; i++)
+            {
+              var productItem = {};
+              productItem['_id'] = Number(products.productVariantPresenters[i].ProductVariantId);
+              productItem['title'] = products.productVariantPresenters[i].Name;
+              productItem['quantity'] = products.productVariantPresenters[i].StockLevelDisplay;
+              productItem['image'] = products.productVariantPresenters[i].ImageUrl;
+              productItem['unit'] = products.productVariantPresenters[i].UPC;
+              productItem['slug'] = products.productVariantPresenters[i].UPC;
+              productItem['tag'] = products.productVariantPresenters[i].ProductId;
+              productItem['originalPrice'] = products.productVariantPresenters[i].PriceDisplay;
+              productItem['price'] = products.productVariantPresenters[i].PriceDisplay;
+              productItem['type'] = '';
+              productItem['sku'] = products.productVariantPresenters[i].SKU;
+              productItem['discount'] = 0;
+              productItem['description'] = products.productVariantPresenters[i].Description;
+              productItem['currencySign'] = products.currencySign;
+      
+      
+              productVariants.push(productItem);
+            }
+      
+            pagingManager();
+            setProductList(productVariants);
+      
+      
+            setLoading(false);
+          }
+      
+          const pagingManager = () =>
+          {
+            var allPage = countPage;
+            var startPage = 1;
+            var endPage = allPage;
+            if(currentPage < 3)
+            {
+              startPage = 1;
+            }
+            else
+            {
+              startPage = currentPage - 2;
+            }
+            if(currentPage + 2 > allPage)
+            {
+              endPage = allPage;
+            }
+            else
+            {
+              if(currentPage < 3)
+              {
+                endPage = 5;
+              }
+              else
+              {
+                endPage = currentPage + 2;
+              }
+                  
+            }
+      
+            var indents = [];
+          
+              if(startPage > 1)
+              {
+                indents.push(<button onClick={()=>RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,startPage-1,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+                    Previous
+                  </button>);
+              }
+              else
+              {
+                indents.push(
+                  <button className="text-gray-400 text-lg px-2" disabled>Previous</button>
+                );
+              }
+      
+              var iPage = 0;
+              for (let i = startPage; i <= endPage; i++) {
+                if(i === currentPage)
+                {
+                  indents.push(<button className="text-gray-400 text-lg px-2" disabled>{i}</button>);
+                }
+                else
+                {
+                  iPage = i;
+                  indents.push(<button onClick={()=>RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,i,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+                  {i}
+                </button>);
+                }
+                
+              }
+      
+              if(endPage > allPage)
+              {
+                indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+                
+              }
+              else
+              {
+                if(endPage === allPage)
+                {
+                  indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+                }
+                else
+                {
+                  indents.push(<button onClick={()=>RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,endPage+1,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+                  Next
+                </button>)
+                }
+                
+              }
+      
+              setPaging(indents);
+          }
+          
+      
 
   return (
     <>
