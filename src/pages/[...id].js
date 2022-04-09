@@ -13,7 +13,7 @@ import FeatureCategory from '@component/category/FeatureCategory';
 
 import UserServices from '@services/UserServices';
 
-const Details = ({ products, popularProducts, discountProducts, liffEndpoint }) => {
+const Details = ({ products, liffEndpoint }) => {
   const [value, set] = useSessionstorage('products', products);
 
   return (
@@ -72,9 +72,9 @@ const Details = ({ products, popularProducts, discountProducts, liffEndpoint }) 
             <div className="flex">
               <div className="w-full">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                  {popularProducts?.slice(0, 18).map((product) => (
+                  {/* {popularProducts?.slice(0, 18).map((product) => (
                     <ProductCard key={product._id} product={product} />
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>
@@ -108,9 +108,9 @@ const Details = ({ products, popularProducts, discountProducts, liffEndpoint }) 
             <div className="flex">
               <div className="w-full">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                  {discountProducts?.slice(0, 18).map((product) => (
+                  {/* {discountProducts?.slice(0, 18).map((product) => (
                     <ProductCard key={product._id} product={product} />
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@ export const getServerSideProps = async ({req, res,params }) => {
     const title = "all-in-one, heavy-duty & modern ecommerce platform";
     const description = "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.";
 
-    
+
   if(coinPOSLiffData.length > 0)
   {
     const parms = coinPOSLiffData.split('?');
@@ -279,14 +279,14 @@ export const getServerSideProps = async ({req, res,params }) => {
       promotionId,customerTypeId,page,itemPerPage,query,category,product
     });
 
-  const popularProducts = products.filter((p) => p.discount === 0);
-  const discountProducts = products.filter((p) => p.discount >= 5);
+  //const popularProducts = products.filter((p) => p.discount === 0);
+  //const discountProducts = products.filter((p) => p.discount >= 5);
 
   return {
     props: {
       products: products,
-      popularProducts: popularProducts.slice(0, 50),
-      discountProducts: discountProducts,
+      //popularProducts: popularProducts.slice(0, 50),
+      //discountProducts: discountProducts,
       liffEndpoint:liffEndpoint,
     },
     
