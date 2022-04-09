@@ -857,26 +857,80 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
 
   return (
     <>
-      <Layout>
+      <Layout title={title} description={description} dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo} 
+      locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+      locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+      locationEmail={locationEmail} locationTel={locationTel}
+      RefreshProductList={SearchProduct} FilterProduct={FilterProduct} >
         <div className="min-h-screen">
-          <StickyCart />
+          <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>
           <div className="bg-white">
             <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
-              <div className="flex w-full">
-                <div className="flex-shrink-0 xl:pr-6 lg:block w-full lg:w-3/5">
-                  <MainCarousel />
-                </div>
-                <div className="w-full hidden lg:flex">
-                  <OfferCard />
-                </div>
-              </div>
-              <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 hidden lg:block">
-                <Banner />
-              </div>
+
+              {promotionLoading ?
+                      <div className="bg-gray-100 lg:py-16 py-10">
+                        <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
+                          
+                          <div className="mb-10 flex justify-center">
+                            <div className="text-center w-full lg:w-2/5">
+                              <Loading loading={promotionLoading} />
+                              <p className="text-base font-sans text-gray-600 leading-6">
+                                กำลังปรับปรุงส่วนลด กรุณารอสักครู่
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      :
+                        <div className="flex w-full">
+                          <div className="w-full lg:flex">
+                            <OfferCard promotions={promotions} selectedPromotion={promotionCode} companyId={liffCompanyId} ApplyPromotionCode={ApplyPromotionCode} CancelPromotionCode={CancelPromotionCode}/>
+                        
+                        </div>
+                        </div>
+                      
+                      
+                    }   
+                    
+              
+              
             </div>
           </div>
 
-            {liffEndpoint}
+
+
+          <div id="newProduct"
+            className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
+          >
+            <div className="mb-10 flex justify-center">
+              <div className="text-center w-full lg:w-2/5">
+                <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
+                  Latest New Products
+                </h2>
+                
+              </div>
+            </div>
+            {
+                newProductLoading ? (
+                  <Loading loading={newProductLoading} />
+                )
+                :
+                (
+                  <div className="flex">
+                    <div className="w-full">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                        {newProductList.map((product) => (
+                          <ProductCard key={product._id} product={product} liffId={liffData} lineUserId={lineUserId} 
+                          linePOSId={linePOSId} groupId={groupId} orderId={liffOrderId} companyId={liffCompanyId} locationId={liffLocationId} pictureUrl={lineProfileImage} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            
+          </div>
           {/* feature category's */}
           <div className="bg-gray-100 lg:py-16 py-10">
             <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
@@ -886,11 +940,19 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                     Featured Categories
                   </h2>
                   <p className="text-base font-sans text-gray-600 leading-6">
-                    Choose your necessary products from this feature categories.
+                    เลือกหมวดหมู่สินค้า เพื่อค้นหาสินค้าที่ตรงใจคุณอย่างรวดเร็ว
                   </p>
                 </div>
               </div>
-              <FeatureCategory />
+              {
+                categoryLoading ? (
+                  <Loading loading={categoryLoading} />
+                )
+                :
+                (
+                  <FeatureCategory categories={categoryList} FilterCategory={FilterCategory} FilterProduct={FilterProduct}/>
+                )
+              }
             </div>
           </div>
 
@@ -899,37 +961,66 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
             <div className="mb-10 flex justify-center">
               <div className="text-center w-full lg:w-2/5">
                 <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                  Popular Products for Daily Shopping
+                  สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ
                 </h2>
-                <p className="text-base font-sans text-gray-600 leading-6">
-                  See all our popular products in this week. You can choose your
-                  daily needs products from this list and get some special offer
-                  with free shipping.
-                </p>
+                
               </div>
             </div>
-            <div className="flex">
-              <div className="w-full">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                  {/* {popularProducts?.slice(0, 18).map((product) => (
-                    <ProductCard key={product._id} product={product} />
-                  ))} */}
-                </div>
-              </div>
-            </div>
+            {
+              loading ? (
+                <Loading loading={loading} />
+              )
+              :
+              (
+                <>
+                  <div className="flex">
+                    <div className="w-full">
+                      
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                        {productList?.map((product) => (
+                          <ProductCard key={product._id} product={product} liffId={liffData} lineUserId={lineUserId} 
+                          linePOSId={linePOSId} groupId={groupId} orderId={liffOrderId} companyId={liffCompanyId} locationId={liffLocationId} pictureUrl={lineProfileImage}  />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-full">
+                    <div id="pagingProduct" className=" lg:py-16 bg-repeat bg-center overflow-hidden">
+                      <div className="max-w-screen-2xl mx-auto px-4 sm:px-10">
+                        <div className="grid grid-cols-1 gap-2 md:gap-3 lg:gap-3 items-center">
+                          
+                          <div className="text-center">
+                            
+                            <div className="mt-2">
+                              {pagingIndent}
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                      
+                    </div>
+                  </div>
+                </>
+                
+              )    
+            }
+            
           </div>
 
           {/* promotional banner card */}
-          <div className="block mx-auto max-w-screen-2xl">
+          {/* <div className="block mx-auto max-w-screen-2xl">
             <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
               <div className="lg:p-16 p-6 bg-emerald-500 shadow-sm border rounded-lg">
                 <CardTwo />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* discounted products */}
-          <div
+          {/* <div
             id="discount"
             className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
           >
@@ -947,13 +1038,13 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
             <div className="flex">
               <div className="w-full">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                  {/* {discountProducts?.slice(0, 18).map((product) => (
+                  {discountProducts?.slice(0, 18).map((product) => (
                     <ProductCard key={product._id} product={product} />
-                  ))} */}
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </Layout>
     </>

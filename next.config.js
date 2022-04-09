@@ -26,6 +26,9 @@ module.exports = withPWA({
 
   images: {
     domains: [
+      'coinpos-uat.azurewebsites.net',
+      'localhost',
+      'profile.line-scdn.net',
       'images.unsplash.com',
       'img.icons8.com',
       'i.ibb.co',
