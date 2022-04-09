@@ -11,7 +11,9 @@ import ProductCard from '@component/product/ProductCard';
 import MainCarousel from '@component/carousel/MainCarousel';
 import FeatureCategory from '@component/category/FeatureCategory';
 
-const Details = ({ products, popularProducts, discountProducts }) => {
+import UserServices from '@services/UserServices';
+
+const Details = ({ products, popularProducts, discountProducts, liffEndpoint }) => {
   const [value, set] = useSessionstorage('products', products);
 
   return (
@@ -35,6 +37,7 @@ const Details = ({ products, popularProducts, discountProducts }) => {
             </div>
           </div>
 
+            {liffEndpoint}
           {/* feature category's */}
           <div className="bg-gray-100 lg:py-16 py-10">
             <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
@@ -122,6 +125,8 @@ export const getServerSideProps = async ({req, res,params }) => {
   const products = await ProductServices.getShowingProducts();
   const provinces = await ProductServices.fetchGetStateProvince();
 
+  var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
+
 
   const popularProducts = products.filter((p) => p.discount === 0);
   const discountProducts = products.filter((p) => p.discount >= 5);
@@ -131,6 +136,7 @@ export const getServerSideProps = async ({req, res,params }) => {
       products: products,
       popularProducts: popularProducts.slice(0, 50),
       discountProducts: discountProducts,
+      liffEndpoint:liffEndpoint,
     },
     
   };
