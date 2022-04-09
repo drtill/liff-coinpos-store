@@ -122,11 +122,162 @@ const Details = ({ products, popularProducts, discountProducts, liffEndpoint }) 
 };
 
 export const getServerSideProps = async ({req, res,params }) => {
-  const products = await ProductServices.getShowingProducts();
+  //const products = await ProductServices.getShowingProducts();
   const provinces = await ProductServices.fetchGetStateProvince();
 
+  var dataParam = params.id;
+    var coinPOSLiffData = req.url.replace('/','');
+
+    var liffCompanyId = 0;
+    var liffLocationId = 0;
+    var liffProcess = "";
+    var liffCompanyName = "";
+
+    var liffData = '';
+    var linePOSId = '';
+    var lineUserId = '';
+    var groupId = '';
+    var liffOrderId = null;
+
+    var companyName = '';
+    var locationName = '';
+    const promotionId = 0;
+
+    const customerTypeId = 9;
+    var page = 1;
+    var itemPerPage = 30;
+    const query = '';
+    const category = '';
+    const product = '';   
+
+    const title = "all-in-one, heavy-duty & modern ecommerce platform";
+    const description = "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.";
+
+    
+  if(coinPOSLiffData.length > 0)
+  {
+    const parms = coinPOSLiffData.split('?');
+
+    
+
+    if(parms.length > 1)
+    {
+      const liffQuery = parms[0];
+      const liffOrderQuery = parms[1];
+      var liffVar = liffQuery.split("=");
+      if(liffVar[0] === 'liffId')
+      {
+        liffData = liffVar[1];
+        
+      }
+
+      var vars = liffOrderQuery.split("&");
+      for (var i=0;i<vars.length;i++)
+      {
+        var pair = vars[i].split("=");
+        if(pair[0] === 'liffId')
+        {
+          liffData = pair[1];
+          
+        }
+        if(pair[0] === 'linePOSId')
+        {
+          linePOSId = pair[1];
+        }
+        if(pair[0] === 'groupId')
+        {
+          groupId = pair[1];
+        }
+        if(pair[0] === 'orderId')
+        {
+          liffOrderId = Number(pair[1]);
+        }
+        if(pair[0] === 'companyId')
+        {
+            liffCompanyId = Number(pair[1]);
+        }
+        if(pair[0] === 'companyName')
+        {
+            liffCompanyName = pair[1];
+        }
+        if(pair[0] === 'locationId')
+        {
+            liffLocationId = Number(pair[1]);
+        }
+        if(pair[0] === 'process')
+        {
+            liffProcess = pair[1];
+        }
+
+        if(pair[0] === 'liff.state')
+        {
+          var param = pair[1];
+          param = param.replaceAll("%3D","=");
+          param = param.replaceAll("%26","&");
+          param = param.replaceAll("%3F","?");
+          param = param.replace("?","");
+          var m_params = param.split("&");
+          for (var j=0;j<m_params.length;j++)
+          {
+            var paramValue = m_params[j].split("=");
+            if(paramValue[0] === 'linePOSId')
+            {
+              linePOSId = paramValue[1];
+            }
+            if(paramValue[0] === 'groupId')
+            {
+              groupId = paramValue[1];
+            }
+            if(paramValue[0] === 'orderId')
+            {
+              liffOrderId = Number(paramValue[1]);
+            }
+            if(paramValue[0] === 'companyId')
+            {
+              liffCompanyId = Number(paramValue[1]);
+            }
+            if(paramValue[0] === 'locationId')
+            {
+              liffLocationId = Number(paramValue[1]);
+            }
+            if(paramValue[0] === 'process')
+            {
+              liffProcess = paramValue[1];
+            }
+          }
+
+        }
+      }
+    }
+
+  }
+
+  var liffId = liffData;
+  var orderId = liffOrderId;
+  var companyId = liffCompanyId;
+  var locationId = liffLocationId;
+  
+  var dataPath = 'liffId=' + liffId + '?linePOSId=' + linePOSId + '&groupId=' + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+  
   var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
 
+  var catalogName = '';
+  var companyCode = '';
+
+  const products = await ProductServices.fetchGetDefaultDataCompany({
+    //const products = await ProductServices.getCoinPOSProductService({
+      liffId,
+      lineUserId,
+      linePOSId,
+      groupId,
+      orderId:orderId === null ? 0 : orderId,
+      companyId,locationId,
+      companyName,
+      locationName,
+      catalogName,
+      companyCode,
+      promotionId,customerTypeId,page,itemPerPage,query,category,product
+    });
 
   const popularProducts = products.filter((p) => p.discount === 0);
   const discountProducts = products.filter((p) => p.discount >= 5);
