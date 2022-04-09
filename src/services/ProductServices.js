@@ -90,6 +90,171 @@ const ProductServices = {
       
     }
   },
+  async fetchGetCoinPOSOrder(body){
+    try
+    {
+      var productList = null;
+      await fetch(serviceUrl + 'GetLiffOrder',
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"LiffId": "${body.liffId}","LineUserId":"${body.lineUserId}", "LinePOSId":"${body.linePOSId}", "GroupId":"${body.groupId}","OrderId":${body.orderId},"CompanyId":${body.companyId}
+          ,"LocationId":${body.locationId},"CompanyName":"${body.companyName}","LocationName":"${body.locationName}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        var obj = JSON.parse(data);
+          
+        console.log("Obj = " + obj);
+        console.log(data); // this will be a string
+        var pvJson = obj.ProductVariantListJson
+          productList = JSON.parse(pvJson)
+      });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return err.message;
+      
+    }
+  },
+  async fetchGetCoinPOSProductService(body){
+    try
+    {
+      //alert("Fetch")
+      var productList = null;
+      const products = await fetch(serviceUrl + 'GetLiffProductList',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"LiffId": "${body.liffId}","LineUserId":"${body.lineUserId}", "LinePOSId":"${body.linePOSId}", "GroupId":"${body.groupId}","OrderId":${body.orderId},"CompanyId":${body.companyId},
+          "CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","PromotionId":${body.promotionId},"CustomerTypeId":${body.customerTypeId},"LocationId":${body.locationId},"CompanyName":"${body.companyName}","LocationName":"${body.locationName}","Page":${body.page},"RowPerPage":${body.itemPerPage},"Query":"${body.query}","Category":"${body.category}","Product":"${body.product}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          console.log("GetData = " + data)
+          var obj = JSON.parse(data);
+          var pvJson = obj.ProductVariantListJson
+          productList = JSON.parse(pvJson)
+          
+          
+        });
+      
+
+        return productList;
+    }
+    catch(err) {
+        return "Error: " + err.message
+    }
+  },
+  async fetchCancelPromotionCode(body) {
+    try
+    {
+      var productList = null;
+      await fetch(serviceUrl + 'ApplyPromotionCode',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":${body.companyId},"LocationId":${body.locationId},
+        "OrderId":${body.orderId},
+        "PromotionCode":"${body.qrPromotion}",
+        "UserId":1,
+        "LineUserId": "${body.lineUserId}",
+        "LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}",
+        "CatalogName":"${body.catalogName}","OrderDetails":${body.orderDetails}}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = data;
+      });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message
+      
+    }
+  },
+  async fetchApplyPromotionCode(body) {
+    try
+    {
+      var productList = null;
+      await fetch(serviceUrl + 'ApplyPromotionCode',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":${body.companyId},"LocationId":${body.locationId},
+        "OrderId":${body.orderId},
+        "PromotionCode":"${body.qrPromotion}",
+        "UserId":1,
+        "LineUserId": "${body.lineUserId}",
+        "LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}",
+        "CatalogName":"${body.catalogName}","OrderDetails":${body.orderDetails}}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = data;
+      });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  async fetchRefreshCoinPOSProductService(body){
+    try
+    {
+      //alert("Fetch")
+      var productList = null;
+      const products = await fetch(serviceUrl + 'RefreshLiffProductList',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"LiffId": "${body.liffId}","LineUserId":"${body.lineUserId}", "LinePOSId":"${body.linePOSId}", "GroupId":"${body.groupId}","OrderId":${body.orderId},"CompanyId":${body.companyId},
+          "CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","PromotionId":${body.promotionId},"CustomerTypeId":${body.customerTypeId},"LocationId":${body.locationId},"CompanyName":"${body.companyName}","LocationName":"${body.locationName}","Page":${body.page},"RowPerPage":${body.itemPerPage},"Query":"${body.query}","Category":"${body.category}","Product":"${body.product}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          console.log("GetData = " + data)
+          var obj = JSON.parse(data);
+          var pvJson = obj.ProductVariantListJson
+          productList = JSON.parse(pvJson)
+          
+          
+        });
+      
+
+        return productList;
+    }
+    catch(err) {
+        return "Error: " + err.message
+    }
+  },
 };
 
 export default ProductServices;
