@@ -261,7 +261,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
             var lineUserId = lineLiffUserId;
             try
             {
-              //alert("Get Order");
+              alert("Get Order");
               const salesOrder = await ProductServices.fetchGetCoinPOSOrder({
                   liffId,
                   lineUserId,
@@ -273,8 +273,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   locationName
                 });
           
-                //alert("Get SaleOrder");
-                //alert(JSON.stringify(salesOrder));
+                alert("Get SaleOrder");
+                alert(JSON.stringify(salesOrder));
                 if(salesOrder.orderStatusId !== 1)
                 {
                   alert("Goto Order")

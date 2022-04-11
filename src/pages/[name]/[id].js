@@ -115,6 +115,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
     
     useEffect(async () => {
 
+      //alert("catalogName = " + catalogName)
       setPromotionLoading(true);
       
       //alert(JSON.stringify(promotions))
@@ -219,6 +220,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       sessionStorage.setItem('countrysJSON', JSON.stringify(countrys));
       sessionStorage.setItem('dataPath',dataPath);
       sessionStorage.setItem('catalogName',catalogName);
+      sessionStorage.setItem('companyCode',companyCode);
       sessionStorage.setItem('companyLogo',companyLogo);
       sessionStorage.setItem('companyName',companyNameData);
       sessionStorage.setItem('companyId',catalogCompanyId);
@@ -741,7 +743,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       query = query === undefined ? 'null' : query;
       category = category === undefined ? 'null' : category;
       product = product === undefined ? 'null' : product;
-      //alert("customerTypeId = " + customerTypeId);
+      alert("page = " + page);
       const products = await ProductServices.fetchRefreshCoinPOSProductService({
         liffId,
         lineUserId,
@@ -752,9 +754,9 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
         companyCode,
         locationId,
         companyName,
-        
+
         locationName,
-        catalogName:"",
+        catalogName:catalogName,
         promotionId,customerTypeId,page,itemPerPage,query:query,category,product
       });
 
@@ -833,7 +835,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
     
         if(startPage > 1)
         {
-          indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,catalogLocationId,'','',0,9,startPage-1,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+          indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,companyCode,catalogLocationId,
+            catalogName,'','',0,9,startPage-1,30,'','','')} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
               Previous
             </button>);
         }
@@ -853,7 +856,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
           else
           {
             iPage = i;
-            indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,catalogLocationId,'','',0,9,i,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+            indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,companyCode,catalogLocationId,
+              catalogName,'','',0,9,i,30,'','','')} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
             {i}
           </button>);
           }
@@ -873,7 +877,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
           }
           else
           {
-            indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,catalogLocationId,'','',0,9,endPage+1,30)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
+            indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,companyCode,catalogLocationId,
+              catalogName,'','',0,9,endPage+1,30,'','','')} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
             Next
           </button>)
           }
@@ -1367,6 +1372,7 @@ export const getServerSideProps = async ({req, res,params }) => {
         catalogCompanyId:catalogCompanyId,
         catalogName:catalogName,
         catalogLocationId:catalogLocationId,
+        catalogOrderId:0,
 
         locationName:locationName,
         //categories:productCategories,

@@ -1,7 +1,7 @@
 import requests from './httpServices';
 
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
   getShowingProducts() {
     return requests.get('/products/show');
@@ -13,6 +13,44 @@ const ProductServices = {
 
   getProductBySlug(slug) {
     return requests.get(`/products/${slug}`);
+  },
+  async fetchGetProductBySlug(body){
+    try
+    {
+      var product = null;
+      await fetch(serviceUrl + 'GetLiffProductBySlug',
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"LiffId": "${body.liffId}","LineUserId":"${body.lineUserId}", "LinePOSId":"${body.linePOSId}", "GroupId":"${body.groupId}","CompanyId":${body.companyId}
+          ,"LocationId":${body.locationId},"CompanyName":"${body.companyName}","LocationName":"${body.locationName}"
+          ,"CompanyCode":"${body.companyCode}","CatalogName":"${body.catalogName}","PromotionId":${body.promotionId}
+          ,"CustomerId":${body.customerId},"CustomerTypeId":"${body.customerTypeId}"
+          ,"Slug":"${body.slug}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        var obj = JSON.parse(data);
+
+        //alert(data);
+        //var obj = JSON.parse(data);
+          
+        alert("Obj = " + data);
+        console.log(data); // this will be a string
+        var pvJson = obj.ProductVariantJson
+          product = JSON.parse(pvJson)
+      });
+      
+        return product;
+    }
+    catch (err) 
+    {
+      return err.message;
+      
+    }
   },
   getCountry(body)
   {
