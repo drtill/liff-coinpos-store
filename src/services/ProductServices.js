@@ -1,7 +1,7 @@
 import requests from './httpServices';
 
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
   getShowingProducts() {
     return requests.get('/products/show');
@@ -38,7 +38,7 @@ const ProductServices = {
         //alert(data);
         //var obj = JSON.parse(data);
           
-        alert("Obj = " + data);
+        //alert("Obj = " + data);
         console.log(data); // this will be a string
         var pvJson = obj.ProductVariantJson
           product = JSON.parse(pvJson)

@@ -30,16 +30,22 @@ import { useEffect, useState } from 'react';
 import { set } from 'react-hook-form';
 import Loading from '@component/preloader/Loading';
 
+import { IoBagAddSharp, IoAdd, IoRemove } from 'react-icons/io5';
+
+import { useCart } from 'react-use-cart';
+
 const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
   const slug = params.slug;
   const router = useRouter();
-  const { handleAddItem } = useAddToCart();
+  //const { handleAddItem } = useAddToCart();
+  const { items, addItem, updateItemQuantity, inCart } = useCart();
 
   
 
 
   const [isLoading, setIsLoading] = useState(true);
   const [product, setProduct] = useState({});
+  const [relatedProduct, setRelatedProduct] = useState([]);
   const [companyId, setCompanyId] = useState(0);
   const [locationId, setLocationId] = useState(0);
   const [linePOSId, setLinePOSId] = useState('');
@@ -227,7 +233,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
           setPromotionId(promotionIdData);
         }
 
-        alert("Slug = " + slug);
+        //alert("Slug = " + slug);
         const product = await ProductServices.fetchGetProductBySlug(
           {
             liffId:liffIdData === undefined ? "" : liffIdData,
@@ -246,8 +252,37 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
             slug:slug === undefined ? '' : slug
           });
         //alert(JSON.stringify(product));
-        alert(product);
+        //alert(product);
         setProduct(product);
+        var relatedProductVariants = [];//products.productVariantPresenters;
+        if(product !== undefined)
+        {
+          if(product.relatedProductVariantPresenters !== undefined)
+          {
+            for(var i = 0;i < product.relatedProductVariantPresenters.length; i++)
+            {
+              var productItem = {};
+              productItem['_id'] = Number(product.relatedProductVariantPresenters[i].ProductVariantId);
+              productItem['title'] = product.relatedProductVariantPresenters[i].Name;
+              productItem['quantity'] = product.relatedProductVariantPresenters[i].StockLevelDisplay;
+              productItem['image'] = product.relatedProductVariantPresenters[i].ImageUrl;
+              productItem['unit'] = product.relatedProductVariantPresenters[i].UPC;
+              productItem['slug'] = product.relatedProductVariantPresenters[i].UPC;
+              productItem['tag'] = product.relatedProductVariantPresenters[i].ProductId;
+              productItem['originalPrice'] = product.relatedProductVariantPresenters[i].PriceDisplay;
+              productItem['price'] = product.relatedProductVariantPresenters[i].PriceDisplay;
+              productItem['type'] = 'W';
+              productItem['sku'] = product.relatedProductVariantPresenters[i].SKU;
+              productItem['discount'] = 0;
+              productItem['description'] = product.relatedProductVariantPresenters[i].Description;
+              productItem['currencySign'] = product.currencySign;
+
+
+              relatedProductVariants.push(productItem);
+            }
+          }
+        }
+        setRelatedProduct(relatedProductVariants);
 
         setIsLoading(false);
   },[])
@@ -255,6 +290,250 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
   //if (router.isFallback) {
     //return <div>Loading...</div>;
   //}
+
+  const checkItemInCart = (_id) => {
+    var isInCart = false;
+    for(var i = 0;i<items.length;i++)
+    {
+      var item = items[i];
+      
+      
+      if(item !== null)
+      {
+        
+        if(item.id === _id)
+        {
+          //alert("match");
+          isInCart = true;
+        }
+        
+      }
+    }
+    
+    return isInCart;
+
+  };
+
+  const handleUpdateItem = async(item,_qty, _updateType) =>{
+    updateItemQuantity(item.id,_qty);
+
+    //alert("items count = " + items.length);
+    if(_qty === 0)
+    {
+      if(liffId.length > 0)
+      {
+        removeCoinPOSCartDetail(item,liffId,linePOSId,orderId,pictureUrl);
+      }
+      
+    }
+    else
+    {
+      if(liffId.length > 0)
+      {
+        updateCoinPOSCartDetail(item, _qty,liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl, _updateType)
+      }
+      
+    }
+    
+  };
+
+  const updateCoinPOSCartDetail = async(req, _qty,_liffId, _lineUserId, _linePOSId, _groupId, _orderId, _companyId, _locationId, _pictureUrl, _updateType) => 
+  {
+    var liffId = _liffId;
+    var lineUserId = _lineUserId;
+    var linePOSId = _linePOSId;
+    var groupId = _groupId;
+    var orderId = _orderId;
+    var companyId = _companyId;
+    var locationId = _locationId;
+    var orderDetailId = 0;
+    var quantity = _qty;
+    var pvId = req.id;
+    var updateType = _updateType;
+    var pictureUrl = _pictureUrl;
+    var userId = 1;
+
+
+    const detail = await ProductServices.updateCoinPOSCartDetail({
+      orderDetailId,
+      userId,
+      quantity,
+      companyId,
+      orderId,
+      pvId,
+      updateType,
+      linePOSId,
+      liffId,
+      pictureUrl
+    })
+  };
+
+  const handleAddItem = async (p) => {
+
+    //alert("Add Item")
+    
+    if(liffId.length > 0) //liff
+    {
+      //alert("Liff");
+      const newItem = {
+        ...p,
+        id: p._id,
+      };
+      //alert(p._id)
+      addItem(newItem);
+      if(liffId.length > 0)
+      {
+        AddProductToCart(p,liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl);
+      }
+      
+    }
+    else//WebCatalog
+    {
+      //alert("Catalog");
+      const newItem = {
+        ...p,
+        id: p._id,
+      };
+      //alert(p._id)
+      addItem(newItem);
+    }
+
+    //alert("AddItem")
+    if(sessionStorage.getItem('discountRate'))
+      {
+        
+        var discountDetails = [];
+        
+        if(sessionStorage.getItem('discountDetails'))
+        {
+          var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
+          
+          //alert("discountDetailsJson = " + discountDetailsJson);
+          discountDetails = JSON.parse(discountDetailsJson) === null ? [] : JSON.parse(discountDetailsJson);
+          
+        }
+        
+        var isForAllProduct = true;
+        if(sessionStorage.getItem('isForAllProduct'))
+        {
+          isForAllProduct = sessionStorage.getItem('isForAllProduct'); 
+        }
+
+        
+        if(isForAllProduct === true)
+        {
+          //alert("Is For All = " + isForAllProduct);
+          var discountRate = sessionStorage.getItem('discountRate'); 
+            var discountDetail = {
+              id: Number(p._id),
+              discount:Number(p.price * discountRate),
+              discountRate:Number(discountRate)
+            }
+            discountDetails.push(discountDetail);
+        }
+        else
+        {
+          //alert("Is For All = " + isForAllProduct);
+
+          var isDiscount = false;
+          //alert("Check Session");
+          if(sessionStorage.getItem('promotionProductIdList'))
+          {
+            //alert("Found");
+            var promotionmProductIdListJson = sessionStorage.getItem('promotionProductIdList');
+            //alert("promotionmProductIdList = " + promotionmProductIdListJson);
+            var promotionmProductIdList = JSON.parse(promotionmProductIdListJson);
+            //alert("Parsed = " + promotionmProductIdList);
+            if(promotionmProductIdList !== null)
+            {
+              for(var i = 0;i<promotionmProductIdList.length;i++)
+              {
+                //alert("Get Product Id at index = " + i);
+                var promotionProductId = promotionmProductIdList[i];
+                //alert("p.tag = " + JSON.stringify(p) + " promotionProductId = " + promotionProductId);
+
+                if(Number(promotionProductId) === Number(p.tag))
+                {
+                  //alert("Discount")
+                  isDiscount = true;
+                }
+
+              }
+            }
+            else
+            {
+              isDiscount = true;
+            }
+            
+          }
+
+          if(isDiscount === true)
+          {
+            
+            var discountRate = sessionStorage.getItem('discountRate'); 
+            var discountDetail = {
+              id: Number(p._id),
+              discount:Number(p.price * discountRate),
+              discountRate:Number(discountRate)
+            }
+            //alert('discountDetails = ' + JSON.stringify(discountDetails))
+            discountDetails.push(discountDetail);
+          }
+          else
+          {
+            
+            var discountRate = sessionStorage.getItem('discountRate'); 
+            var discountDetail = {
+              id: Number(p._id),
+              discount:Number(0),
+              discountRate:Number(0)
+            }
+            discountDetails.push(discountDetail);
+          }
+        }
+
+        
+        
+        
+        sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
+
+      }
+    
+    
+  };
+  const AddProductToCart = async(req,_liffId, _lineUserId, _linePOSId, _groupId, _orderId, _companyId, _locationId, _pictureUrl) => 
+  {
+    var liffId = _liffId;
+    var lineUserId = _lineUserId;
+    var linePOSId = _linePOSId;
+    var groupId = _groupId;
+    var orderId = _orderId;
+    var companyId = _companyId;
+    var locationId = _locationId;
+    var pictureUrl = _pictureUrl;
+
+    var pvId = req._id;
+
+    var promotionCode = ''
+    if(sessionStorage.getItem('promotionCode'))
+    {
+      promotionCode = sessionStorage.getItem('promotionCode');
+    }
+    //alert(promotionCode);
+    //alert("liffId = " + liffId + " lineUserId = " + lineUserId + " OrderId = " + orderId)
+    const products = await ProductServices.addToCoinPOSCart({
+      orderId,
+      pvId,
+      companyId,locationId,
+      lineUserId,
+      linePOSId,
+      groupId,
+      liffId,
+      pictureUrl,
+      promotionCode
+    });
+    //alert(products);
+};
 
   return (
     <Layout title={product.title} description={product.description}
@@ -282,12 +561,15 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                     <FiChevronRight />{' '}
                   </li>
                   <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold ">
-                    <Link
+                    {/* <Link
                       href={`/search?category=${product.category
                         .toLowerCase()
                         .replace('&', '')
                         .split(' ')
                         .join('-')}`}
+                    > */}
+                    <Link
+                      href='#'
                     >
                       <a>{product.category}</a>
                     </Link>
@@ -349,12 +631,62 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                           <p className="text-sm leading-6 text-gray-500 md:leading-7">
                             {product.description}
                           </p>
-                          <button
+                          {/* <button
                             onClick={() => handleAddItem(product)}
                             className="leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-6 hover:text-white hover:bg-emerald-600 h-12 text-sm lg:text-base w-full sm:w-auto"
                           >
                             Add to Cart
-                          </button>
+                          </button> */}
+                          {checkItemInCart(product._id) ? (
+                            <div>
+                              {items.map(
+                                (item) =>
+                                  item.id === product._id 
+                                  ? 
+                                  (
+                                    <div
+                                      key={item.id}
+                                      className="w-56 group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-500 text-white"
+                                    >
+                                      <button
+                                        onClick={() =>
+                                          handleUpdateItem(item, item.quantity - 1,'Dec')
+                                        }
+                                        className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
+                                      >
+                                        <span className="text-dark text-base">
+                                          <IoRemove />
+                                        </span>
+                                      </button>
+                                      <p className="text-sm text-dark px-1 font-serif font-semibold">
+                                        {item.quantity}
+                                      </p>
+                                      <button
+                                        onClick={() =>
+                                          handleUpdateItem(item, item.quantity + 1, 'Inc')
+                                        }
+                                        disabled={product.quantity === item.quantity}
+                                        className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
+                                      >
+                                        <span className="text-dark text-base">
+                                          <IoAdd />
+                                        </span>
+                                      </button>
+                                    </div>
+                                  )
+                                  :
+                                  <></>
+                                  
+                              )}{' '}
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => handleAddItem(product)}
+                              className="leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-6 hover:text-white hover:bg-emerald-600 h-12 text-sm lg:text-base w-full sm:w-auto"
+                            >
+                              Add to Cart
+                            </button>
+                          )}
 
                           <div className="flex flex-col mt-4">
                             <span className="font-serif font-semibold py-1 text-sm d-block">
@@ -367,7 +699,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                           </div>
 
                           {/* social share */}
-                          <div className="mt-8">
+                          {/* <div className="mt-8">
                             <h3 className="text-base font-semibold mb-1 font-serif">
                               Share your social network
                             </h3>
@@ -417,12 +749,12 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                                 </LinkedinShareButton>
                               </li>
                             </ul>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div className="w-full xl:w-5/12 lg:w-6/12 md:w-5/12">
                         <div className="mt-6 md:mt-0 lg:mt-0 bg-gray-50 border border-gray-100 p-4 lg:p-8 rounded-lg">
-                          <Card />
+                          {/* <Card /> */}
                         </div>
                       </div>
                     </div>
@@ -438,9 +770,11 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                 <div className="flex">
                   <div className="w-full">
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                      {/* {relatedProduct?.slice(1, 13).map((product, i) => (
+                       {relatedProduct.map((product, i) => (
                         <ProductCard key={i + 1} product={product} />
-                      ))} */}
+                      ))
+                      //JSON.stringify(relatedProduct)
+                      }
                     </div>
                   </div>
                 </div>
