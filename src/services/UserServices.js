@@ -1,7 +1,8 @@
 import requests from './httpServices';
+import jwt from 'jsonwebtoken';
 
-//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-const serviceUrl = 'http://localhost:41781/lineliff/';
+const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+//const serviceUrl = 'http://localhost:41781/lineliff/';
 const UserServices = {
   userLogin(body) {
     return requests.post('/user/login', body);
@@ -14,7 +15,9 @@ const UserServices = {
   userRegister(token, body) {
     return requests.post(`/user/register/${token}`, body);
   },
-
+  coinposUserRegister(token, body) {
+    return requests.post(`/user/coinpos-register/${token}`, body);
+  },
   signUpWithProvider(body) {
     return requests.post('/user/signup', body);
   },
@@ -183,6 +186,41 @@ const UserServices = {
       
     }
   },
+  verifyCoinPOSEmailAddress(body) {
+    alert('run Regis')
+    return requests.post('/user/verify-coinpos-email', body);
+  },
+  async fetchVerifyCoinPOSEmailAddress(body) {
+    try
+    {
+      //alert('fetchVerify')
+      var productList = null;
+      await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
+      //await fetch('http://localhost:5055/api' + '/user/verify-coinpos-email', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"companyId":${body.companyId},"name":"${body.name}","email":"${body.email}","password":"${body.password}","companyName":"${body.companyName}","locationEmail":"${body.locationEmail}","dataPath":"${body.dataPath}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        alert("expired = " + data)
+        console.log("expired = " + data); // this will be a string
+        productList = obj;
+      });
+      
+      return productList;
+      
+    }
+    catch (err) {
+      return "Error: " + err.message;
+      
+    }
+  },
   async fetchCoinposCheckExpired(body) {
     try
     {
@@ -211,8 +249,79 @@ const UserServices = {
       
     }
   },
+  /* async fetchVerifyCoinPOSEmailAddress(body) {
+    const isAdded = await findCoinPOSEmail(body.companyId,body.email);
+  
+    if (isAdded) {
+      return ({
+        message: 'This Email already Added!',
+      });
+    } else {
+      
+      const token = tokenForVerify(body);
+      const body = {
+        from: process.env.EMAIL_USER,
+        to: `${body.email}`,
+        subject: 'Email Activation',
+        subject: 'Verify Your Email',
+        html: `<h2>Hello ${body.email}</h2>
+        <p>Verify your email address to complete the signup and login into your <strong>${body.companyName}</strong> account.</p>
+
+          <p>This link will expire in <strong> 15 minute</strong>.</p>
+
+          <p style="margin-bottom:20px;">Click this link for active your account</p>
+
+          <a href=${process.env.STORE_URL}/user/email-verification/${token} style="background:#22c55e;color:white;border:1px solid #22c55e; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Verify Account</a>
+
+          <p style="margin-top: 35px;">If you did not initiate this request, please contact us immediately at ${body.locationEmail}</p>
+
+          <p style="margin-bottom:0px;">Thank you</p>
+          <strong>${body.companyName} Team</strong>
+              `,
+      };
+
+      const message = 'Please check your email to verify!';
+      var msgResult = sendEmail(body, res, message);
+
+      return msgResult;
+    }
+  }, */
 };
 
+/* const sendEmail = (body, message) => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.HOST,
+    service: process.env.SERVICE,
+    port: process.env.EMAIL_PORT,
+    secure: false,//true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+  transporter.verify(function (err, success) {
+    if (err) {
+      return ({
+        message: `Error happen when verify ${err.message}`,
+      });
+      console.log(err.message);
+    } else {
+      console.log('Server is ready to take our messages');
+    }
+  });
+
+  transporter.sendMail(body, (err, data) => {
+    if (err) {
+      return ({
+        message: `Error happen when sending email ${err.message}`,
+      });
+    } else {
+      return ({
+        message: message,
+      });
+    }
+  });
+} */
 
 const findCoinPOSCustomerAccount = async(companyId, email, password) => 
 {
@@ -297,4 +406,17 @@ const findCoinPOSEmail = async(companyId, email) =>
     });
   }
 };
+/* const tokenForVerify = (user) => {
+  return jwt.sign(
+    {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      companyId: user.companyId
+    },
+    process.env.JWT_SECRET_FOR_VERIFY,
+    { expiresIn: '15m' }
+  );
+}; */
 export default UserServices;

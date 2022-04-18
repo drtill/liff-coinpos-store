@@ -140,7 +140,11 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
                   {coupon.title}
                 </h2>
                 
-                {dayjs().isAfter(dayjs(coupon.endTime)) ? (
+                {
+                coupon.endTime === null ?
+                  <></>
+                :
+                dayjs().isAfter(dayjs(coupon.endTime)) ? (
                   <span className="inline-block mb-2">
                     <div className="flex items-center font-semibold">
                       <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
@@ -169,7 +173,9 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
                       />
                     </div>
                   </span>
-                )}
+                )
+                  
+                }
               </div>
             </div>
             <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-4">

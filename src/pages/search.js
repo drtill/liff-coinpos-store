@@ -13,6 +13,12 @@ const Search = ({ products }) => {
   const [visibleProduct, setVisibleProduct] = useState(18);
   const { productData, setSortedField } = useFilter(products);
 
+  userEffect(() => 
+  {
+
+    
+  });
+
   return (
     <Layout title="Search" description="This is search page">
       <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">

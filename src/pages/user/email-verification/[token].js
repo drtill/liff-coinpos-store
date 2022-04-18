@@ -17,12 +17,15 @@ const EmailVerification = ({ params }) => {
   const { dispatch } = useContext(UserContext);
 
   useEffect(() => {
+
+    
     setLoading(true);
     UserServices.coinposUserRegister(params?.token)
       .then((res) => {
         alert(JSON.stringify(res));
         //router.push('/');
-        router.push('/catalog/2-MyCustomer');
+        //router.push('/catalog/2-MyCustomer');
+        router.push('/' + res.dataPath);
         setLoading(false);
         setSuccess(res.message);
         notifySuccess('Register Success!');

@@ -177,18 +177,26 @@ const useLoginSubmit = (setModalOpen) => {
     if (name && email && password) {
       //alert("Name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId);
       //return;
-      UserServices.verifyCoinPOSEmailAddress({ name, email, password, companyName, locationEmail, companyId })
+      var dataPath = '';
+      if(sessionStorage.getItem('dataPath'))
+      {
+        dataPath = sessionStorage.getItem('dataPath'); 
+        
+              
+      }
+      UserServices.fetchVerifyCoinPOSEmailAddress({ name, email, password, companyName, locationEmail, companyId, dataPath })
         .then((res) => {
-          alert(res.message)
+          //alert('then = ' + res)
           setLoading(false);
           setModalOpen(false);
           notifySuccess(res.message);
         })
         .catch((err) => {
           setLoading(false);
+          alert('catch = ' + JSON.stringify(err));
           
           notifyError(err.response.data.message);
-          alert(err.response.data.message);
+          
         });
     }
     if (verifyEmail) {

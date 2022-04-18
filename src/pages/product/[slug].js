@@ -561,16 +561,14 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                     <FiChevronRight />{' '}
                   </li>
                   <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold ">
-                    {/* <Link
+                    <Link
                       href={`/search?category=${product.category
                         .toLowerCase()
                         .replace('&', '')
                         .split(' ')
                         .join('-')}`}
-                    > */}
-                    <Link
-                      href='#'
                     >
+                    
                       <a>{product.category}</a>
                     </Link>
                   </li>

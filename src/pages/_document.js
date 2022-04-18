@@ -27,6 +27,9 @@ class MyDocument extends Document {
             property="og:image"
             content="https://res.cloudinary.com/ahossain/image/upload/v1636729752/facebook-page_j7alju.png"
           />
+          <link rel="preconnect" href="https://fonts.googleapis.com"/>
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+          <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap" rel="stylesheet"/>
         </Head>
         <body>
           <Main />

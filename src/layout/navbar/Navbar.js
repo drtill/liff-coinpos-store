@@ -84,16 +84,26 @@ const Navbar = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
               ?
               <></>
               :
+              <>
+              
               <Link href={"/" + dataPath}>
                 <a className="mr-3 lg:mr-12 xl:mr-12 hidden md:hidden lg:block">
-                  <Image
-                    width={70}
-                    height={70}
-                    src={companyLogo === undefined ? 'https://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
-                    alt="logo"
-                  />
-                </a>
+                    <span className="flex">
+                      <Image
+                        width={70}
+                        height={70}
+                        src={companyLogo === undefined ? 'https://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
+                        alt="logo"
+                      />
+                      <h1 className="text-xl lg:text-2xl mb-2 font-serif font-semibold text-white">Company Name</h1>
+                    </span>
+                    
+                    
+                  </a>
               </Link>
+              
+              </>
+              
               
             }
             

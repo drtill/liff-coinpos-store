@@ -31,6 +31,7 @@ const CouponDetails = ({ coupon }) => {
             />
           </figure>
           <div className="ml-5">
+            
             {dayjs().isAfter(dayjs(coupon.endTime)) ? (
               <span className="inline-block mb-2">
                 <div className="flex items-center font-semibold">
@@ -66,7 +67,7 @@ const CouponDetails = ({ coupon }) => {
               <span className="text-lg md:text-xl lg:text-2xl leading-12 text-red-500 font-extrabold">
                 {coupon.discountPercentage}%
               </span>{' '}
-              Off
+              Off 
             </p>
           </div>
         </div>

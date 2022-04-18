@@ -112,7 +112,7 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
                     <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-500 text-white">
                       <button
                         onClick={() => handleUpdateItem(item, item.quantity - 1,'Dec')}
-                        disabled={item.quantity === 1}
+                        disabled={item.quantity === 0}
                         className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
                       >
                         <span className="text-dark text-base">
