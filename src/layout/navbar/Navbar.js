@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useCart } from 'react-use-cart';
 import { IoSearchOutline } from 'react-icons/io5';
 import { FiShoppingCart, FiUser, FiBell } from 'react-icons/fi';
-
+import {BsPersonCircle} from 'react-icons/bs'
 //internal import
 import NavbarPromo from '@layout/navbar/NavbarPromo';
 import { UserContext } from '@context/UserContext';
@@ -15,7 +15,7 @@ import LoginModal from '@component/modal/LoginModal';
 import CartDrawer from '@component/drawer/CartDrawer';
 import { SidebarContext } from '@context/SidebarContext';
 
-const Navbar = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
+const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct}) => {
   const [imageUrl, setImageUrl] = useState('');
   const [searchText, setSearchText] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const Navbar = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
         <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
 
-      <div className="bg-cyan-500 sticky top-0 z-20">
+      <div className="bg-sky-500 sticky top-0 z-20">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="top-bar h-16 lg:h-auto flex items-center justify-between py-4 mx-auto">
             {
@@ -95,7 +95,9 @@ const Navbar = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
                         src={companyLogo === undefined ? 'https://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
                         alt="logo"
                       />
-                      <h1 className="text-xl lg:text-2xl mb-2 font-serif font-semibold text-white">Company Name</h1>
+                      
+                      <div className="relative ml-1 lg:ml-2 xl:ml-2 absolute inset-y-0.5 bottom-0 text-xl lg:text-2xl mt-4 mb-4 font-serif font-semibold text-white">{companyName}</div>
+                      
                     </span>
                     
                     
@@ -171,9 +173,12 @@ const Navbar = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
                 ) : userInfo?.name ? (
                   <Link href="/user/dashboard">
                     <a className="leading-none font-bold font-serif block">
-                      {userInfo?.name[0]}
+                      <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
+                      
                     </a>
+                    
                   </Link>
+                  
                 ) : (
                   <span onClick={() => setModalOpen(!modalOpen)}>
                     <FiUser className="w-6 h-6 drop-shadow-xl" />

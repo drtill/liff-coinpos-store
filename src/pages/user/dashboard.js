@@ -165,7 +165,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
               
       }
 
-  const { data } = useAsync(() => ProductServices.getDashboardOrderByUserId(
+  const { data } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
     {
       companyId,
       liffId,

@@ -14,6 +14,104 @@ const ProductServices = {
   getProductBySlug(slug) {
     return requests.get(`/products/${slug}`);
   },
+  getOrderByUserId(body)
+  {
+    return requests.post('/products/GetOrderByUserId',body);
+  },
+  async fetchGetOrderByUserId(body)
+  {
+    try {
+
+      var productList = null;
+      console.log("Get Order = " + JSON.stringify(body));
+      //res.send("Get Order = " + JSON.stringify(req.body));
+      
+      //return;
+      await fetch(serviceUrl + 'GetOrderByUserId',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+  
+        var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = obj;
+      });
+      
+        return productList;
+    } catch (err) {
+      return "Error: " + err.message; 
+      
+    }
+  },
+  getDashboardOrderByUserId(body)
+  {
+    return requests.post('/products/GetDashboardOrderByUserId',body);
+  },
+  async fetchGetOrderByUserId(body)
+  {
+    try {
+      var productList = null;
+      await fetch(serviceUrl + 'GetOrderByUserId',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+  
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = data;
+      });
+      
+        return productList;
+    } catch (err) {
+      return 'Error: ' + err.message;
+      /*res.status(500).send({
+        message: err.message,
+      });*/
+    }
+  },
+  async fetchGetDashboardOrderByUserId(body)
+  {
+    try {
+      var productList = null;
+      console.log("Get Order = " + JSON.stringify(body));
+      //res.send("Get Order = " + JSON.stringify(req.body));
+      
+      //return;
+      await fetch(serviceUrl + 'GetDashboardOrderByUserId',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":0,"RowPerPage":0,"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+  
+          alert(data);
+        var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = obj;
+
+      });
+      
+        return productList
+    } catch (err) {
+      return "Error: " + err.message;
+    }
+  },
   async fetchGetProductBySlug(body){
     try
     {

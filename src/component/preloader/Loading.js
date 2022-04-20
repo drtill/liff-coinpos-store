@@ -4,8 +4,16 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 const Loading = ({ loading }) => {
   return (
     <div className="text-lg text-center py-6">
-      <ScaleLoader
+      {/* <ScaleLoader
         color="#34D399"
+        loading={loading}
+        height={30}
+        width={3}
+        radius={3}
+        margin={2}
+      /> */}
+      <ScaleLoader
+        color="#25A0DA"
         loading={loading}
         height={30}
         width={3}

@@ -24,7 +24,7 @@ const MobileFooter = ({companyLogo, dataPath, RefreshProductList, FilterProduct}
       <div className="flex flex-col h-full justify-between align-middle bg-white rounded cursor-pointer overflow-y-scroll flex-grow scrollbar-hide w-full">
         <CategoryDrawer companyLogo={companyLogo} FilterProduct={FilterProduct} className="w-6 h-6 drop-shadow-xl" />
       </div>
-      <footer className="lg:hidden fixed z-30 bottom-0 bg-cyan-500 flex items-center justify-between w-full h-16 px-3 sm:px-10">
+      <footer className="lg:hidden fixed z-30 bottom-0 bg-cyan-600 flex items-center justify-between w-full h-16 px-3 sm:px-10">
         <button
           aria-label="Bar"
           onClick={toggleCategoryDrawer}

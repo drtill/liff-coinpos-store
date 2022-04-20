@@ -30,7 +30,7 @@ import ProductServices from '@services/ProductServices';
 import { UserContext } from '@context/UserContext';
 import Uploader from '@component/image-uploader/Uploader';
 import { notifySuccess, notifyError } from '@utils/toast';
-import { set } from 'firebase/database';
+//import { set } from 'firebase/database';
 
 import Loading from '@component/preloader/Loading';
 

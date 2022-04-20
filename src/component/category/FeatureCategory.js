@@ -30,7 +30,7 @@ const FeatureCategory = ({categories,FilterCategory, FilterProduct}) => {
                     <h3 onClick={() =>
                   
                   FilterCategory(0)
-                } className="text-sm text-gray-600 cursor-pointer font-serif font-medium leading-tight line-clamp-1 group-hover:text-cyan-500">
+                } className="text-sm text-gray-600 cursor-pointer font-serif font-medium leading-tight line-clamp-1 group-hover:text-cyan-600">
                       สินค้าทั้งหมด
                     </h3>
                     
@@ -63,7 +63,7 @@ const FeatureCategory = ({categories,FilterCategory, FilterProduct}) => {
                       .join('-')}`
                   ) */
                   FilterCategory(category._id)
-                } className="text-sm text-gray-600 cursor-pointer font-serif font-medium leading-tight line-clamp-1 group-hover:text-cyan-500">
+                } className="text-sm text-gray-600 cursor-pointer font-serif font-medium leading-tight line-clamp-1 group-hover:text-cyan-600">
                       {category.parent}
                     </h3>
                     <ul className="pt-1 mt-1">

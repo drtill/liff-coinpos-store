@@ -130,7 +130,7 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
                         Inactive
                       </span>
                     ) : (
-                      <span className="text-cyan-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-cyan-100">
+                      <span className="text-white inline-block px-4 py-1 rounded-full font-medium text-xs bg-coinpos">
                         Active
                       </span>
                     )}
@@ -214,17 +214,37 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
                           <span className="font-bold text-gray-700">
                             สินค้า ประเภท {coupon.productType}
                           </span>{' '}
-                          และ เมื่อยอดมากกว่า{' '}
-                          <span className="font-bold text-gray-700">
-                            {coupon.currencySign}{coupon.minimumAmount}
-                          </span>{' '}
+                          {Number(coupon.minimumAmount) <= 0
+                            ?
+                            <>
+                              และ ไม่มียอดขั้นต่ำ{' '}
+                            </>
+                            :
+                            <>
+                              และ เมื่อยอดมากกว่า{' '}
+                              <span className="font-bold text-gray-700">
+                                {coupon.currencySign}{coupon.minimumAmount}
+                              </span>{' '}
+                            </>
+                          }
+                          
                         </p>
                       </>
                     :
                       <>
                         <p className="text-xs leading-4 text-gray-500 mt-2">
-                        * คูปองนี้ใช้ได้เมื่อยอดมากกว่า{' '}
-                        <span className="font-bold"> {coupon.currencySign}{coupon.minimumAmount}</span>{' '}
+                          {Number(coupon.minimumAmount) <= 0
+                            ?
+                            <>
+                              * คูปองนี้ไม่มียอดขั้นต่ำ{' '}
+                            </>
+                            :
+                            <>
+                              * คูปองนี้ใช้ได้เมื่อยอดมากกว่า{' '}
+                              <span className="font-bold"> {coupon.currencySign}{coupon.minimumAmount}</span>{' '}
+                            </>
+                          }
+                        
                       </p>
                       </>
                   }

@@ -29,6 +29,7 @@ const useLoginSubmit = (setModalOpen) => {
     verifyEmail,
     password,
     companyId,
+    locationId,
     companyName,
     locationEmail,
     liffId,
@@ -184,9 +185,9 @@ const useLoginSubmit = (setModalOpen) => {
         
               
       }
-      UserServices.fetchVerifyCoinPOSEmailAddress({ name, email, password, companyName, locationEmail, companyId, dataPath })
+      UserServices.fetchVerifyCoinPOSEmailAddress({ name, email, password, companyName, locationEmail, companyId, locationId, dataPath })
         .then((res) => {
-          //alert('then = ' + res)
+          alert('then = ' + res)
           setLoading(false);
           setModalOpen(false);
           notifySuccess(res.message);
@@ -219,15 +220,94 @@ const useLoginSubmit = (setModalOpen) => {
   };
 
   const handleGoogleSignIn = (user) => {
-    UserServices.signUpWithProvider({
+    alert('user google = ' + user.profileObj.name + " Email = " + user.profileObj.email + " imgUrl = " + user.profileObj.imageUrl);
+
+    console.log('user google = ' + JSON.stringify(user));
+
+    //return JSON.stringify(user);
+    var companyId = 0;
+    if(sessionStorage.getItem('companyId'))
+    {
+      companyId = sessionStorage.getItem('companyId'); 
+      alert("Google CompanyId = " + companyId);
+            
+    }
+    UserServices.fetchCoinposGoogleLogin({
+      companyId:companyId,
       name: user.profileObj.name,
       email: user.profileObj.email,
       image: user.profileObj.imageUrl,
     })
       .then((res) => {
         setModalOpen(false);
+        alert(JSON.stringify(res));
         notifySuccess('Login success!');
-        router.push(redirect || '/');
+        //router.push(redirect || '/');
+        
+
+
+
+        dispatch({ type: 'USER_LOGIN', payload: res });
+        Cookies.set('userInfo', JSON.stringify(res));
+      })
+
+      .catch((err) => {
+        notifyError(err.message);
+        setModalOpen(false);
+      });
+  };
+  const handleLineSignIn = async () => {
+    alert("Line SignIn")
+    var dataPath = '';
+      if(sessionStorage.getItem('dataPath'))
+      {
+        dataPath = sessionStorage.getItem('dataPath'); 
+        
+              
+      }
+    var liffData = '';
+
+    var getProfile = null;
+    const liff = (await import('@line/liff')).default
+    try {
+      await liff.init({ liffId:liffData });
+    } catch (error) {
+      console.error('liff init error', error.message)
+    }
+    if (!liff.isLoggedIn()) {
+      //alert("Will Login")
+      var url = 'http://localhost:3000/' + dataPath;
+      //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
+      alert(url);
+      liff.login({ redirectUri: url});
+    }
+    else
+    {
+      alert("Logined")
+      getProfile = await liff.getProfile();
+      
+      alert("GetProfile")
+                
+    }
+    return JSON.stringify(getProfile);
+    var companyId = 0;
+    if(sessionStorage.getItem('companyId'))
+    {
+      companyId = sessionStorage.getItem('companyId'); 
+      alert("Google CompanyId = " + companyId);
+            
+    }
+    UserServices.fetchCoinposGoogleLogin({
+      companyId:companyId,
+      name: user.profileObj.name,
+      email: user.profileObj.email,
+      image: user.profileObj.imageUrl,
+    })
+      .then((res) => {
+        setModalOpen(false);
+        alert(JSON.stringify(res));
+        notifySuccess('Login success!');
+        //router.push(redirect || '/');
         
 
 
@@ -246,6 +326,7 @@ const useLoginSubmit = (setModalOpen) => {
     handleSubmit,
     submitHandler,
     handleGoogleSignIn,
+    handleLineSignIn,
     register,
     errors,
     GoogleLogin,

@@ -47,7 +47,7 @@ const Layout = ({ title, description,dataPath, children, companyName, locationNa
           <link ref="icon" href="/favicon.ico"/>
         </Head>
         {/* <NavBarTop /> */}
-        <Navbar companyLogo={companyLogo} dataPath={dataPath} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
+        <Navbar companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
         <div className="bg-gray-50">{children}</div>
         <MobileFooter companyLogo={companyLogo} dataPath={dataPath} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
         <div className="w-full">

@@ -102,7 +102,7 @@ const NavbarPromo = ({FilterProduct}) => {
                     </Popover> */}
                     <Link href="/offer">
                       <a className="relative inline-flex items-center h-6 bg-red-100 font-serif ml-4 py-0 px-2 rounded text-sm font-medium text-red-500 hover:text-cyan-600">
-                        Offers
+                        ส่วนลด
                         <div className="absolute flex w-2 h-2 left-auto -right-1 -top-1">
                           <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>

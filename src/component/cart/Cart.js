@@ -103,7 +103,7 @@ const Cart = () => {
   const checkoutClass = (
     <button
       onClick={closeCartDrawer}
-      className="w-full py-3 px-3 rounded-lg bg-cyan-500 hover:bg-cyan-600 flex items-center justify-between bg-heading text-sm sm:text-base text-white focus:outline-none transition duration-300"
+      className="w-full py-3 px-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 flex items-center justify-between bg-heading text-sm sm:text-base text-white focus:outline-none transition duration-300"
     >
       <span className="align-middle font-medium font-serif">
         ดำเนินการชำระเงิน

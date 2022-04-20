@@ -10,20 +10,23 @@ import {
 //internal import
 import { SidebarContext } from '@context/SidebarContext';
 
-const CategoryCard = ({ title, icon, nested }) => {
+const CategoryCard = ({ parentId, title, icon, nested, FilterProduct }) => {
   const [show, setShow] = useState(false);
   const showCategory = () => setShow(!show);
   const router = useRouter();
   const { closeCategoryDrawer } = useContext(SidebarContext);
 
-  const handleSubCategory = (children) => {
-    router.push(
+  const handleSubCategory = (proId) => {
+    //alert("parentId = " + parentId + " children._id = " + proId)
+    FilterProduct(parentId,proId)
+    //FilterProduct(children);
+    /*router.push(
       `/search?category=${children
         .toLowerCase()
         .replace('&', '')
         .split(' ')
         .join('-')}`
-    );
+    );*/
     closeCategoryDrawer();
   };
 
@@ -31,7 +34,7 @@ const CategoryCard = ({ title, icon, nested }) => {
     <>
       <a
         onClick={showCategory}
-        className="p-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+        className="p-2 flex items-center rounded-md hover:bg-gray-50 w-full hover:text-cyan-600"
         role="button"
       >
         <Image
@@ -41,7 +44,7 @@ const CategoryCard = ({ title, icon, nested }) => {
           alt={title}
           aria-hidden="true"
         />
-        <div className="inline-flex items-center justify-between ml-3 text-sm font-medium w-full hover:text-emerald-600">
+        <div className="inline-flex items-center justify-between ml-3 text-sm font-medium w-full hover:text-cyan-600">
           {title}
           <span className="transition duration-700 ease-in-out inline-flex loading-none items-end text-gray-400">
             {show ? <IoChevronDownOutline /> : <IoChevronForwardOutline />}
@@ -51,15 +54,15 @@ const CategoryCard = ({ title, icon, nested }) => {
       {show ? (
         <ul className="pl-6 pb-3 pt-1 -mt-1">
           {nested.map((children) => (
-            <li key={children}>
+            <li key={children._id}>
               <a
-                onClick={() => handleSubCategory(children)}
-                className="flex items-center font-serif py-1 text-sm text-gray-600 hover:text-emerald-600 cursor-pointer"
+                onClick={() => handleSubCategory(children._id)}
+                className="flex items-center font-serif py-1 text-sm text-gray-600 hover:text-cyan-600 cursor-pointer"
               >
                 <span className="text-xs text-gray-500 pr-1">
                   <IoRemoveSharp />
                 </span>
-                {children}
+                {children.title}
               </a>
             </li>
           ))}

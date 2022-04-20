@@ -141,20 +141,20 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
         <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 lg:py-16 justify-between">
           <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3">
             <h3 className="text-md lg:leading-7 font-medium mb-4 sm:mb-5 lg:mb-6 pb-0.5">
-              Company
+              Quick Link
             </h3>
             <ul className="text-sm flex flex-col space-y-3">
               <li className="flex items-baseline">
                 <Link href="/">
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
-                    Offers
+                    ส่วนลด
                   </a>
                 </Link>
               </li>
               <li className="flex items-baseline">
                 <Link href="/contact-us">
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
-                    Contact us
+                    ติดต่อเรา
                   </a>
                 </Link>
               </li>
@@ -176,7 +176,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
           </div>
           <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3">
             <h3 className="text-md lg:leading-7 font-medium mb-4 sm:mb-5 lg:mb-6 pb-0.5">
-              My Account
+              บัญชีผู้ใช้
             </h3>
             <ul className="text-sm lg:text-15px flex flex-col space-y-3">
               <li className="flex items-baseline">
@@ -188,7 +188,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
                 </Link> */}
                 <div onClick={() => handleDashBoardClick()}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
-                  Dashboard
+                  แดชบอร์ด
                   </a></div>
               </li>
               <li className="flex items-baseline">
@@ -202,7 +202,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
                 </Link> */}
                 <div onClick={() => handleMyOrdersClick()}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
-                  My Orders
+                  ใบสั่งขายของฉัน
                   </a></div>
               </li>
               <li className="flex items-baseline">
@@ -215,7 +215,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
                 </Link> */}
                 <div onClick={() => handleDashBoardClick()}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
-                  Recent Orders
+                  ใบสั่งขาย ล่าสุด
                   </a></div>
               </li>
               <li className="flex items-baseline">
@@ -230,7 +230,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
                 </Link> */}
                 <div onClick={updateProfileClick}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
-                    Updated Profile
+                    แก้ไข โปรไฟล์
                   </a></div>
               </li>
             </ul>
@@ -298,7 +298,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
               </span>
               <br/>
               <span>
-                Location: {locationName}
+                สาขา: {locationName}
               </span>
               <br/>
               <span>

@@ -225,6 +225,8 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       sessionStorage.setItem('companyName',companyNameData);
       sessionStorage.setItem('companyId',catalogCompanyId);
 
+      sessionStorage.setItem('locationId',catalogLocationId);
+
       sessionStorage.setItem('companyFacebook',companyFacebookData);
       sessionStorage.setItem('companyLine',companyLineData);
 

@@ -1,8 +1,12 @@
 import requests from './httpServices';
 import jwt from 'jsonwebtoken';
+const {tokenForVerify } = require('../config/auth');
 
 const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
 //const serviceUrl = 'http://localhost:41781/lineliff/';
+const JWT_SECRET_FOR_VERIFY = 'lfjfjasjfr09ri09wrilfdjdjgdfgd';
+const JWT_SECRET = 'fgdfgdfgdfgfgfdgdfgdfgfgfgtrgrtg5455454y4646hhgdfg';
+
 const UserServices = {
   userLogin(body) {
     return requests.post('/user/login', body);
@@ -21,6 +25,7 @@ const UserServices = {
   signUpWithProvider(body) {
     return requests.post('/user/signup', body);
   },
+  
 
   forgetPassword(body) {
     return requests.put('/user/forget-password', body);
@@ -76,6 +81,62 @@ const UserServices = {
   async fetchCoinposUserLogin(body) {
     try {
       const userJson = await findCoinPOSCustomerAccount(body.companyId,body.registerEmail,body.password);
+      
+      
+      if(userJson != 'null')
+      {
+        //alert('Fetch not null = ' + userJson);
+        const user = JSON.parse(userJson);
+        return ({
+          //token,
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          address: user.address,
+          phone: user.phone,
+          image: user.image,
+          paramPath: body.paramPath,
+          customerId: user.customerId,
+          customerName: user.customerName,
+          customerTypeId: user.customerTypeId,
+          customerType: user.customerType,
+          imageUrl: user.imageUrl,
+          firstName: user.firstName,
+          middleName: user.middleName,
+          lastName: user.lastName,
+          customerAddressId: user.customerAddressId,
+          countrys: user.countrys,
+          provinces: user.provinces,
+          cities: user.cities,
+          districts: user.districts,
+          address1: user.address1,
+          postalcode: user.postalcode,
+          districtId: user.districtId,
+          cityId: user.cityId,
+          provinceId: user.provinceId,
+          countryId: user.countryId,
+          country: user.country,
+          province: user.province,
+          city: user.city,
+          district: user.district,
+          
+  
+  
+  
+  
+        });
+      } else {
+        return null;
+        
+      }
+    } catch (err) {
+      return err.message;
+      
+    }
+  },
+  async fetchCoinposGoogleLogin(body) {
+    try {
+      const userJson = await loginCoinPOSCustomerGoogleAccount(body.companyId,body.name,body.email,body.image);
       
       
       if(userJson != 'null')
@@ -193,30 +254,36 @@ const UserServices = {
   async fetchVerifyCoinPOSEmailAddress(body) {
     try
     {
-      //alert('fetchVerify')
+      alert('fetchVerify')
+      alert('process.env.JWT_SECRET_FOR_VERIFY = ' + JWT_SECRET_FOR_VERIFY)
+      const token = tokenForVerify(body);
+      alert('token = ' + token)
+      //return;
       var productList = null;
-      await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
+      //await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
       //await fetch('http://localhost:5055/api' + '/user/verify-coinpos-email', 
+      await fetch(serviceUrl + 'CoinPOSCustomerRegister',
       { 
         method:'POST',
         //credentials:"include",
         headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-        body:`{"companyId":${body.companyId},"name":"${body.name}","email":"${body.email}","password":"${body.password}","companyName":"${body.companyName}","locationEmail":"${body.locationEmail}","dataPath":"${body.dataPath}"}`
+        body:`{"companyId":${body.companyId},"locationId":${body.locationId},"name":"${body.name}","email":"${body.email}","password":"${body.password}","companyName":"${body.companyName}","locationEmail":"${body.locationEmail}","dataPath":"${body.dataPath}","token":"${token}"}`
         }).then(function(response) {
           return response.text();
         }).then(function(data) {
 
-        var obj = JSON.parse(data);
+        //var obj = JSON.parse(data);
         //console.log("Obj = " + obj);
         alert("expired = " + data)
         console.log("expired = " + data); // this will be a string
-        productList = obj;
+        productList = data;
       });
       
       return productList;
       
     }
     catch (err) {
+      alert("Error: " + err.message);
       return "Error: " + err.message;
       
     }
@@ -334,6 +401,32 @@ const findCoinPOSCustomerAccount = async(companyId, email, password) =>
       //credentials:"include",
       headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
       body:`{"CompanyId":${companyId},"Email":"${email}", "Password":"${password}"}`
+      }).then(function(response) {
+        return response.text();
+      }).then(function(data) {
+
+        userData = data;
+    });
+    
+    return userData;
+      
+  }
+  catch (err) {
+    return "Error: " + err.message;
+    
+  }
+};
+const loginCoinPOSCustomerGoogleAccount = async(companyId, name, email, imageUrl) => 
+{
+  try
+  {
+    var userData = null;
+    await fetch(serviceUrl + 'CoinPOSCustomerGoogleAccountLogin',//fetch('http://localhost:5002/simple-cors3', 
+    { 
+      method:'POST',
+      //credentials:"include",
+      headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+      body:`{"CompanyId":${companyId}, "DisplayName":"${name}","Email":"${email}", "ImageUrl":"${imageUrl}"}`
       }).then(function(response) {
         return response.text();
       }).then(function(data) {

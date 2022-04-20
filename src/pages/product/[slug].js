@@ -551,7 +551,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
             <div className="mx-auto px-3 lg:px-10 max-w-screen-2xl">
               <div className="flex items-center pb-4">
                 <ol className="flex items-center w-full overflow-hidden font-serif">
-                  <li className="text-sm pr-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold">
+                  <li className="text-sm pr-1 transition duration-200 ease-in cursor-pointer hover:text-cyan-600 font-semibold">
                     <Link href={"/" + dataPath}>
                       <a>Home</a>
                     </Link>
@@ -560,7 +560,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                     {' '}
                     <FiChevronRight />{' '}
                   </li>
-                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold ">
+                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-cyan-600 font-semibold ">
                     <Link
                       href={`/search?category=${product.category
                         .toLowerCase()
@@ -616,7 +616,16 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                             <span className="font-bold text-gray-600">
                               {product.sku
                                 ? product.sku
-                                : product._id//.substring(18, 24)
+                                : '-'//.substring(18, 24)
+                                }
+                            </span>
+                          </p>
+                          <p className="uppercase font-serif font-medium text-gray-500 text-sm">
+                            UPC :{' '}
+                            <span className="font-bold text-gray-600">
+                              {product.upc
+                                ? product.upc
+                                : '-'//.substring(18, 24)
                                 }
                             </span>
                           </p>
@@ -644,7 +653,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                                   (
                                     <div
                                       key={item.id}
-                                      className="w-56 group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-500 text-white"
+                                      className="w-56 group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-600 text-white"
                                     >
                                       <button
                                         onClick={() =>
@@ -680,17 +689,29 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                           ) : (
                             <button
                               onClick={() => handleAddItem(product)}
-                              className="leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-6 hover:text-white hover:bg-emerald-600 h-12 text-sm lg:text-base w-full sm:w-auto"
+                              className="leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-cyan-600 text-white px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-6 hover:text-white hover:bg-cyan-600 h-12 text-sm lg:text-base w-full sm:w-auto"
                             >
-                              Add to Cart
+                              เพิ่มลงตะกร้า
                             </button>
                           )}
 
                           <div className="flex flex-col mt-4">
                             <span className="font-serif font-semibold py-1 text-sm d-block">
-                              <span className="text-gray-700">Category:</span>{' '}
+                              <span className="text-gray-700">หมวดหมู่สินค้า:</span>{' '}
                               <span className="text-gray-500">
-                                {product.category}
+                                {product.category ? product.category : '-'}
+                              </span>
+                            </span>
+                            <span className="font-serif font-semibold py-1 text-sm d-block">
+                              <span className="text-gray-700">กลุ่มสินค้า:</span>{' '}
+                              <span className="text-gray-500">
+                                {product.product ? product.product : '-'}
+                              </span>
+                            </span>
+                            <span className="font-serif font-semibold py-1 text-sm d-block">
+                              <span className="text-gray-700">รายละเอียด:</span>{' '}
+                              <span className="text-gray-500">
+                                {product.description ? product.description : '-'}
                               </span>
                             </span>
                             {/* <Tags product={product} /> */}

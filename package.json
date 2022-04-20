@@ -1,7 +1,7 @@
 {
-  "name": "kachabazar-store",
+  "name": "CoinPOS",
   "version": "0.1.0",
-  "description": "this is kachabazar-store built with next.js and tailwindcss",
+  "description": "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.",
   "homepage": "https://kachabazar-store.vercel.app/",
   "private": true,
   "scripts": {

@@ -46,23 +46,53 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
 
               <Stock product={product} />
             </div>
-            <p className="text-sm leading-6 text-gray-500 md:leading-6">
-              {product.description}
-            </p>
-            <div className="flex items-center mt-4">
+            <div className="flex flex-col mt-1">
+              <span className="py-1 text-sm d-block leading-6 text-gray-500 md:leading-6">
+                <span className="text-gray-700">SKU:</span>{' '}
+                <span className="text-gray-500">
+                  {product.sku ? product.sku : '-'}
+                </span>
+              </span>
+              <span className="py-1 text-sm d-block leading-6 text-gray-500 md:leading-6">
+                <span className="text-gray-700">UPC:</span>{' '}
+                <span className="text-gray-500">
+                  {product.upc
+                                ? product.upc
+                                : '-'//.substring(18, 24)
+                                }
+                </span>
+              </span>
+              
+            </div>
+            
+            
+            <div className="flex items-center mt-4 mb-4">
               <Price product={product} />
             </div>
 
-            <div className="flex items-center mt-4">
+            {
+              item === undefined || item === null?
+                <></>
+              :
+                item.quantity === undefined || item.quantity === null || item.quantity <= 0 ?
+                    <></>
+                
+                :
+                <p className="text-sm leading-6 text-gray-500 md:leading-6">
+                    กด '+' หรือ '-' เพื่อปรับจำนวนสินค้าในตะกร้า{' '}
+                    
+                </p>
+              }
+            <div className="flex items-center mt-0">
               {
               item === undefined || item === null?
                 <div className="flex items-center justify-between space-s-3 sm:space-s-4 w-full">
                   <button
                           onClick={() => handleAddItem(product)}
                           disabled={product.quantity < 1}
-                          className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-cyan-500 hover:bg-cyan-600 w-full h-12"
+                          className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-cyan-600 hover:bg-cyan-600 w-full h-12"
                         >
-                          Add To Cart
+                          เพิ่มลงตะกร้า
                         </button>
                   
                   
@@ -71,6 +101,7 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
               :
                 item.quantity === undefined || item.quantity === null || item.quantity <= 0 ?
                     <div className="flex items-center justify-between space-s-3 sm:space-s-4 w-full">
+                      
                       <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
                         <button
                           onClick={() => handleUpdateItem(item, item.quantity - 1,'Dec')}
@@ -99,7 +130,7 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
                       <button
                           onClick={() => handleAddItem(product)}
                           disabled={product.quantity < 1}
-                          className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-cyan-500 hover:bg-cyan-600 w-full h-12"
+                          className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-cyan-600 hover:bg-cyan-600 w-full h-12"
                         >
                           Add To Cart
                         </button>
@@ -109,7 +140,7 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
                 
                 :
                   <div className="flex items-center justify-between space-s-3 sm:space-s-4 w-full">
-                    <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-500 text-white">
+                    <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300 bg-cyan-600 text-white">
                       <button
                         onClick={() => handleUpdateItem(item, item.quantity - 1,'Dec')}
                         disabled={item.quantity === 0}
@@ -143,10 +174,20 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
             </div>
             <div className="flex flex-col mt-4">
               <span className="font-serif font-semibold py-1 text-sm d-block">
-                <span className="text-gray-700">Category:</span>{' '}
-                <span className="text-gray-500">{product.children}</span>
+                <span className="text-gray-700">หมวดหมู่สินค้า:</span>{' '}
+                <span className="text-gray-500">
+                  {product.children ? product.children : '-'}
+                </span>
               </span>
-              <Tags product={product} />
+              <span className="font-serif font-semibold py-1 text-sm d-block">
+                <span className="text-gray-700">กลุ่มสินค้า:</span>{' '}
+                <span className="text-gray-500">{product.children ? product.children : '-'}</span>
+              </span>
+              <span className="font-serif font-semibold py-1 text-sm d-block">
+                <span className="text-gray-700">รายละเอียด:</span>{' '}
+                <span className="text-gray-500">{product.description ? product.description : '-'}</span>
+              </span>
+              {/* <Tags product={product} /> */}
             </div>
           </div>
         </div>

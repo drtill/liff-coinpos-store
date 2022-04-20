@@ -258,7 +258,7 @@ const MyOrders = () => {
         setLoading(true);
         try
         {
-          const data = await ProductServices.getOrderByUserId(
+          const data = await ProductServices.fetchGetOrderByUserId(
             {
               companyId,
               liffId,
@@ -289,7 +289,7 @@ const MyOrders = () => {
     setLoading(true);
       try
       {
-        const data = await ProductServices.getOrderByUserId(
+        const data = await ProductServices.fetchGetOrderByUserId(
           {
             companyId,
             liffId,

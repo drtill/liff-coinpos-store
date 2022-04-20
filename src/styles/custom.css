@@ -340,3 +340,12 @@ p:not(:last-of-type) {
 .category-slider button.prev svg, .category-slider button.next svg{
   margin: 0 auto;
 }
+.bg-coinpos
+{
+  --tw-bg-opacity:1;
+  background-color:#25A0DA;
+}
+.text-coinpos
+{
+  color:#25A0DA;
+}

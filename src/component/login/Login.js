@@ -110,10 +110,10 @@ const Login = ({ setShowResetPassword, setModalOpen }) => {
                   <InputArea
                     register={register}
                     defaultValue=""
-                    label="Password"
+                    label="รหัสผ่าน"
                     name="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder="รหัสผ่าน"
                     Icon={FiLock}
                   />
 
