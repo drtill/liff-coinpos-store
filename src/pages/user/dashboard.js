@@ -303,7 +303,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
                   onClick={handleLogOut}
                   className="inline-flex items-center justify-between text-sm font-medium w-full hover:text-emerald-600"
                 >
-                  Logout
+                  ออกจากระบบ
                 </button>
               </span>
             </div>
@@ -312,29 +312,29 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
             {!children && (
               <div className="overflow-hidden">
                 <h2 className="text-xl font-serif font-semibold mb-5">
-                  Dashboard
+                  แดชบอร์ด
                 </h2>
                 <div className="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-4">
                   <Card
-                    title="Total Order"
+                    title="ใบสั่งขาย รวม"
                     Icon={FiShoppingCart}
                     quantity={allOrderCount}//{data?.orders?.length}
                     className="text-red-600  bg-red-200"
                   />
                   <Card
-                    title="Pending Order"
+                    title="ใบสั่งขาย รอดำเนินการ"
                     Icon={FiRefreshCw}
                     quantity={pendingOrderCount}//{pending.length}
                     className="text-orange-600 bg-orange-200"
                   />
                   <Card
-                    title="Processing Order"
+                    title="ใบสั่งขาย กำลังดำเนินการ"
                     Icon={FiTruck}
                     quantity={processingOrderCount}//{processing.length}
                     className="text-indigo-600 bg-indigo-200"
                   />
                   <Card
-                    title="Complete Order"
+                    title="ใบสั่งขาย เสร้จสิ้นแล้ว"
                     Icon={FiCheck}
                     quantity={deliveredOrderCount}//{delivered.length}
                     className="text-emerald-600 bg-emerald-200"

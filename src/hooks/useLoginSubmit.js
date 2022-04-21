@@ -257,17 +257,37 @@ const useLoginSubmit = (setModalOpen) => {
       });
   };
   const handleLineSignIn = async () => {
-    alert("Line SignIn")
+    //alert("Line SignIn")
     var dataPath = '';
+    var companyCode = '';
+    var catalogName = '';
       if(sessionStorage.getItem('dataPath'))
       {
         dataPath = sessionStorage.getItem('dataPath'); 
         
               
       }
+      if(sessionStorage.getItem('companyCode'))
+      {
+        companyCode = sessionStorage.getItem('companyCode'); 
+        
+              
+      }
+      if(sessionStorage.getItem('catalogName'))
+      {
+        catalogName = sessionStorage.getItem('catalogName'); 
+        
+              
+      }
     var liffData = '';
+    if(sessionStorage.getItem('catalogLiffId'))
+    {
+      liffData = sessionStorage.getItem('catalogLiffId');
+    }
+    router.push(redirect || '/' + 'liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName);
 
-    var getProfile = null;
+    return;
+    /*var getProfile = null;
     const liff = (await import('@line/liff')).default
     try {
       await liff.init({ liffId:liffData });
@@ -276,8 +296,8 @@ const useLoginSubmit = (setModalOpen) => {
     }
     if (!liff.isLoggedIn()) {
       //alert("Will Login")
-      var url = 'http://localhost:3000/' + dataPath;
-      //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
+      //var url = 'https://6e3b-2001-fb1-b1-5dda-19ad-b449-f716-f151.ap.ngrok.io/coinpos/2-MyCustomer';//'https://6e3b-2001-fb1-b1-5dda-19ad-b449-f716-f151.ap.ngrok.io/liffId=1656885294-1ggNNLVX';//'https://6e3b-2001-fb1-b1-5dda-19ad-b449-f716-f151.ap.ngrok.io/' + dataPath;
+      var url = 'https://6e3b-2001-fb1-b1-5dda-19ad-b449-f716-f151.ap.ngrok.io' + '/liffId=1656555843-E6WV7arj' + '?catalog=' + dataPath;
       alert(url);
       liff.login({ redirectUri: url});
     }
@@ -289,7 +309,7 @@ const useLoginSubmit = (setModalOpen) => {
       alert("GetProfile")
                 
     }
-    return JSON.stringify(getProfile);
+    return JSON.stringify(getProfile);*/
     var companyId = 0;
     if(sessionStorage.getItem('companyId'))
     {

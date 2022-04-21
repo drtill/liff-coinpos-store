@@ -30,7 +30,7 @@ import useLoginSubmit from '@hooks/useLoginSubmit';
 const isLiffLogin = true;//process.env.NEXT_PUBLIC_ISLOGIN
 var itemPerPage = 30;
 
-const Details = ({params,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,
+const Details = ({params,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,companyCode,catalogName,coinPOSLiffData,
     groupIdData, liffOrderId, liffCompanyId,liffLocationId,countPage,currentPage,
     products,salesOrder, orderDetails,categories,shippingServices,bankNameAndAccounts,
     currencySign, companyName, locationName,companyLogo,
@@ -100,7 +100,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           useLoginSubmit();
           
           useEffect(async () => {
-            //alert("companyName = " + companyNameData)
+            
       
             //var getPromotionCode = localStorage.getItem('promotionCode')
       
@@ -169,37 +169,53 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
             
             if(isLiffLogin === true)
             {
+              alert('liffData = ' + coinPOSLiffData)
               if(liffData.length === 0)
               {
-                //alert("Liff Data is not found.");
+                alert("Liff Data is not found.");
                 router.push('/404');
               }
               const liff = (await import('@line/liff')).default
               try {
                 await liff.init({ liffId:liffData });
               } catch (error) {
-                console.error('liff init error', error.message)
+                alert('liff init error' + error.message)
               }
               if (!liff.isLoggedIn()) {
-                //alert("Will Login")
-                var url = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
-                //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
-                //alert(url);
-                liff.login({ redirectUri: url});
+                alert("Will Login")
+                alert("Logined")
+                //liffId=1656555843-E6WV7arj
+                if(companyCode)
+                {
+                  var url = liffEndpoint + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
+                  //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
+                  //alert(url);
+                  liff.login({ redirectUri: url});
+                }
+                else
+                {
+                  var url = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+                  //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
+                  //alert(url);
+                  liff.login({ redirectUri: url});
+                }
+                
               }
               else
               {
-                //alert("Logined")
+                alert("Logined")
                 let getProfile = await liff.getProfile();
       
-                //alert("GetProfile")
+                alert("GetProfile")
                 lineUsername = getProfile.displayName;
                 
                 
                 lineLiffUserId = getProfile.userId;
                 
                 lineProfileImage = getProfile.pictureUrl;
-                //alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
+                const email = liff.getDecodedIDToken().email;
+                alert("GetEmail = " + JSON.stringify(email));
+                alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
                 setLineUsername(lineUsername);
                 setLineUserId(lineLiffUserId);
                 setProfileImage(lineProfileImage);
@@ -211,6 +227,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                 var dataUser = {};
                 dataUser['image'] = lineProfileImage;
                 dataUser['name'] = lineUsername;
+                dataUser['email'] = email;
+
       
                 //orderData['_id']
                 //Cookies.set('lineUserName', lineUsername);
@@ -230,6 +248,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   data["liffId"] = liffId;
                   data["lineUserId"] = lineUserId;
                   data["linePOSId"] = linePOSId;
+                  data["email"] = email;
                   var companyId = Number(liffCompanyId);
                   var paramPath = dataPath;
                 
@@ -252,98 +271,111 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
               //Cookies.set('lineProfileImage', "https://profile.line-scdn.net/0hijMbw1BrNkVwGx1VWnFJEkxeOCgHNTANCC97Il1OPHVYLXZGG3V_dlBObXQJLnERGXx4J1wYOnZZ");
             }
         
+
             //alert("Liff Init = " + lineUserId);
-            var orderId = liffOrderId;
-            var companyId = liffCompanyId;
-            var locationId = liffLocationId;
-            var companyName = '';
-            var locationName = '';
-            var lineUserId = lineLiffUserId;
-            try
+
+            if(companyCode)
             {
-              alert("Get Order");
-              const salesOrder = await ProductServices.fetchGetCoinPOSOrder({
-                  liffId,
-                  lineUserId,
-                  linePOSId,
-                  groupId,
-                  orderId,
-                  companyId,locationId,
-                  companyName,
-                  locationName
-                });
-          
-                alert("Get SaleOrder");
-                alert(JSON.stringify(salesOrder));
-                if(salesOrder.orderStatusId !== 1)
-                {
-                  alert("Goto Order")
-                  router.push('/order/' + salesOrder.orderId);
-      
-                  return ;
-                }
-                
-          
-                sessionStorage.setItem('customerTypeId',salesOrder.customerTypeId);
-      
-                var salesOrderDetails = salesOrder.orderDetails;
-      
-                var promotionCode = salesOrder.promotionCode;
-                
-                const productDs = [];
-                const discountDetails = [];
-      
-                for(var i = 0;i<salesOrderDetails.length;i++)
-                {
-                  var detail = {
-                    id: Number(salesOrderDetails[i].productVariantId),
-                    slug:salesOrderDetails[i].productId,
-                    name: salesOrderDetails[i].upc,
-                    title:salesOrderDetails[i].productVariantName,
-                    sku: salesOrderDetails[i].sku,
-                    quantity:salesOrderDetails[i].quantity,
-                    price: salesOrderDetails[i].productVariantPrice,
-                    image:salesOrderDetails[i].imageUrl,
-                    //key.push(orderDetails[i].upc)
-                  }
-                  var discountDetail = {
-                    id: Number(salesOrderDetails[i].productVariantId),
-                    discount:Number(salesOrderDetails[i].discount),
-                    discountRate:Number(salesOrderDetails[i].discountRate)
-                  }
-                  //alert("add");
-                  productDs.push(detail);
-                  discountDetails.push(discountDetail);
-                }
-                //alert("Set Cart")
-                setItems(productDs);
-                if(promotionCode !== undefined && promotionCode !== null)
-                {
-                  //alert("Set Promo")
-                  sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
-                  sessionStorage.setItem('promotionCode', promotionCode);
-                  SetPromotionData(promotionCode,'',0,discountDetails[0].discountRate, true);
-                  setDiscountDetail(JSON.stringify(discountDetails))
-                }
-                
-      
-                //alert("Get Product")
-                await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
-                //setProductList([]);
-                //alert("Set Product")
-                //pagingManager();
-                //setProductList(products);
-      
-                setPromotionLoading(false);
-                setCategoryLoading(false);
-                setNewProductLoading(false);
-                setLoading(false);
-      
+              alert('Back To catalog')
+              router.push('/' + companyCode + '/' + catalogName);
+              return;
             }
-            catch (err) 
+            else
             {
-              alert(err.message);
+              var orderId = liffOrderId;
+              var companyId = liffCompanyId;
+              var locationId = liffLocationId;
+              var companyName = '';
+              var locationName = '';
+              var lineUserId = lineLiffUserId;
+              try
+              {
+                alert("catalogData = " + catalogData)
+                alert("Get Order");
+                const salesOrder = await ProductServices.fetchGetCoinPOSOrder({
+                    liffId,
+                    lineUserId,
+                    linePOSId,
+                    groupId,
+                    orderId,
+                    companyId,locationId,
+                    companyName,
+                    locationName
+                  });
+            
+                  alert("Get SaleOrder");
+                  alert(JSON.stringify(salesOrder));
+                  if(salesOrder.orderStatusId !== 1)
+                  {
+                    alert("Goto Order")
+                    router.push('/order/' + salesOrder.orderId);
+        
+                    return ;
+                  }
+                  
+            
+                  sessionStorage.setItem('customerTypeId',salesOrder.customerTypeId);
+        
+                  var salesOrderDetails = salesOrder.orderDetails;
+        
+                  var promotionCode = salesOrder.promotionCode;
+                  
+                  const productDs = [];
+                  const discountDetails = [];
+        
+                  for(var i = 0;i<salesOrderDetails.length;i++)
+                  {
+                    var detail = {
+                      id: Number(salesOrderDetails[i].productVariantId),
+                      slug:salesOrderDetails[i].productId,
+                      name: salesOrderDetails[i].upc,
+                      title:salesOrderDetails[i].productVariantName,
+                      sku: salesOrderDetails[i].sku,
+                      quantity:salesOrderDetails[i].quantity,
+                      price: salesOrderDetails[i].productVariantPrice,
+                      image:salesOrderDetails[i].imageUrl,
+                      //key.push(orderDetails[i].upc)
+                    }
+                    var discountDetail = {
+                      id: Number(salesOrderDetails[i].productVariantId),
+                      discount:Number(salesOrderDetails[i].discount),
+                      discountRate:Number(salesOrderDetails[i].discountRate)
+                    }
+                    //alert("add");
+                    productDs.push(detail);
+                    discountDetails.push(discountDetail);
+                  }
+                  //alert("Set Cart")
+                  setItems(productDs);
+                  if(promotionCode !== undefined && promotionCode !== null)
+                  {
+                    //alert("Set Promo")
+                    sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
+                    sessionStorage.setItem('promotionCode', promotionCode);
+                    SetPromotionData(promotionCode,'',0,discountDetails[0].discountRate, true);
+                    setDiscountDetail(JSON.stringify(discountDetails))
+                  }
+                  
+        
+                  //alert("Get Product")
+                  await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
+                  //setProductList([]);
+                  //alert("Set Product")
+                  //pagingManager();
+                  //setProductList(products);
+        
+                  setPromotionLoading(false);
+                  setCategoryLoading(false);
+                  setNewProductLoading(false);
+                  setLoading(false);
+        
+              }
+              catch (err) 
+              {
+                alert(err.message);
+              }
             }
+            
             
       
             
@@ -1061,13 +1093,15 @@ export const getServerSideProps = async ({req, res,params }) => {
     var liffCompanyId = 0;
     var liffLocationId = 0;
     var liffProcess = "";
+    var catalogName = "";
+    var companyCode = "";
     var liffCompanyName = "";
 
     var liffData = '';
     var linePOSId = '';
     var lineUserId = '';
     var groupId = '';
-    var liffOrderId = null;
+    var liffOrderId = 0;
 
     var companyName = '';
     var locationName = '';
@@ -1093,7 +1127,9 @@ export const getServerSideProps = async ({req, res,params }) => {
     if(parms.length > 1)
     {
       const liffQuery = parms[0];
-      const liffOrderQuery = parms[1];
+      var liffOrderQuery = parms[1];
+
+      
       var liffVar = liffQuery.split("=");
       if(liffVar[0] === 'liffId')
       {
@@ -1138,6 +1174,24 @@ export const getServerSideProps = async ({req, res,params }) => {
         {
             liffProcess = pair[1];
         }
+        if(pair[0] === 'companycode')
+        {
+            companyCode = pair[1];
+        }
+        if(pair[0] === 'catalog')
+        {
+            catalogName = pair[1];
+        }
+        if(pair[0] === 'id')
+        {
+            var idData = pair[1];
+            idData = idData.replaceAll("%3D","=");
+            var liffs = idData.split("=")
+            if(liffs.length > 1)
+            {
+              liffData = liffs[1];
+            }
+        }
 
         if(pair[0] === 'liff.state')
         {
@@ -1145,6 +1199,7 @@ export const getServerSideProps = async ({req, res,params }) => {
           param = param.replaceAll("%3D","=");
           param = param.replaceAll("%26","&");
           param = param.replaceAll("%3F","?");
+          param = param.replaceAll("%2F","/");
           param = param.replace("?","");
           var m_params = param.split("&");
           for (var j=0;j<m_params.length;j++)
@@ -1174,6 +1229,14 @@ export const getServerSideProps = async ({req, res,params }) => {
             {
               liffProcess = paramValue[1];
             }
+            if(pair[0] === 'companycode')
+            {
+                companyCode = pair[1];
+            }
+            if(pair[0] === 'catalog')
+            {
+                catalogName = pair[1];
+            }
           }
 
         }
@@ -1191,8 +1254,8 @@ export const getServerSideProps = async ({req, res,params }) => {
   
   var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
 
-  var catalogName = '';
-  var companyCode = '';
+  //var catalogName = '';
+  //var companyCode = '';
 
   const products = await ProductServices.fetchGetDefaultDataCompany({
     //const products = await ProductServices.getCoinPOSProductService({
@@ -1200,7 +1263,7 @@ export const getServerSideProps = async ({req, res,params }) => {
       lineUserId,
       linePOSId,
       groupId,
-      orderId:orderId === null ? 0 : orderId,
+      orderId:orderId ? 0 : orderId,
       companyId,locationId,
       companyName,
       locationName,
@@ -1257,6 +1320,9 @@ export const getServerSideProps = async ({req, res,params }) => {
     props: {
         params: dataParam,
         dataPath:dataPath,
+        coinPOSLiffData:coinPOSLiffData,
+        catalogName:catalogName,
+        companyCode:companyCode,
         title:title,
         description:description,
         liffEndpoint:liffEndpoint,

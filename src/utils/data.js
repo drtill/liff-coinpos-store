@@ -72,22 +72,22 @@ const pages = [
 
 const userSidebar = [
   {
-    title: 'Dashboard',
+    title: 'แดชบอร์ด',
     href: '/user/dashboard',
     icon: IoGridOutline,
   },
   {
-    title: 'My Orders',
+    title: 'ใบสั่งขายของฉัน',
     href: '/user/my-orders',
     icon: IoListOutline,
   },
   {
-    title: 'Update Profile',
+    title: 'แก้ไข โปรไฟล์',
     href: '/user/update-profile',
     icon: IoSettingsOutline,
   },
   {
-    title: 'Change Password',
+    title: 'เปลี่ยนรหัสผ่าน',
     href: '/user/change-password',
     icon: HiOutlineDocumentText,
   },

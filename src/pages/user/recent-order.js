@@ -109,13 +109,13 @@ const RecentOrder = () => {
         if(startPage > 1)
         {
           indents.push(<button onClick={()=>getOrderByUserIdByPaging(startPage-1,rowPerPage)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
-              Previous
+              ย้อนกลับ
             </button>);
         }
         else
         {
           indents.push(
-            <button className="text-gray-400 text-lg px-2" disabled>Previous</button>
+            <button className="text-gray-400 text-lg px-2" disabled>ย้อนกลับ</button>
           );
         }
 
@@ -137,19 +137,19 @@ const RecentOrder = () => {
 
         if(endPage > allPage)
         {
-          indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+          indents.push(<button className="text-gray-400 text-lg px-2" disabled>ถัดไป</button>);
           
         }
         else
         {
           if(endPage === allPage)
           {
-            indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+            indents.push(<button className="text-gray-400 text-lg px-2" disabled>ถัดไป</button>);
           }
           else
           {
             indents.push(<button onClick={()=>getOrderByUserIdByPaging(endPage+1,rowPerPage)} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
-            Next
+            ถัดไป
           </button>)
           }
           
@@ -330,7 +330,7 @@ const RecentOrder = () => {
                     <IoBagHandle />
                   </span>
                   <h2 className="font-medium text-md my-4 text-gray-600">
-                    You Have no order Yet!
+                    คุณยังไม่มีใบสั่งขาย!
                   </h2>
                 </div>
               ) 
@@ -338,7 +338,7 @@ const RecentOrder = () => {
               (
                 <div className="flex flex-col">
                   <h3 className="text-lg font-serif font-medium mb-5">
-                    Recent Order
+                    ใบสั่งขายล่าสุด
                   </h3>
                   <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="align-middle inline-block border border-gray-100 rounded-md min-w-full pb-2 sm:px-6 lg:px-8">
@@ -350,32 +350,32 @@ const RecentOrder = () => {
                                 scope="col"
                                 className="text-left text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                               >
-                                ID
+                                หมายเลขใบสั่งขาย
                               </th>
                               <th
                                 scope="col"
                                 className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                               >
-                                OrderTime
+                                เวลาที่สั่ง
                               </th>
 
                               <th
                                 scope="col"
                                 className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                               >
-                                Method
+                                รูปแบบชำระเงิน
                               </th>
                               <th
                                 scope="col"
                                 className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                               >
-                                Status
+                                สถานะ
                               </th>
                               <th
                                 scope="col"
                                 className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                               >
-                                Total
+                                ยอดรวม
                               </th>
                             </tr>
                           </thead>

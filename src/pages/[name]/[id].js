@@ -35,7 +35,7 @@ var itemPerPage = 30;
 const Catalog = ({params,targetPage,companyCode,dataPath,title,description,countPage,currentPage,
   products,salesOrder, orderDetails,categories,shippingServices,bankNameAndAccounts,
   currencySign, companyName, locationName,companyLogo,
-  catalogCompanyId,catalogName,catalogLocationId,catalogOrderId,
+  catalogCompanyId,catalogName,catalogLocationId,catalogOrderId,catalogLiffId,
   customerFirstName,customerLastName,customerEmail, customerPhoneNumber,
   address1,countryId,provinceId,cityId,districtId,postalcode,
   countrys,provinces,cities,districts,
@@ -215,7 +215,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       }
 
       //alert(JSON.stringify(countrys))
-      //alert('Storage = ' + sessionStorage.getItem('countrys'))
+      alert('catalogLiffId Storage = ' + catalogLiffId)
       sessionStorage.setItem('countrys', 'JSON.stringify(countrys)');
       sessionStorage.setItem('countrysJSON', JSON.stringify(countrys));
       sessionStorage.setItem('dataPath',dataPath);
@@ -226,6 +226,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       sessionStorage.setItem('companyId',catalogCompanyId);
 
       sessionStorage.setItem('locationId',catalogLocationId);
+      sessionStorage.setItem('catalogLiffId',catalogLiffId);
 
       sessionStorage.setItem('companyFacebook',companyFacebookData);
       sessionStorage.setItem('companyLine',companyLineData);
@@ -839,13 +840,13 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
         {
           indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,companyCode,catalogLocationId,
             catalogName,'','',0,9,startPage-1,30,'','','')} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
-              Previous
+              ย้อนกลับ
             </button>);
         }
         else
         {
           indents.push(
-            <button className="text-gray-400 text-lg px-2" disabled>Previous</button>
+            <button className="text-gray-400 text-lg px-2" disabled>ย้อนกลับ</button>
           );
         }
 
@@ -868,20 +869,20 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
 
         if(endPage > allPage)
         {
-          indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+          indents.push(<button className="text-gray-400 text-lg px-2" disabled>ถัดไป</button>);
           
         }
         else
         {
           if(endPage === allPage)
           {
-            indents.push(<button className="text-gray-400 text-lg px-2" disabled>Next</button>);
+            indents.push(<button className="text-gray-400 text-lg px-2" disabled>ถัดไป</button>);
           }
           else
           {
             indents.push(<button onClick={()=>RefreshProductList("","","","",catalogOrderId,catalogCompanyId,companyCode,catalogLocationId,
               catalogName,'','',0,9,endPage+1,30,'','','')} className="hover:text-red-600 text-red-400 text-lg cursor-pointer px-2">
-            Next
+            ถัดไป
           </button>)
           }
           
@@ -1346,6 +1347,8 @@ export const getServerSideProps = async ({req, res,params }) => {
   var catalogCompanyId = products.companyId;
   var catalogLocationId = products.locationId;
 
+  var catalogLiffId = products.locationLiff;
+
   
   companyName = products.companyName;
   locationName = products.locationName;
@@ -1375,6 +1378,8 @@ export const getServerSideProps = async ({req, res,params }) => {
         catalogName:catalogName,
         catalogLocationId:catalogLocationId,
         catalogOrderId:0,
+
+        catalogLiffId:catalogLiffId,
 
         locationName:locationName,
         //categories:productCategories,
