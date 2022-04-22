@@ -193,6 +193,7 @@ const RecentOrder = () => {
             email:customerEmail
           })
           var data = JSON.parse(dataJson);
+          
           pagingManager(data.allCount, data.currentPage)
           setData(data);
           setLoading(false);

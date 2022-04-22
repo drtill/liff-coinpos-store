@@ -182,11 +182,36 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
 
 
   
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     dispatch({ type: 'USER_LOGOUT' });
     Cookies.remove('userInfo');
     Cookies.remove('couponInfo');
     localStorage.removeItem('userInfo');
+
+    var liffData = '';
+    if(sessionStorage.getItem('catalogLiffId'))
+    {
+      alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
+      liffData = sessionStorage.getItem('catalogLiffId');
+    }
+    
+    if(!liffData)
+    {
+      const liff = (await import('@line/liff')).default
+      try {
+        await liff.init({ liffId:liffData });
+      } catch (error) {
+        console.error('liff init error', error.message)
+      }
+
+      if (liff.isLoggedIn())
+      {
+        alert("Liff log out")
+        liff.logout();
+      }
+    }
+    
+    
     router.push('/' + dataPath);
   };
 
@@ -340,7 +365,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
                     className="text-emerald-600 bg-emerald-200"
                   />
                 </div>
-                <RecentOrder />
+                {/* <RecentOrder /> */}
               </div>
             )}
             {children}

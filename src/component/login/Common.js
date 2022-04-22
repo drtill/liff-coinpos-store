@@ -68,12 +68,12 @@ const Common = ({ setModalOpen }) => {
         </div>
         <div className="text-center text-sm text-gray-900 mt-4">
           <div className="text-gray-500 mt-2.5">
-            {showRegister ? 'Already have a account ?' : 'Not have a account ?'}
+            {showRegister ? 'มีบัญชีผู้ใช้อยู่แล้ว ?' : 'ยังไม่มีบัญชีผู้ใช้ ?'}
             <button
               onClick={handleModal}
               className="text-gray-800 hover:text-cyan-500 font-bold mx-2"
             >
-              {showRegister ? 'Login' : 'Register'}
+              {showRegister ? 'เข้าสู่ระบบ' : 'ลงทะเบียน'}
             </button>
           </div>
         </div>

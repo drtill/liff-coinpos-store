@@ -254,10 +254,10 @@ const UserServices = {
   async fetchVerifyCoinPOSEmailAddress(body) {
     try
     {
-      alert('fetchVerify')
-      alert('process.env.JWT_SECRET_FOR_VERIFY = ' + JWT_SECRET_FOR_VERIFY)
+      //alert('fetchVerify')
+      //alert('process.env.JWT_SECRET_FOR_VERIFY = ' + JWT_SECRET_FOR_VERIFY)
       const token = tokenForVerify(body);
-      alert('token = ' + token)
+      //alert('token = ' + token)
       //return;
       var productList = null;
       //await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
@@ -274,7 +274,7 @@ const UserServices = {
 
         //var obj = JSON.parse(data);
         //console.log("Obj = " + obj);
-        alert("expired = " + data)
+        //alert("expired = " + data)
         console.log("expired = " + data); // this will be a string
         productList = data;
       });
@@ -283,7 +283,7 @@ const UserServices = {
       
     }
     catch (err) {
-      alert("Error: " + err.message);
+      //alert("Error: " + err.message);
       return "Error: " + err.message;
       
     }

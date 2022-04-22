@@ -100,7 +100,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
       if(sessionStorage.getItem('locationId'))
       {
         locationId = sessionStorage.getItem('locationId'); 
-        alert("LocationId = " + locationId);
+        //alert("LocationId = " + locationId);
           
       }
       if(sessionStorage.getItem('locationEmail'))
@@ -115,7 +115,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
 
       
 
-      alert("Handle")
+      //alert("Handle")
       submitHandler(data)
 
 
@@ -123,9 +123,9 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
   return (
     <>
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold font-serif">Signing Up</h2>
+        <h2 className="text-3xl font-bold font-serif">ลงทะเบียนเข้าใช้</h2>
         <p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
-          Create an account with email
+          สร้างบัญชีด้วย Email และข้อมูลผู้ใช้
         </p>
       </div>
       {
@@ -183,7 +183,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                 label="รหัสยืนยัน"
                 name="confirmPassword"
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="รหัสยืนยัน"
                 Icon={FiLock}
               />
 
@@ -197,7 +197,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                   onClick={() => setShowResetPassword(true)}
                   className="text-end text-sm text-heading ps-3 underline hover:no-underline focus:outline-none"
                 >
-                  Forgot password?
+                  ลืมรหัสผ่าน?
                 </button>
               </div>
             </div>
@@ -206,7 +206,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
               type="submit"
               className="w-full text-center py-3 rounded bg-cyan-500 text-white hover:bg-cyan-600 transition-all focus:outline-none my-1"
             >
-              Register
+              ลงทะเบียน
             </button>
           </div>
         </form>

@@ -215,9 +215,12 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       }
 
       //alert(JSON.stringify(countrys))
-      alert('catalogLiffId Storage = ' + catalogLiffId)
+      //alert('catalogLiffId Storage = ' + catalogLiffId)
       sessionStorage.setItem('countrys', 'JSON.stringify(countrys)');
       sessionStorage.setItem('countrysJSON', JSON.stringify(countrys));
+
+      sessionStorage.setItem('fromPage','catalog');
+
       sessionStorage.setItem('dataPath',dataPath);
       sessionStorage.setItem('catalogName',catalogName);
       sessionStorage.setItem('companyCode',companyCode);
@@ -746,7 +749,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       query = query === undefined ? 'null' : query;
       category = category === undefined ? 'null' : category;
       product = product === undefined ? 'null' : product;
-      alert("page = " + page);
+      //alert("page = " + page);
       const products = await ProductServices.fetchRefreshCoinPOSProductService({
         liffId,
         lineUserId,
@@ -897,9 +900,9 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       //return;
       var userLocalJson = localStorage.getItem('userInfo');
       var userLocal = JSON.parse(userLocalJson)
-      alert('catalogName = ' + catalogName);
+      //alert('catalogName = ' + catalogName);
       var target = 'update-profile';
-      alert('targetPage = ' + target);
+      //alert('targetPage = ' + target);
       if (userLocal?.email) 
       {
         sessionStorage.setItem('catalogName',catalogName);
