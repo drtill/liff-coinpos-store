@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IoClose } from 'react-icons/io5';
@@ -11,13 +11,14 @@ import { SidebarContext } from '@context/SidebarContext';
 import CategoryServices from '@services/CategoryServices';
 import CategoryCard from '@component/category/CategoryCard';
 
-const Category = ({companyLogo,FilterProduct}) => {
+const Category = ({companyLogo, companyName, dataPath,FilterProduct}) => {
   const { categoryDrawerOpen, closeCategoryDrawer } =
     useContext(SidebarContext);
   //  const { data, loading, error } = useAsync(() =>
   //   CategoryServices.getShowingCategory()
   // ); 
 
+  
   var loading = true;
   var error = '';
   var categories = [];
@@ -49,8 +50,8 @@ const Category = ({companyLogo,FilterProduct}) => {
       {categoryDrawerOpen && (
         <div className="w-full flex justify-between items-center h-16 px-6 py-4 bg-cyan-500 text-white border-b border-gray-100">
           <h2 className="font-semibold font-serif text-lg m-0 text-heading flex align-center">
-            <Link href="/">
-              <a className="mr-10">
+            <Link href={"/" + dataPath}>
+              <a className="mr-4 inline-flex">
                 {/* <Image
                   width={100}
                   height={38}
@@ -58,14 +59,30 @@ const Category = ({companyLogo,FilterProduct}) => {
                   alt="logo"
                 /> */}
                 <Image
-                  width={38}
-                  height={38}
-                  src={companyLogo === undefined ? 'http://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
-                  alt="logo"
-                />
+                    width={38}
+                    height={38}
+                    
+                    src={companyLogo === undefined ? 'https://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
+                    alt="logo"
+                  />
+                  <div className="ml-4 self-center">{companyName}</div>
+                {/* <span className="flex" style={"heigth:38px"}>
+                  <Image
+                    width={38}
+                    height={38}
+                    
+                    src={companyLogo === undefined ? 'https://coinpos-uat.azurewebsites.net/img/logo2.png' : companyLogo}
+                    alt="logo"
+                  />
+
+                  <div className="relative ml-1 lg:ml-2 xl:ml-2 absolute inset-y-0.5 bottom-0 text-xl lg:text-2xl mt-4 mb-4 font-serif font-semibold text-white">{companyName}</div>
+                      
+                </span> */}
+                
               </a>
             </Link>
           </h2>
+          {/* <div className="relative ml-1 lg:ml-2 xl:ml-2 absolute inset-y-0.5 bottom-0 text-xl lg:text-2xl mt-4 mb-4 font-serif font-semibold text-white">{companyName}</div> */}
           <button
             onClick={closeCategoryDrawer}
             className="flex text-xl items-center justify-center w-8 h-8 rounded-full bg-gray-50 text-red-500 p-2 focus:outline-none transition-opacity hover:text-red-600"

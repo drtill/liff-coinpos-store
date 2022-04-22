@@ -127,7 +127,7 @@ const Cart = () => {
             <span className="text-xl mr-2 mb-1">
               <IoBagCheckOutline />
             </span>
-            Shopping Cart
+            ตะกร้าสินค้า
           </h2>
           <button
             onClick={closeCartDrawer}
@@ -135,7 +135,7 @@ const Cart = () => {
           >
             <IoClose />
             <span className="font-sens text-sm text-gray-500 hover:text-red-400 ml-1">
-              Close
+              ปิด
             </span>
           </button>
         </div>
@@ -149,10 +149,10 @@ const Cart = () => {
                   </span>
                 </div>
                 <h3 className="font-serif font-semibold text-gray-700 text-lg pt-5">
-                  Your cart is empty
+                  ตะกร้าสินค้าของคุณ ว่างเปล่า
                 </h3>
                 <p className="px-12 text-center text-sm text-gray-500 pt-2">
-                  No items added in your cart. Please add product to your cart
+                  ไม่พบรายการสินค้าในตะกร้าของคุณ กรุณาเพิ่มสินค้าสู่รายการในตะกร้า
                   list.
                 </p>
               </div>

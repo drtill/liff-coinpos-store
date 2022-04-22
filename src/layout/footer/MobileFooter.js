@@ -4,13 +4,14 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useCart } from 'react-use-cart';
 import { FiHome, FiUser, FiShoppingCart, FiAlignLeft } from 'react-icons/fi';
+import {BsPersonCircle} from 'react-icons/bs'
 
 import { UserContext } from '@context/UserContext';
 import LoginModal from '@component/modal/LoginModal';
 import { SidebarContext } from '@context/SidebarContext';
 import CategoryDrawer from '@component/drawer/CategoryDrawer';
 
-const MobileFooter = ({companyLogo, dataPath, RefreshProductList, FilterProduct}) => {
+const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { toggleCartDrawer, toggleCategoryDrawer } = useContext(SidebarContext);
   const { totalItems } = useCart();
@@ -22,7 +23,7 @@ const MobileFooter = ({companyLogo, dataPath, RefreshProductList, FilterProduct}
     <>
       <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       <div className="flex flex-col h-full justify-between align-middle bg-white rounded cursor-pointer overflow-y-scroll flex-grow scrollbar-hide w-full">
-        <CategoryDrawer companyLogo={companyLogo} FilterProduct={FilterProduct} className="w-6 h-6 drop-shadow-xl" />
+        <CategoryDrawer className="w-6 h-6 drop-shadow-xl" companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} FilterProduct={FilterProduct} />
       </div>
       <footer className="lg:hidden fixed z-30 bottom-0 bg-cyan-600 flex items-center justify-between w-full h-16 px-3 sm:px-10">
         <button
@@ -36,7 +37,7 @@ const MobileFooter = ({companyLogo, dataPath, RefreshProductList, FilterProduct}
         </button>
         <Link href={"/" + dataPath}>
           <a className="text-xl text-white" rel="noreferrer" aria-label="Home">
-            {' '}
+            {' '} 
             <FiHome className="w-6 h-6 drop-shadow-xl" />
           </a>
         </Link>
@@ -70,8 +71,10 @@ const MobileFooter = ({companyLogo, dataPath, RefreshProductList, FilterProduct}
           ) : userInfo?.name ? (
             <Link href="/user/dashboard">
               <a className="leading-none font-bold font-serif block">
-                {userInfo?.name[0]}
+                <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
+                      
               </a>
+                    
             </Link>
           ) : (
             <span onClick={() => setModalOpen(!modalOpen)}>
