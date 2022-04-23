@@ -665,6 +665,10 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
               productItem['image'] = products.productVariantPresenters[i].ImageUrl;
               productItem['unit'] = products.productVariantPresenters[i].UPC;
               productItem['slug'] = products.productVariantPresenters[i].UPC;
+              productItem['upc'] = products.productVariantPresenters[i].UPC;
+              productItem['productName'] = products.productVariantPresenters[i].ProductName;
+              productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+
               productItem['tag'] = products.productVariantPresenters[i].ProductId;
               productItem['originalPrice'] = products.productVariantPresenters[i].Price;
               productItem['price'] = products.productVariantPresenters[i].Price;
@@ -691,6 +695,10 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
               productItem['image'] = products.newProductVariantPresenters[i].ImageUrl;
               productItem['unit'] = products.newProductVariantPresenters[i].UPC;
               productItem['slug'] = products.newProductVariantPresenters[i].UPC;
+              productItem['upc'] = products.productVariantPresenters[i].UPC;
+              productItem['productName'] = products.productVariantPresenters[i].ProductName;
+              productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+
               productItem['tag'] = products.newProductVariantPresenters[i].ProductId;
               productItem['originalPrice'] = products.newProductVariantPresenters[i].Price;
               productItem['price'] = products.newProductVariantPresenters[i].Price;
@@ -1013,6 +1021,10 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
               productItem['image'] = products.productVariantPresenters[i].ImageUrl;
               productItem['unit'] = products.productVariantPresenters[i].UPC;
               productItem['slug'] = products.productVariantPresenters[i].UPC;
+              productItem['upc'] = products.productVariantPresenters[i].UPC;
+              productItem['productName'] = products.productVariantPresenters[i].ProductName;
+              productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+
               productItem['tag'] = products.productVariantPresenters[i].ProductId;
               productItem['originalPrice'] = products.productVariantPresenters[i].PriceDisplay;
               productItem['price'] = products.productVariantPresenters[i].PriceDisplay;

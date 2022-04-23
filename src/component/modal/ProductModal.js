@@ -51,6 +51,7 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
                 <span className="text-gray-700">SKU:</span>{' '}
                 <span className="text-gray-500">
                   {product.sku ? product.sku : '-'}
+                  
                 </span>
               </span>
               <span className="py-1 text-sm d-block leading-6 text-gray-500 md:leading-6">
@@ -176,12 +177,12 @@ const ProductModal = ({ modalOpen, setModalOpen, product, item, handleAddItem, h
               <span className="font-serif font-semibold py-1 text-sm d-block">
                 <span className="text-gray-700">หมวดหมู่สินค้า:</span>{' '}
                 <span className="text-gray-500">
-                  {product.children ? product.children : '-'}
+                  {product.categoryName ? product.categoryName : '-'}
                 </span>
               </span>
               <span className="font-serif font-semibold py-1 text-sm d-block">
                 <span className="text-gray-700">กลุ่มสินค้า:</span>{' '}
-                <span className="text-gray-500">{product.children ? product.children : '-'}</span>
+                <span className="text-gray-500">{product.productName ? product.productName : '-'}</span>
               </span>
               <span className="font-serif font-semibold py-1 text-sm d-block">
                 <span className="text-gray-700">รายละเอียด:</span>{' '}
