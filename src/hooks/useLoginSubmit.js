@@ -247,6 +247,14 @@ const useLoginSubmit = (setModalOpen) => {
 
   const handleGoogleSignIn = async (user) => {
     
+    if(!user)
+    {
+      return;
+    }
+    if(!user.profileObj)
+    {
+      return;
+    }
     setLoading(true);
     alert('user google = ' + user.profileObj.name + " Email = " + user.profileObj.email + " imgUrl = " + user.profileObj.imageUrl);
 

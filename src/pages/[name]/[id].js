@@ -645,7 +645,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       var pictureUrl = '';
 
       
-      const promotion = await ProductServices.applyPromotionCode({
+      const promotionJson = await ProductServices.fetchApplyPromotionCode({
         companyId,
         locationId,
         orderId:0,
@@ -657,6 +657,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
         catalogName:catalogName,
         orderDetails:JSON.stringify(orderDetails)
       });
+      var promotion = JSON.parse(promotionJson);
+      
       var salesOrderDetails = promotion.orderDetails;
 
           const productDs = [];

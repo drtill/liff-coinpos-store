@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react'
 import dynamic from 'next/dynamic';
-import { CardElement } from '@stripe/react-stripe-js';
+//import { CardElement } from '@stripe/react-stripe-js';
 import Link from 'next/link';
 import {
   IoReturnUpBackOutline,
@@ -16,6 +16,7 @@ import {
 } from 'react-icons/io5';
 import { ImCreditCard,ImClearFormatting,ImFileEmpty } from 'react-icons/im';
 
+import Loading from '@component/preloader/Loading';
 //import { Combobox } from '@headlessui/react'
 import Dropdown from 'react-dropdown';
 //internal import
@@ -59,7 +60,7 @@ const Checkout = () => {
     showCard,
     setShowCard,
     error,
-    stripe,
+    //stripe,
     couponInfo,
     couponRef,
     handleCouponCode,
@@ -130,7 +131,7 @@ const Checkout = () => {
 
 
   var companyLogoData = '';
-  var companyName = '';
+  
   var locationName = '';
   var locationAddress1 = '';
   var locationAddress2 = '';
@@ -142,11 +143,11 @@ const Checkout = () => {
   var locationTel = '';
 
   var catalogName = '';
-  var dataPath = '';
   var customerId = 0;
   var isInputAddressData = false;
 
-  
+  const [companyName,setCompanyName] = useState('');
+  const [dataPath,setDataPath] = useState('');
 
   useEffect(() => 
   {
@@ -417,14 +418,14 @@ const Checkout = () => {
   }
   if(sessionStorage.getItem('dataPath'))
   {
-    dataPath = sessionStorage.getItem('dataPath'); 
-    
+    var dataPathData = sessionStorage.getItem('dataPath'); 
+    setDataPath(dataPathData);
           
   }
   if(sessionStorage.getItem('catalogName'))
   {
     catalogName = sessionStorage.getItem('catalogName'); 
-    
+    //alert('first catalogName = ' + catalogName)
           
   }
   if(sessionStorage.getItem('customerAddressId'))
@@ -514,8 +515,8 @@ const Checkout = () => {
   }
   if(sessionStorage.getItem('companyName'))
   {
-    companyName = sessionStorage.getItem('companyName'); 
-    //alert(companyName)
+    var companyNameData = sessionStorage.getItem('companyName'); 
+    setCompanyName(companyNameData);
     
   }
     
@@ -541,19 +542,22 @@ const Checkout = () => {
           var discountItem = discountDetails[j];
           if(discountItem.id === item.id)
           {
-            totalDiscountValue += (item.quantity * item.price * discountItem.discountRate);
+            totalDiscountValue += (item.quantity * item.price * (discountItem.discountRate ? discountItem.discountRate : 0));
           } 
         }
         
       }
     }
-    alert(totalDiscountValue);
+    //alert(totalDiscountValue);
     setTotalDiscount(totalDiscountValue);
+    //setTotalDiscount(์totalDiscountValue);
   }
   const submitContact = async (event) => {
+    setCustomerInfoLoading(true);
+    setConfirmOrderLoading(true);
     event.preventDefault();
     
-    setConfirmOrderLoading(true);
+    
     //alert(`submitContact`);
     //alert(`So your name is ${firstName}?`);
     var data = {};
@@ -612,7 +616,7 @@ const Checkout = () => {
     data["postalCode"] = postalCodeString;//event.target.postalCode.value;
     
 
-    
+    //alert('before catalogName = ' + catalogName);
     if(catalogName !== null)
     {
       var orderDetails = [];
@@ -646,6 +650,7 @@ const Checkout = () => {
     }
 
     setConfirmOrderLoading(false);
+    setCustomerInfoLoading(false);
   };
 
   //const ApplyPromotionCode = async(promotionCode,discountPercentage, isForAllProduct, minimumAmount, productIdList) =>
@@ -1001,12 +1006,17 @@ const SaveCustomerInfo = async (companyId) =>
         setCustomerAddressId(customerAddressId);
         setEditCustomerInfo(false);
         setDisableCustomerInfo(true);
+        clearErrorMessage();
     }
 
     setCustomerInfoLoading(false);
     
 }
 
+const clearErrorMessage = () =>
+{
+  setContactError('');
+}
 const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId, provinceString, districtString,cityString) =>
 {
   var isComplete = true;
@@ -1398,7 +1408,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                             <div className="col-span-6 sm:col-span-3">
                               <button
                                 type="button"
-                                disabled={isEmpty || !stripe || isCheckoutSubmit}
+                                disabled={isEmpty || isCheckoutSubmit}
                                 onClick={() => SaveCustomerInfo(lineCompanyId)}
                                 className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                               >
@@ -1418,7 +1428,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <div className="col-span-6 sm:col-span-3">
                                   <button
                                     type="button"
-                                    disabled={isEmpty || !stripe || isCheckoutSubmit}
+                                    disabled={isEmpty || isCheckoutSubmit}
                                     onClick={() => CancelCustomerInfo()}
                                     className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
                                   >
@@ -1432,7 +1442,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <div className="col-span-6 sm:col-span-3">
                                   <button
                                     type="button"
-                                    disabled={isEmpty || !stripe || isCheckoutSubmit}
+                                    disabled={isEmpty || isCheckoutSubmit}
                                     onClick={() => SaveCustomerInfo(lineCompanyId)}
                                     className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                                   >
@@ -1450,7 +1460,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <div className="col-span-6 sm:col-span-3">
                                   <button
                                     type="button"
-                                    disabled={isEmpty || !stripe || isCheckoutSubmit}
+                                    disabled={isEmpty || isCheckoutSubmit}
                                     onClick={() => AcceptCustomerInfo()}
                                     className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                                   >
@@ -1464,7 +1474,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <div className="col-span-6 sm:col-span-3">
                                   <button
                                     type="button"
-                                    disabled={isEmpty || !stripe || isCheckoutSubmit}
+                                    disabled={isEmpty || isCheckoutSubmit}
                                     onClick={() => EditCustomerInfo()}
                                     className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                                   >
@@ -1479,75 +1489,76 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                           
                           
                       }
+                      {
+                        customerAddressId === 0 ? 
+                          <>
+                            <br/>
+                            <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
+                              กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                            </h2>
+                          </> 
+                        : 
+                          IsApproveCustomerInfo === false ?
+                            <>
+                              <br/>
+                              <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
+                                กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                              </h2>
+                            </>
+                          :
+                          <>
+                            <div className="form-group mt-12">
+                                  <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
+                                    03. รูปแบบขนส่ง
+                                  </h2>
+                                  <div className="grid grid-cols-6 gap-6">
+                                    <div className="col-span-6 sm:col-span-3">
+                                    <ShippingFormSelect register={register}
+                                      label="Shipping"
+                                      name="shippingOption"
+                                      type="text"
+                                      handleItemChange={handleShippingChange} 
+                                      dataList={shippingServices} selectedId={shippingId}/>
+                                    </div>
+                                    
+                                    
+                                  </div>
+                                  
+                                </div>
+            
+                                <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                                  <div className="col-span-6 sm:col-span-3">
+                                    <Link href={dataPath}>
+                                      <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
+                                        <span className="text-xl mr-2">
+                                          <IoReturnUpBackOutline />
+                                        </span>
+                                        ช็อบต่อ
+                                      </a>
+                                    </Link>
+                                  </div>
+                                  <div className="col-span-6 sm:col-span-3">
+                                    <button
+                                      type="submit"
+                                      disabled={isEmpty || isCheckoutSubmit}
+                                      className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                    >
+                                      อนุมัติ คำสั่งขาย{' '}
+                                      <span className="text-xl ml-2">
+                                        {' '}
+                                        <IoArrowForward />
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                          </>
+                        }
                     </>
                     
                     }
                     
 
-                    {
-                    customerAddressId === 0 ? 
-                      <>
-                        <br/>
-                        <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                          Please save customer info before confirm order. 
-                        </h2>
-                      </> 
-                    : 
-                      IsApproveCustomerInfo === false ?
-                        <>
-                          <br/>
-                          <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                            Please approve customer info before confirm order. 
-                          </h2>
-                        </>
-                      :
-                      <>
-                        <div className="form-group mt-12">
-                              <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                                03. รูปแบบขนส่ง
-                              </h2>
-                              <div className="grid grid-cols-6 gap-6">
-                                <div className="col-span-6 sm:col-span-3">
-                                <ShippingFormSelect register={register}
-                                  label="Shipping"
-                                  name="shippingOption"
-                                  type="text"
-                                  handleItemChange={handleShippingChange} 
-                                  dataList={shippingServices} selectedId={shippingId}/>
-                                </div>
-                                
-                                
-                              </div>
-                              
-                            </div>
-        
-                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                              <div className="col-span-6 sm:col-span-3">
-                                <Link href={dataPath}>
-                                  <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
-                                    <span className="text-xl mr-2">
-                                      <IoReturnUpBackOutline />
-                                    </span>
-                                    ช็อบต่อ
-                                  </a>
-                                </Link>
-                              </div>
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="submit"
-                                  disabled={isEmpty || !stripe || isCheckoutSubmit}
-                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                >
-                                  อนุมัติ คำสั่งขาย{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoArrowForward />
-                                  </span>
-                                </button>
-                              </div>
-                            </div>
-                      </>
-                    }
+                    
                     
                     
                   </form>
@@ -1563,57 +1574,68 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                   สรุป คำสั่งขาย
                 </h2>
 
-                <div className="overflow-y-scroll flex-grow scrollbar-hide w-full max-h-64 bg-gray-50 block">
-                  {items.map((item) => (
-                    <CartItem key={item.id} item={item} discountDetails={discountDetails} UpdateTotal={UpdateTotal}/>
-                  ))}
+                {confirmOrderLoading 
+                ? 
+                  <Loading loading={confirmOrderLoading} />
+                :
+                  <>
+                    <div className="overflow-y-scroll flex-grow scrollbar-hide w-full max-h-64 bg-gray-50 block">
+                      {items.map((item) => (
+                        <CartItem key={item.id} item={item} discountDetails={discountDetails} UpdateTotal={UpdateTotal}/>
+                      ))}
 
-                  {isEmpty && (
-                    <div className="text-center py-10">
-                      <span className="flex justify-center my-auto text-gray-500 font-semibold text-4xl">
-                        <IoBagHandle />
-                      </span>
-                      <h2 className="font-medium font-serif text-sm pt-2 text-gray-600">
-                        ยังไม่มีข้อมูลสินค้า!
-                      </h2>
+                      {isEmpty && (
+                        <div className="text-center py-10">
+                          <span className="flex justify-center my-auto text-gray-500 font-semibold text-4xl">
+                            <IoBagHandle />
+                          </span>
+                          <h2 className="font-medium font-serif text-sm pt-2 text-gray-600">
+                            ยังไม่มีข้อมูลสินค้า!
+                          </h2>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <div className="flex items-center mt-4 py-4 lg:py-4 text-sm w-full font-semibold text-heading last:border-b-0 last:text-base last:pb-0">
-                  <form className="w-full">
-                    {couponInfo.couponCode ? (
-                      <span className="bg-cyan-50 px-4 py-3 leading-tight w-full rounded-md flex justify-between">
-                        {' '}
-                        <p className="text-cyan-600">ใช้คูปองแล้ว </p>{' '}
-                        <span className="text-red-500 text-right">
-                          {couponInfo.couponCode}
-                        </span>
-                      </span>
-                    ) : (
-                      <div className="flex flex-col sm:flex-row items-start justify-end">
-                        <input
-                          ref={couponRef}
-                          type="text"
-                          placeholder="Input your coupon code"
-                          className="form-input py-2 px-3 md:px-4 w-full appearance-none transition ease-in-out border text-input text-sm rounded-md h-12 duration-200 bg-white border-gray-200 focus:ring-0 focus:outline-none focus:border-cyan-500 placeholder-gray-500 placeholder-opacity-75"
-                        />
-                        {/* <button
-                          onClick={handleCouponCode}
-                          className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 hover:text-white hover:bg-cyan-500 h-12 text-sm lg:text-base w-full sm:w-auto"
-                        >
-                          ใช้รหัสคูปอง
-                        </button> ApplyPromotionCode*/}
-                        <button
-                          onClick={ApplyPromotionCode}
-                          className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 hover:text-white hover:bg-cyan-500 h-12 text-sm lg:text-base w-full sm:w-auto"
-                        >
-                          ใช้รหัสคูปอง
-                        </button>
-                      </div>
-                    )}
-                  </form>
-                </div>
+                    <div className="flex items-center mt-4 py-4 lg:py-4 text-sm w-full font-semibold text-heading last:border-b-0 last:text-base last:pb-0">
+                      <form className="w-full">
+                        {couponInfo.couponCode ? (
+                          <span className="bg-cyan-50 px-4 py-3 leading-tight w-full rounded-md flex justify-between">
+                            {' '}
+                            <p className="text-cyan-600">ใช้คูปองแล้ว </p>{' '}
+                            <span className="text-red-500 text-right">
+                              {couponInfo.couponCode}
+                            </span>
+                          </span>
+                        ) : (
+                          <div className="flex flex-col sm:flex-row items-start justify-end">
+                            <input
+                              ref={couponRef}
+                              type="text"
+                              placeholder="ระบุ รหัสส่วนลดของคุณ"
+                              className="form-input py-2 px-3 md:px-4 w-full appearance-none transition ease-in-out border text-input text-sm rounded-md h-12 duration-200 bg-white border-gray-200 focus:ring-0 focus:outline-none focus:border-cyan-500 placeholder-gray-500 placeholder-opacity-75"
+                            />
+                            {/* <button
+                              onClick={handleCouponCode}
+                              className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 hover:text-white hover:bg-cyan-500 h-12 text-sm lg:text-base w-full sm:w-auto"
+                            >
+                              ใช้รหัสคูปอง
+                            </button> ApplyPromotionCode
+                            
+                            bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full
+                            */}
+                            <button
+                              onClick={ApplyPromotionCode}
+                              className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 bg-cyan-500 hover:bg-cyan-600 text-white h-12 text-sm lg:text-base w-full sm:w-auto"
+                            >
+                              ใช้รหัสคูปอง
+                            </button>
+                          </div>
+                        )}
+                      </form>
+                    </div>
+                  </>
+                }
+                
                 <div className="flex items-center py-2 text-sm w-full font-semibold text-gray-500 last:border-b-0 last:text-base last:pb-0">
                   ยอดขาย
                   <span className="ml-auto flex-shrink-0 text-gray-800 font-bold">
@@ -1637,7 +1659,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                     ยอดชำระรวม
                     <span className="font-serif font-extrabold text-lg">
                       {' '}
-                      {currencySign}{Math.round(total-totalDiscount)}.00
+                      {currencySign}{Number(total)}{/* {Math.round(Number(total)-Number(totalDiscount))}.00 */}
                     </span>
                   </div>
                 </div>

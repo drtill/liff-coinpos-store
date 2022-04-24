@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCart } from 'react-use-cart';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+//import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 //internal import
 import useAsync from '@hooks/useAsync';
@@ -22,7 +22,7 @@ const useCheckoutSubmit = () => {
   } = useContext(UserContext);
 
   const [error, setError] = useState('');
-  const [total, setTotal] = useState('');
+  const [total, setTotal] = useState(0);
   const [couponInfo, setCouponInfo] = useState({});
   const [minimumAmount, setMinimumAmount] = useState(0);
   const [showCard, setShowCard] = useState(false);
@@ -49,8 +49,8 @@ const useCheckoutSubmit = () => {
 
 
   const router = useRouter();
-  const stripe = useStripe();
-  const elements = useElements();
+  //const stripe = useStripe();
+  //const elements = useElements();
   const couponRef = useRef('');
   const { isEmpty, emptyCart, items, cartTotal, setItems } = useCart();
 
@@ -97,10 +97,11 @@ const useCheckoutSubmit = () => {
       (preValue, currentValue) => preValue + currentValue.itemTotal,
       0
     );
-    let totalValue = '';
+    let totalValue = 0;
     let subTotal = (cartTotal + shippingCost).toFixed(2);
-    let discountAmount = discountProductTotal * (discountPercentage / 100);
-    totalValue = subTotal - discountAmount;
+    let discountAmount = discountProductTotal * ((discountPercentage ? discountPercentage : 0) / 100);
+    totalValue = Number(subTotal) - discountAmount;
+
     setDiscountAmount(discountAmount);
     setTotal(totalValue);
   }, [cartTotal, shippingCost, discountPercentage]);
@@ -221,7 +222,7 @@ const useCheckoutSubmit = () => {
     };
     //alert("submitHandler3 ");
     if (data.paymentMethod === 'Card') {
-      if (!stripe) {
+      /*if (!stripe) {
         return;
       }
       const cardElement = elements.getElement(CardElement);
@@ -252,7 +253,7 @@ const useCheckoutSubmit = () => {
             notifyError(err.message);
             setIsCheckoutSubmit(false);
           });
-      }
+      }*/
     }
     if (data.paymentMethod === 'COD') {
       OrderServices.addOrder(orderInfo)
@@ -346,10 +347,12 @@ const useCheckoutSubmit = () => {
         companyId = sessionStorage.getItem('companyId'); 
         
       }
+      var catalogName = '';
       if(sessionStorage.getItem('catalogName'))
       {
-        catalogName = sessionStorage.getItem('catalogName'); 
         
+        catalogName = sessionStorage.getItem('catalogName'); 
+        //alert('catalogName = ' + catalogName)
               
       }
       //alert(data.firstName);
@@ -364,7 +367,7 @@ const useCheckoutSubmit = () => {
       var district = data.district;
       var postalCode = data.postalCode;
       var orderDetails = data.orderDetails;
-      var catalogName = data.catalogName;
+      
       var email = data.email;
       //alert("contact = " + data.contact)
 
@@ -377,6 +380,7 @@ const useCheckoutSubmit = () => {
       })
         .then((res) => {
           
+          //alert('res = ' + res);
           //return
           //router.push(`/order/${res._id}`);
           let orderInfo = {
@@ -397,7 +401,7 @@ const useCheckoutSubmit = () => {
             currencySign:res.currencySign
 
           };
-
+          //alert('get Order Info');
 
           Cookies.set('orderInfo', JSON.stringify(orderInfo));
           //Cookies.remove('couponInfo');
@@ -405,11 +409,11 @@ const useCheckoutSubmit = () => {
           emptyCart();
           setIsCheckoutSubmit(false);
 
-          alert(`/order/${res.orderId}`);
+          //alert(`/order/${res.orderId}`);
           router.push(`/order/${res.orderId}`);
           notifySuccess('Your Order Confirmed!');
 
-          alert(JSON.stringify(res))
+          //alert(JSON.stringify(res))
           
         })
         .catch((err) => {
@@ -556,7 +560,7 @@ const useCheckoutSubmit = () => {
     showCard,
     setShowCard,
     error,
-    stripe,
+    //stripe,
     couponInfo,
     couponRef,
     handleCouponCode,

@@ -6,7 +6,7 @@ import Image from 'next/image';
 //internal import
 import OrderTable from '@component/order/OrderTable';
 
-const Invoice = ({ data, printRef, companyName, locationName, companyLogo, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode}) => {
+const Receipt = ({ data, printRef, companyName, locationName, companyLogo, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode}) => {
 
 
   
@@ -15,7 +15,7 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
     <div ref={printRef}>
       <div className="bg-indigo-50 p-8 rounded-t-xl">
         <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-gray-50">
-          <h1 className="font-bold font-serif text-2xl uppercase">ใบเรียกเก็บเงิน</h1>
+          <h1 className="font-bold font-serif text-2xl uppercase">Receipt</h1>
           <div className="lg:text-right text-left">
             <h2 className="text-lg font-serif font-semibold mt-4 lg:mt-0 md:mt-0">
               <Link href="/">
@@ -42,7 +42,7 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
         <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
           <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              วันที่
+              Date
             </span>
             <span className="text-sm text-gray-500 block">
               {/* {data.createdAt !== undefined && (
@@ -55,13 +55,13 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
           </div>
           <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              หมายเลขใบเรียกเก็บเงิน
+              Invoice No.
             </span>
             <span className="text-sm text-gray-500 block">#{data.invoiceNumber}</span>
           </div>
           <div className="flex flex-col lg:text-right text-left">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              ที่อยู่เรียกเก็บเงิน
+              Invoice To.
             </span>
             <span className="text-sm text-gray-500 block">
               {data.customerName}
@@ -84,32 +84,32 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-left"
                   >
-                    ลำดับ
+                    Sr.
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-left"
                   >
-                    ชื่อสินค้า
+                    Product Name
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-center"
                   >
-                    จำนวน
+                    Quantity
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-center"
                   >
-                    ราคาต่อหน่วย
+                    Item Price
                   </th>
 
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-right"
                   >
-                    ยอดรวม
+                    Amount
                   </th>
                 </tr>
               </thead>
@@ -159,4 +159,4 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
   );
 };
 
-export default Invoice;
+export default Receipt;

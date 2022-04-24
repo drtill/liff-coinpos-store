@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const InvoiceForDownload = ({ data }) => {
+const ReceiptForDownload = ({ data }) => {
   return (
     <>
       <Document>
@@ -289,4 +289,4 @@ const InvoiceForDownload = ({ data }) => {
   );
 };
 
-export default InvoiceForDownload;
+export default ReceiptForDownload;
