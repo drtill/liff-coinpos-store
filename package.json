@@ -2,7 +2,7 @@
   "name": "CoinPOS",
   "version": "0.1.0",
   "description": "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.",
-  "homepage": "https://kachabazar-store.vercel.app/",
+  "homepage": "https://coinpos.io/",
   "private": true,
   "scripts": {
     "dev": "next dev",
