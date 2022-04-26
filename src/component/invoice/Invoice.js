@@ -1,14 +1,24 @@
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+
 
 //internal import
 import OrderTable from '@component/order/OrderTable';
 
-const Invoice = ({ data, printRef, companyName, locationName, companyLogo, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode}) => {
+const Invoice = ({ data, printRef, companyName, locationName, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode, dataPath}) => {
 
+  const [companyLogo,setCompanyLogo] = useState('')
+  useEffect(() =>
+  {
+    if(sessionStorage.getItem('companyLogo'))
+      {
+        var companyLogoData = sessionStorage.getItem('companyLogo'); 
+        setCompanyLogo(companyLogoData);
+      }
 
+  },[]);
   
 
   return (
@@ -18,14 +28,20 @@ const Invoice = ({ data, printRef, companyName, locationName, companyLogo, curre
           <h1 className="font-bold font-serif text-2xl uppercase">ใบเรียกเก็บเงิน</h1>
           <div className="lg:text-right text-left">
             <h2 className="text-lg font-serif font-semibold mt-4 lg:mt-0 md:mt-0">
-              <Link href="/">
-                <a className="">
+              <Link href={"/" + dataPath}>
+                <a className="mr-3 lg:mr-12 xl:mr-12 hidden md:hidden lg:block">
+                  {companyLogo === ''
+                  ?
+                    companyLogo
+                  :
                   <Image
-                    width={70}
-                    height={70}
+                    width={69}
+                    height={69}
                     src={companyLogo}
                     alt="logo"
                   />
+                  }
+                  
                 </a>
               </Link>
             </h2>

@@ -64,6 +64,8 @@ const Order = ({ params }) => {
   const [locationEmail,setLocationEmail] = useState('')
   const [locationTel,setLocationTel] = useState('')
   
+  const [data,setPayOrder] = useState({});
+  const [loading,setLoading] = useState(false);
   //const data = null;
   //const loading = true;
   //alert("Order");
@@ -152,7 +154,7 @@ const Order = ({ params }) => {
 
     
 
-  const { data, loading } = useAsync(() => ProductServices.fetchGetPayOrderById(
+  /*const { data, loading } = useAsync(() => ProductServices.fetchGetPayOrderById(
     {
       orderId,
       companyId,
@@ -164,10 +166,11 @@ const Order = ({ params }) => {
       pictureUrl,
       catalogName
 
-    }));
+    }));*/
 
     useEffect(async () => {
       
+      setLoading(true);
       //alert('Login 0');
       var companyId = 0;
       if(sessionStorage.getItem('companyId'))
@@ -310,6 +313,9 @@ const Order = ({ params }) => {
           sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
           sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
           sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+
+          
+
         }
         else
         {
@@ -320,6 +326,30 @@ const Order = ({ params }) => {
           Cookies.remove('couponInfo');
         }
 
+        var payOrderData = await ProductServices.fetchGetPayOrderById(
+          {
+            orderId,
+            companyId,
+            locationId,
+            linePOSId,
+            lineUserId,
+            groupId,
+            liffId,
+            pictureUrl,
+            catalogName
+      
+          });
+          if(payOrderData !== undefined)
+          {
+            //alert("data = " + JSON.stringify(data));
+            setPayOrder(payOrderData);
+            setPaymentStatusId(payOrderData.paymentStatusId);
+            setOrderStatusId(payOrderData.orderStatusId);
+            setcurrencySign(payOrderData.currencySign);
+
+            paymentContentManager();
+          }
+          
   
         
       }
@@ -331,23 +361,11 @@ const Order = ({ params }) => {
         router.push('/');
       }*/
 
+      setLoading(false);
       
     }, []);
   
-    useEffect(() => 
-    {
-      if(data !== undefined)
-      {
-        //alert("data = " + JSON.stringify(data));
-        setPaymentStatusId(data.paymentStatusId);
-        setOrderStatusId(data.orderStatusId);
-        setcurrencySign(data.currencySign);
-
-        paymentContentManager();
-      }
-
-    });
-      
+     
     /*const [data, setOrder] = useState();
     const [loading, setLoading] = useState(true);
     var paymentStatusIdData = 1;
@@ -433,7 +451,7 @@ const Order = ({ params }) => {
           <div className="bg-white rounded-lg shadow-sm">
             <Invoice data={data} printRef={printRef} companyName={companyName} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-       locationName={locationName} companyLogo={companyLogo} currencySign={data.currencySign}/>
+       locationName={locationName} currencySign={data.currencySign} dataPath={dataPath}/>
             <div className="bg-white p-8 rounded-b-xl">
               <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between">
                 {/* <p>{JSON.stringify(data)}</p>

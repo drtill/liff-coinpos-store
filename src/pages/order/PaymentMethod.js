@@ -54,7 +54,7 @@ const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId}
   //alert("QR Click");
   
   
-  var qrData = await ProductServices.getQRPayment(
+  var qrData = await ProductServices.fetchGetQRPayment(
     {
       orderId,
       liffId,

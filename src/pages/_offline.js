@@ -5,7 +5,7 @@ const Offline = () => {
   return (
     <>
       <Head>
-        <title>KachaBazar | React eCommerce Template</title>
+        <title>CoinPOS Ecommerce Platform | All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.</title>
       </Head>
       <div className="px-6 py-10 lg:py-20 bg-emerald-50 h-screen flex flex-wrap content-center">
         <div className="block justify-items-stretch mx-auto items-center text-center">
