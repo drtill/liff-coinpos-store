@@ -191,7 +191,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
     var liffData = '';
     if(sessionStorage.getItem('catalogLiffId'))
     {
-      alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
+      //alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
       liffData = sessionStorage.getItem('catalogLiffId');
     }
     
@@ -365,7 +365,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
                     className="text-emerald-600 bg-emerald-200"
                   />
                 </div>
-                {/* <RecentOrder /> */}
+                <RecentOrder />
               </div>
             )}
             {children}

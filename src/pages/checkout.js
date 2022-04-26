@@ -457,7 +457,7 @@ const Checkout = () => {
   if(sessionStorage.getItem('address1'))
   {
     var customerAddress1Data = sessionStorage.getItem('address1'); 
-    setCustomerAddress1(customerAddress1Data);
+    setCustomerAddress(customerAddress1Data);
       
   }
   

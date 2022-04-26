@@ -33,12 +33,46 @@ const BankTransferPayment = (
 
       useEffect(() => {
         var bankTransferOptionIndentData = [];
+        var bankTransferContentData = [];
+
+        
+        bankTransferContentData.push()
         for(var i=0;i<dataList.length;i++)
         {
-            bankTransferOptionIndentData.push(<div className="flex item-center justify-between"><div className="flex items-center"><span className="text-xl mr-3 text-gray-400"><Icon /></span><h6 className="font-serif font-medium text-sm text-gray-600">{dataList[i].bankName}</h6></div><label className="form-radio outline-none focus:ring-0 text-cyan-500">{dataList[i].bankAccount}</label><input type="radio" value={dataList[i].bankAccount} onClick={() => setBankAccount(
-              dataList[i].bankAccount,dataList[i].bankName)} name="bankMethod" className="form-radio outline-none focus:ring-0 text-cyan-500"/></div>)
+          bankTransferContentData.push(<tr>
+              <td className='text-left'><span className="text-xl text-gray-400"><Icon className="w-8 h-8 pl-3" /></span></td>
+              <td className='text-left'><h6 className="font-serif font-medium text-sm text-gray-600 pl-3">{dataList[i].bankName}</h6></td>
+              <td className='text-right'><label className="form-radio outline-none focus:ring-0 text-cyan-500 pr-3">{dataList[i].bankAccount}</label></td>
+              <td><input type="radio" value={dataList[i].bankAccount} onClick={() => setBankAccount(
+                 dataList[i].bankAccount,dataList[i].bankName)} name="bankMethod" className="form-radio outline-none focus:ring-0 text-cyan-500"/></td>
+            </tr>)
+          /*bankTransferOptionIndentData.push(<div className="flex items-stretch">
+            <div className="self-auto"><span className="text-xl mr-3 text-gray-400"><Icon /></span></div>
+            <div className="self-auto"><h6 className="font-serif font-medium text-sm text-gray-600">{dataList[i].bankName}</h6></div>
+            <div className="self-auto">02</div>
+            <div>03</div>
+          </div>);*/
+            // bankTransferOptionIndentData.push(
+              
+            //   <div className="flex item-center justify-between">
+            //     <div className="flex items-center">
+            //       <span className="text-xl mr-3 text-gray-400"><Icon /></span>
+            //       <h6 className="font-serif font-medium text-sm text-gray-600">{dataList[i].bankName}</h6>
+            //     </div>
+            //     <label className="form-radio outline-none focus:ring-0 text-cyan-500">{dataList[i].bankAccount}</label>
+            //     <input type="radio" value={dataList[i].bankAccount} onClick={() => setBankAccount(
+            //     dataList[i].bankAccount,dataList[i].bankName)} name="bankMethod" className="form-radio outline-none focus:ring-0 text-cyan-500"/>
+            //   </div>)
             
         }
+
+        bankTransferOptionIndentData.push(
+        <table className='table-auto min-w-full border border-gray-100 divide-y divide-gray-200'>
+          <tbody>
+            {bankTransferContentData}
+          </tbody>
+          
+        </table>)
         setBankTransferOptionIndent(bankTransferOptionIndentData);
       },[]);
         
@@ -87,7 +121,7 @@ const BankTransferPayment = (
             {bankTransferOptionIndent}
           </label>
           <div className='row'>
-            <p className="text-base opacity-90 leading-7 mb-3">
+            <p className="text-base opacity-90 leading-7 mt-5 mb-3 font-bold font-serif">
               ระบุวันและเวลา เพื่อแจ้งการโอนชำระเงินของคุณ
             </p>
           </div>

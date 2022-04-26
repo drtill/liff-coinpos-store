@@ -23,43 +23,25 @@ const Cart = () => {
 
   const [discountDetails, setDiscountDetail] = useState(disDetailsData);
   const [totalDiscount, setTotalDiscount] = useState(totalDiscountData);
-  useEffect(() =>
+  
+  const [currencySign, setCurrencySign] = useState('');
+
+  useEffect(() => 
   {
-    if(sessionStorage.getItem('discountDetails'))
-    {
-      var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
-      
-      //alert(discountDetailsJson);
-      var disDetails = JSON.parse(discountDetailsJson);
-      if(disDetails !== null)
-      {
-        var totalDiscountVal = disDetails.reduce((discountTotal, item) => (discountTotal += item.discount),0);
-        setTotalDiscount(totalDiscountVal);
-        setDiscountDetail(disDetails);
-      }
-      else
-      {
-        setTotalDiscount(0);
-        setDiscountDetail([]);
-      }
-    }
-    else
-    {
-      setTotalDiscount(0);
-      setDiscountDetail([]);
-    }
-
-    
-  })
-
-  var currencySign = '';
+    //alert("open cart")
     if(sessionStorage.getItem('currencySign'))
     {
-      currencySign = sessionStorage.getItem('currencySign'); 
-      //alert('liffId = ' + sessionStorage.getItem('liffId'))
+      var currencySignData = sessionStorage.getItem('currencySign'); 
+      setCurrencySign(currencySignData);
     }
 
-
+  },[])
+  
+  useEffect(() =>
+  {
+    updateDiscount();
+  });
+  
   const {
     state: { userInfo },
   } = useContext(UserContext);
@@ -69,6 +51,38 @@ const Cart = () => {
     {
       toggleCartDrawer();
       setModalOpen(!modalOpen);
+    }
+  };
+
+  const updateDiscount = () =>{
+    if(sessionStorage.getItem('discountDetails'))
+    {
+      var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
+      
+      //alert(discountDetailsJson);
+      var disDetails = JSON.parse(discountDetailsJson);
+      if(disDetails !== null)
+      {
+        var totalDiscountVal = disDetails.reduce((discountTotal, item) => (discountTotal += item.discount),0);
+        //totalDiscount = totalDiscountVal;
+        setTotalDiscount(totalDiscountVal);
+        setDiscountDetail(disDetails);
+        //discountDetails = disDetails;
+      }
+      else
+      {
+        //totalDiscount = 0;
+        setTotalDiscount(0);
+        setDiscountDetail([]);
+        //discountDetails = [];
+      }
+    }
+    else
+    {
+      //totalDiscount = 0;
+      setTotalDiscount(0);
+      setDiscountDetail([]);
+      //disDetails = disDetails;
     }
   };
 
@@ -99,6 +113,8 @@ const Cart = () => {
     }
     //alert(totalDiscountValue);
     setTotalDiscount(totalDiscountValue);
+
+    updateDiscount();
   }
   const checkoutClass = (
     <button

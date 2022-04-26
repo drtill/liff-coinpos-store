@@ -273,6 +273,13 @@ const Order = ({ params }) => {
         var groupIdData = sessionStorage.getItem('groupId'); 
         setGroupId(groupIdData);
       }
+      
+      var customerEmailData = '';
+      if(sessionStorage.getItem('customerEmail'))
+      {
+        customerEmailData = sessionStorage.getItem('customerEmail'); 
+        
+      }
       //alert('Login 1');
       if(Cookies.get('userInfo'))
       {
@@ -281,13 +288,14 @@ const Order = ({ params }) => {
       //alert('Login 2');
       var userLocalJson = localStorage.getItem('userInfo');
       Cookies.set('userInfo', userLocalJson);
+      //alert('userLocalJson = ' + userLocalJson);
       var userLocal = JSON.parse(userLocalJson)
       try
       {
         //alert('Login 3');
         const expiredDate = await UserServices.fetchCoinposCheckExpired(
           {
-            email:userLocal.email,
+            email:customerEmailData,//userLocal.email,
             companyId:companyId
           });
           

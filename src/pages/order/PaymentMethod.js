@@ -74,98 +74,84 @@ const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId}
 
   return (
     <div id="downloadApp" className="bg-indigo-50 py-10 lg:py-16 bg-repeat bg-center overflow-hidden">
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-2 md:gap-3 lg:gap-3 items-center">
-          <div className="flex-grow hidden lg:flex md:flex md:justify-items-center lg:justify-start">
-            {/* <Image
-              src="/app-download-img-left.png"
-              alt="app download"
-              width={500}
-              height={394}
-              className="block w-auto"
-            /> */}
-          </div>
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-1">
+      <div className="flex flex-row items-stretch">
+        <div className="basis-1/5 sm:basis-1/3 self-center"></div>
+        <div className="basis-3/5 sm:basis-1/3 self-auto">
           <div className="text-center">
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-serif mb-3">
-              รูปแบบการชำระเงิน
-            </h3>
-            <p className="text-base opacity-90 leading-7 mb-3">
-              กรุณาเลือกรูปแบบชำระเงิน
-            </p>
-                    {
-                      qrLoading === true 
-                      ?
-                        <Loading loading={qrLoading} />
-                      :
-                      <>
-                        {bankShow && (
-                          <div className="mb-3">
-                            <BankTransferPayment 
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-serif mb-3">
+                รูปแบบการชำระเงิน
+              </h3>
+              <p className="text-base opacity-90 leading-7 mb-3">
+                กรุณาเลือกรูปแบบชำระเงิน
+              </p>
+                      {
+                        qrLoading === true 
+                        ?
+                          <Loading loading={qrLoading} />
+                        :
+                        <>
+                          {bankShow && (
+                            <div className="mb-3">
+                              <BankTransferPayment 
+                                
+                                name="BankTransfer"
+                                value="Card"
+                                dataList={bankTransfers}
+                                orderId={salesOrderId}
+                                liffId={lineLiffId}
+                                lineUserId={lineLiffUserId}
+                                companyId={lineCompanyId}
+                                Icon={ImCreditCard}/>
+                              {/* <p className="text-red-400 text-sm mt-1">{error}</p> */}
+                            </div>
+                          )}
+                          {qrShow && (
+                            <div className="mb-3">
                               
-                              name="BankTransfer"
-                              value="Card"
-                              dataList={bankTransfers}
-                              orderId={salesOrderId}
-                              liffId={lineLiffId}
-                              lineUserId={lineLiffUserId}
-                              companyId={lineCompanyId}
-                              Icon={ImCreditCard}/>
-                            {/* <p className="text-red-400 text-sm mt-1">{error}</p> */}
-                          </div>
-                        )}
-                        {qrShow && (
-                          <div className="mb-3">
+                              <QRPaymentPayment 
+                              
+                                name="QR Payment"
+                                value="Card"
+                                qrUrl={qrUrl}
+                                Icon={ImCreditCard}/>
+                              {/* <p className="text-red-400 text-sm mt-1">{error}</p> */}
+                            </div>
+                          )}
+                        </>
+                      }
+                      
+              <div className="mt-8">
+              <div className="grid grid-cols-6 gap-6">
+                        <div className="col-span-6 sm:col-span-3">
+                          <InputPayment
+                            setShowCard={handleBankTransferClick}
                             
-                            <QRPaymentPayment 
-                            
-                              name="QR Payment"
-                              value="Card"
-                              qrUrl={qrUrl}
-                              Icon={ImCreditCard}/>
-                            {/* <p className="text-red-400 text-sm mt-1">{error}</p> */}
-                          </div>
-                        )}
-                      </>
-                    }
-                    
-            <div className="mt-8">
-            <div className="grid grid-cols-6 gap-6">
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputPayment
-                          setShowCard={handleBankTransferClick}
-                          
-                          name="Bank Transfer"
-                          value="Bank"
-                          Icon={IoWalletSharp}
-                        />
-                        {/* <Error errorName={errors.paymentMethod} /> */}
-                      </div>
+                            name="Bank Transfer"
+                            value="Bank"
+                            Icon={IoWalletSharp}
+                          />
+                          {/* <Error errorName={errors.paymentMethod} /> */}
+                        </div>
 
-                      <div className="col-span-6 sm:col-span-3">
-                        <InputPayment
-                          setShowCard={handleQRPaymentClick}
-                          
-                          name="QR Payment"
-                          value="Card"
-                          Icon={ImCreditCard}
-                        />
-                        {/* <Error errorName={errors.paymentMethod} /> */}
+                        <div className="col-span-6 sm:col-span-3">
+                          <InputPayment
+                            setShowCard={handleQRPaymentClick}
+                            
+                            name="QR Payment"
+                            value="Card"
+                            Icon={ImCreditCard}
+                          />
+                          {/* <Error errorName={errors.paymentMethod} /> */}
+                        </div>
                       </div>
-                    </div>
+              </div>
             </div>
-          </div>
-          <div className="md:hidden lg:block">
-            <div className="flex-grow hidden lg:flex md:flex lg:justify-end">
-              {/* <Image
-                src="/app-download-img.png"
-                width={500}
-                height={394}
-                alt="app download"
-                className="block w-auto"
-              /> */}
-            </div>
-          </div>
+
         </div>
+        <div className="basis-1/5 sm:basis-1/3 self-center"></div>
+      </div>
+        
       </div>
     </div>
   );

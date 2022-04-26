@@ -42,64 +42,11 @@ const CartItem = ({ item, UpdateTotal }) => {
 
     
 
-    useEffect(() =>
-    {
-      if(sessionStorage.getItem('discountDetails'))
-      {
-        var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
-        //var promotionmProductIdListJson = sessionStorage.getItem('promotionmProductIdList'); 
-        
-        var disDetails = JSON.parse(discountDetailsJson);
-        //var promoProductIdList = JSON.parse(promotionmProductIdListJson);
-
-        
-        if(disDetails !== null)
-        {
-          var discountData = 0;
-          var discountDataRate = 0;
-          
-          for(var i=0;i<disDetails.length;i++)
-          {
-            var dDetail = disDetails[i];
-            if(dDetail.id === item.id)
-            {
-              //alert('Discount = ' + dDetail.discount)
-              discountData = dDetail.discount;
-              discountDataRate = dDetail.discountRate;
-            }
-
-          }
-          
-          setDiscountDetails(disDetails);
-          setDiscount(discountData);
-          setDiscountRate(discountDataRate);  
-          
-        }
-        else
-        {
-          setDiscountDetails([]);
-          setDiscount(0);
-          setDiscountRate(0);
-        }
-        //alert("Loop Set = " + JSON.stringify(disDetails))
-        
-      }
-      else
-      {
-        //alert("NotFound")
-        setDiscountDetails([]);
-        setDiscount(0);
-        setDiscountRate(0);
-      }
-        //alert("Loop Set = " + JSON.stringify(discountDataDetails));
-      
-        
-
-      
-    });
+    
     
     useEffect(() => 
     {
+      //alert("Open Cart");
       if(sessionStorage.getItem('currencySign'))
       {
         var currencySignData = sessionStorage.getItem('currencySign'); 
@@ -147,9 +94,70 @@ const CartItem = ({ item, UpdateTotal }) => {
       }
 
     },[])
-    
 
+    useEffect(() => 
+    {
+      updateDiscount();
 
+    });
+
+  const updateDiscount = () =>
+  {
+
+    //alert('updateDiscount')
+    if(sessionStorage.getItem('discountDetails'))
+      {
+        //alert('has discountDetails')
+        var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
+        //var promotionmProductIdListJson = sessionStorage.getItem('promotionmProductIdList'); 
+        //alert('discountDetailsJson = ' + discountDetailsJson)
+        var disDetails = JSON.parse(discountDetailsJson);
+        //var promoProductIdList = JSON.parse(promotionmProductIdListJson);
+
+        
+        if(disDetails !== null)
+        {
+          //alert('has disDetails')
+          var discountData = 0;
+          var discountDataRate = 0;
+          
+          //alert('disDetails.length = ' + disDetails.length)
+          for(var i=0;i<disDetails.length;i++)
+          {
+            var dDetail = disDetails[i];
+            //alert('dDetail.id = ' + dDetail.id + " item.id = " + item.id);
+            if(dDetail.id === item.id)
+            {
+              //alert('Discount = ' + dDetail.discount)
+              discountData = dDetail.discount;
+              discountDataRate = dDetail.discountRate;
+            }
+
+          }
+          
+          setDiscountDetails(disDetails);
+          setDiscount(discountData);
+          setDiscountRate(discountDataRate);  
+          
+        }
+        else
+        {
+          setDiscountDetails([]);
+          setDiscount(0);
+          setDiscountRate(0);
+        }
+        //alert("Loop Set = " + JSON.stringify(disDetails))
+        
+      }
+      else
+      {
+        //alert("NotFound")
+        setDiscountDetails([]);
+        setDiscount(0);
+        setDiscountRate(0);
+      }
+        //alert("Loop Set = " + JSON.stringify(discountDataDetails));
+  }
 
   const handleRemoveItem = async(item) => {
     removeItem(item.id)
@@ -171,6 +179,7 @@ const CartItem = ({ item, UpdateTotal }) => {
       removeCoinPOSCartDetail(item,liffId,linePOSId,orderId,pictureUrl);
     }
     
+    updateDiscount();
   };
 
   const handleDecrease = (_id, _qty) => {
@@ -206,6 +215,7 @@ const CartItem = ({ item, UpdateTotal }) => {
       }
     }
     
+    updateDiscount();
     
   };
 
@@ -236,6 +246,8 @@ const CartItem = ({ item, UpdateTotal }) => {
         var _updateType = 'Inc';
         updateCoinPOSCartDetail(item, _qty,liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl, _updateType)
       }
+
+      updateDiscount();
     }
     catch(ex)
     {

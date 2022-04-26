@@ -204,7 +204,7 @@ const ProductServices = {
           return response.text();
         }).then(function(data) {
   
-          alert(data);
+          //alert(data);
         var obj = JSON.parse(data);
         //console.log("Obj = " + obj);
         //console.log(data); // this will be a string

@@ -35,8 +35,8 @@ const Invoice = ({ data, printRef, companyName, locationName, currencySign, loca
                     companyLogo
                   :
                   <Image
-                    width={69}
-                    height={69}
+                    width={70}
+                    height={70}
                     src={companyLogo}
                     alt="logo"
                   />
@@ -46,7 +46,7 @@ const Invoice = ({ data, printRef, companyName, locationName, currencySign, loca
               </Link>
             </h2>
             <h2>{companyName}</h2>
-            <p className="text-sm text-gray-500">Location: {locationName}</p>
+            <p className="text-sm text-gray-500">สาขา: {locationName}</p>
             <p className="text-sm text-gray-500">
               {locationAddress1} {locationAddress2} 
                 <br /> 

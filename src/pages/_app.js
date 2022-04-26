@@ -7,6 +7,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { UserProvider } from '@context/UserContext';
 import DefaultSeo from '@component/common/DefaultSeo';
 import { SidebarProvider } from '@context/SidebarContext';
+
 //const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || null);
 
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <UserProvider>
         <SidebarProvider>
+        
           <CartProvider>
               <DefaultSeo />
               <Component {...pageProps} />

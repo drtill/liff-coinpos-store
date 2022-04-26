@@ -7,13 +7,13 @@ import InputArea from '@component/form/InputArea';
 
 import Loading from '@component/preloader/Loading';
 
-const Login = ({ setShowResetPassword, setModalOpen }) => {
+const Login = ({ setShowResetPassword, setModalOpen,setLoginLoading }) => {
   const { handleSubmit, submitHandler, register, errors, loading } =
     useLoginSubmit(setModalOpen);
 
     const submitLogin = async (event) => 
     {
-      
+      setLoginLoading(true);
       event.preventDefault();
 
       
@@ -72,6 +72,7 @@ const Login = ({ setShowResetPassword, setModalOpen }) => {
 
       //setLoginLoading(false);
       }
+      setLoginLoading(false);
     }
 
   return (

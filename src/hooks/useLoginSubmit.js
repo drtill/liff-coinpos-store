@@ -256,7 +256,7 @@ const useLoginSubmit = (setModalOpen) => {
       return;
     }
     setLoading(true);
-    alert('user google = ' + user.profileObj.name + " Email = " + user.profileObj.email + " imgUrl = " + user.profileObj.imageUrl);
+    //alert('user google = ' + user.profileObj.name + " Email = " + user.profileObj.email + " imgUrl = " + user.profileObj.imageUrl);
 
     console.log('user google = ' + JSON.stringify(user));
 
@@ -265,7 +265,7 @@ const useLoginSubmit = (setModalOpen) => {
     if(sessionStorage.getItem('companyId'))
     {
       companyId = sessionStorage.getItem('companyId'); 
-      alert("Google CompanyId = " + companyId);
+      //alert("Google CompanyId = " + companyId);
             
     }
     
@@ -277,7 +277,37 @@ const useLoginSubmit = (setModalOpen) => {
     })
       .then((res) => {
         setModalOpen(false);
-        alert(JSON.stringify(res));
+        //alert(JSON.stringify(res));
+
+        var userLogin = res;
+        sessionStorage.removeItem('targetPage');
+        
+        sessionStorage.setItem('customerId', userLogin.customerId);
+        sessionStorage.setItem('customerFirstName', userLogin.firstName);
+        sessionStorage.setItem('customerLastName', userLogin.lastName);
+        sessionStorage.setItem('customerEmail', userLogin.email);
+        sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
+
+        sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
+
+
+        sessionStorage.setItem('address1', userLogin.address1);
+        sessionStorage.setItem('country', userLogin.country);
+        sessionStorage.setItem('province', userLogin.province);
+        sessionStorage.setItem('city', userLogin.city);
+        sessionStorage.setItem('district', userLogin.district);
+
+        sessionStorage.setItem('countryId', userLogin.countryId);
+        sessionStorage.setItem('provinceId', userLogin.provinceId);
+        sessionStorage.setItem('cityId', userLogin.cityId);
+        sessionStorage.setItem('districtId', userLogin.districtId);
+        sessionStorage.setItem('postalcode', userLogin.postalcode);
+
+        sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
+        sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
+        sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
+        sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
+
         notifySuccess('Login success!');
         //router.push(redirect || '/');
         
@@ -286,6 +316,8 @@ const useLoginSubmit = (setModalOpen) => {
 
         dispatch({ type: 'USER_LOGIN', payload: res });
         Cookies.set('userInfo', JSON.stringify(res));
+
+        localStorage.setItem('userInfo', JSON.stringify(userLogin));
       })
 
       .catch((err) => {

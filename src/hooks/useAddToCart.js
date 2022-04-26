@@ -6,10 +6,14 @@ import { notifyError, notifySuccess } from '@utils/toast';
 const useAddToCart = () => {
   const [item, setItem] = useState(1);
   const [products, setProducts] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
   const { addItem, items, updateItemQuantity } = useCart();
 
   useEffect(() => {
+    
     const products = sessionStorage.getItem('products');
+    
+    //alert('useAddToCart = ' + products);
     setProducts(JSON.parse(products));
   }, []);
 
@@ -47,6 +51,15 @@ const useAddToCart = () => {
       }
     }
   };
+
+  const getDiscountByItem = (item) =>
+  {
+    const result = discounts?.find((p) => p._id === item.id);
+    if(result)
+    {
+
+    }
+  }
 
   return {
     handleAddItem,
