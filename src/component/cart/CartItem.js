@@ -17,31 +17,24 @@ const CartItem = ({ item, UpdateTotal }) => {
 
   
   //alert(JSON.stringify(discountDetails));
-  var liffId = '';
-    var linePOSId = '';
+    
     var lineUserId = '';
-    var groupId = '';
-    var pictureUrl = '';
-    var companyId = 0;
-    var locationId = 0;
-    var orderId = 0;
-    var currencySign = '';
+    
+    
+    
+    
+    const [companyId,setCompanyId] = useState(0);
+    const [locationId,setLocationId] = useState(0);
+    const [pictureUrl,setPictureUrl] = useState('');
+
+    const [groupId,setGroupId] = useState('');
+    const [liffId,setLiffId] = useState('');
+    const [linePOSId,setLinePOSId] = useState('');
+    const [orderId,setOrderId] = useState(0);
+    const [currencySign,setcurrencySign] = useState('');
+
     
 
-    var discountData = 0;
-    var discountDataRate = 0;
-
-    /*for(var i=0;i<discountDetails.length;i++)
-    {
-      var dDetail = discountDetails[i]
-      if(dDetail.id === item.id)
-      {
-        //alert(dDetail.discount)
-        discountData = dDetail.discount;
-        discountDataRate = dDetail.discountRate;
-      }
-
-    }*/
     
     const [discountDataDetails, setDiscountDetails] = useState([]);
     const [discount,setDiscount] = useState(0);
@@ -62,6 +55,8 @@ const CartItem = ({ item, UpdateTotal }) => {
         
         if(disDetails !== null)
         {
+          var discountData = 0;
+          var discountDataRate = 0;
           
           for(var i=0;i<disDetails.length;i++)
           {
@@ -101,57 +96,58 @@ const CartItem = ({ item, UpdateTotal }) => {
         
 
       
-    })
+    });
     
-    //var discountVal = discountDetail === null ? 0 : discountDetail.discount;
+    useEffect(() => 
+    {
+      if(sessionStorage.getItem('currencySign'))
+      {
+        var currencySignData = sessionStorage.getItem('currencySign'); 
+        setcurrencySign(currencySignData);
+      }
+      if(sessionStorage.getItem('liffId'))
+      {
+        var liffIdData = sessionStorage.getItem('liffId'); 
+        setLiffId(liffIdData);
+      }
 
-    //const [discount, setDiscount] = useState(discountVal); 
-    //alert("Discount = " + discount);
-    if(sessionStorage.getItem('currencySign'))
-    {
-      currencySign = sessionStorage.getItem('currencySign'); 
-      //alert('liffId = ' + sessionStorage.getItem('liffId'))
-    }
-    if(sessionStorage.getItem('liffId'))
-    {
-      liffId = sessionStorage.getItem('liffId'); 
-      //alert('liffId = ' + sessionStorage.getItem('liffId'))
-    }
+      if(sessionStorage.getItem('linePOSId'))
+      {
+        var linePOSIdData = sessionStorage.getItem('linePOSId');
+        setLinePOSId(linePOSIdData);
+      }
 
-    if(sessionStorage.getItem('linePOSId'))
-    {
-      linePOSId = sessionStorage.getItem('linePOSId');
-      //alert('linePOSId = ' + sessionStorage.getItem('linePOSId'))
-    }
+      if(sessionStorage.getItem('groupId'))
+      {
+        var groupIdData = sessionStorage.getItem('groupId');
+        setGroupId(groupIdData);
+      }
 
-    if(sessionStorage.getItem('groupId'))
-    {
-      groupId = sessionStorage.getItem('groupId');
-      //alert('groupId = ' + sessionStorage.getItem('groupId'))
-    }
+      if(sessionStorage.getItem('companyId'))
+      {
+        var companyIdData = sessionStorage.getItem('companyId');
+        setCompanyId(companyIdData);
+      }
 
-    if(sessionStorage.getItem('companyId'))
-    {
-      companyId = sessionStorage.getItem('companyId');
-      //alert('companyId = ' + sessionStorage.getItem('companyId'))
-    }
+      if(sessionStorage.getItem('locationId'))
+      {
+        var locationIdData = sessionStorage.getItem('locationId');
+        setLocationId(locationIdData);
+      }
 
-    if(sessionStorage.getItem('locationId'))
-    {
-      locationId = sessionStorage.getItem('locationId');
-      //alert('locationId = ' + sessionStorage.getItem('locationId'))
-    }
+      if(sessionStorage.getItem('orderId'))
+      {
+        var orderIdData = sessionStorage.getItem('orderId');
+        setOrderId(orderIdData);
+      }
+      if(sessionStorage.getItem('lineProfileImage'))
+      {
+        var pictureUrlData = sessionStorage.getItem('lineProfileImage');
+        setPictureUrl(pictureUrlData);
+      }
 
-    if(sessionStorage.getItem('orderId'))
-    {
-      orderId = sessionStorage.getItem('orderId');
-      //alert('orderId = ' + sessionStorage.getItem('orderId'))
-    }
-    if(sessionStorage.getItem('lineProfileImage'))
-    {
-      pictureUrl = sessionStorage.getItem('lineProfileImage');
-      //alert('lineProfileImage = ' + sessionStorage.getItem('lineProfileImage'))
-    }
+    },[])
+    
 
 
 
@@ -215,29 +211,37 @@ const CartItem = ({ item, UpdateTotal }) => {
 
   const handleIncrease = (_id, _qty) => {
 
-    //alert(JSON.stringify(discountDataDetails))
-    updateItemQuantity(_id, _qty)
-    var discountVal = (_qty * item.price)*discountRate;
-
-    for(var i=0;i<discountDataDetails.length;i++)
+    try
     {
-      var dDetail = discountDataDetails[i]
-      if(dDetail.id === _id)
-      {
-        discountDataDetails[i].discount = discountVal;
-        
-      }
+      //alert(JSON.stringify(discountDataDetails))
+      updateItemQuantity(_id, _qty)
+      var discountVal = (_qty * item.price)*discountRate;
 
+      for(var i=0;i<discountDataDetails.length;i++)
+      {
+        var dDetail = discountDataDetails[i]
+        if(dDetail.id === _id)
+        {
+          discountDataDetails[i].discount = discountVal;
+          
+        }
+
+      }
+      
+      sessionStorage.setItem('discountDetails',JSON.stringify(discountDataDetails)); 
+      //alert(discountVal);
+      //setDiscount(discountVal);
+      if(liffId.length > 0)
+      {
+        var _updateType = 'Inc';
+        updateCoinPOSCartDetail(item, _qty,liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl, _updateType)
+      }
+    }
+    catch(ex)
+    {
+      alert("Add cart item error: " + ex.message);
     }
     
-    sessionStorage.setItem('discountDetails',JSON.stringify(discountDataDetails)); 
-    //alert(discountVal);
-    //setDiscount(discountVal);
-    if(liffId.length > 0)
-    {
-      var _updateType = 'Inc';
-      updateCoinPOSCartDetail(item, _qty,liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl, _updateType)
-    }
     
   };
 

@@ -21,6 +21,13 @@ Font.register({
     },
   ],
 });
+Font.register({ family: 'Kanit',
+  fonts:[
+    {
+      src: 'https://fonts.gstatic.com/s/kanit/v11/nKKX-Go6G5tXcr72GwU.ttf',
+    }
+  ]  });
+
 Font.register({
   family: 'DejaVu Sans',
   fonts: [
@@ -65,6 +72,7 @@ const styles = StyleSheet.create({
     margin: 'auto',
     marginTop: 5,
     fontSize: 10,
+    fontFamily: 'Kanit',
   },
 
   invoiceFirst: {
@@ -92,22 +100,25 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   logo: {
-    width: 64,
-    height: 20,
+    width: 30,
+    height: 30,
     bottom: 5,
   },
   title: {
     color: '#111827',
-    fontFamily: 'Open Sans',
+    fontFamily: 'Kanit',
     fontWeight: 'bold',
     fontSize: 13,
   },
   info: {
     fontSize: 10,
     color: '#374151',
+    fontFamily: 'Kanit',
+    
   },
   amount: {
     fontSize: 10,
+    fontFamily: 'Kanit',
     color: '#ef4444',
   },
   status: {
@@ -119,27 +130,28 @@ const styles = StyleSheet.create({
   header: {
     color: '#111827',
     fontSize: 11,
-    fontFamily: 'Open Sans',
+    fontFamily: 'Kanit',
     fontWeight: 'bold',
   },
 
   thanks: {
     color: '#22c55e',
+    fontFamily: 'Kanit',
   },
 });
 
-const InvoiceForDownload = ({ data }) => {
+const InvoiceForDownload = ({ data,companyLogo, currencySign }) => {
   return (
     <>
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.invoiceFirst}>
             <View>
-              <Text style={{ fontFamily: 'Open Sans', fontWeight: 'bold' }}>
-                INVOICE
+              <Text style={{ fontFamily: 'Kanit', fontWeight: 'bold' }}>
+                ใบเรียกเก็บเงิน
               </Text>
               <Text style={styles.info}>
-                Status :{' '}
+                สถานะ :{' '}
                 {data.orderStatus === 'Draft' && (
                   <span style={{ color: '#eab308' }}>{data.orderStatus}</span>
                 )}
@@ -158,7 +170,7 @@ const InvoiceForDownload = ({ data }) => {
               </Text>
             </View>
             <View>
-              <Image style={styles.logo} src="/logo/logo-color.png" />
+              <Image style={styles.logo} src={companyLogo} />
               <Text style={styles.info}>
                 Cecilia Chapman, 561-4535 Nulla LA,
               </Text>
@@ -168,7 +180,7 @@ const InvoiceForDownload = ({ data }) => {
 
           <View style={styles.invoiceSecond}>
             <View>
-              <Text style={styles.title}>DATE</Text>
+              <Text style={styles.title}>วันที่</Text>
               <Text style={styles.info}>
                 {data.orderDate !== undefined && (
                   <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
@@ -176,11 +188,11 @@ const InvoiceForDownload = ({ data }) => {
               </Text>
             </View>
             <View>
-              <Text style={styles.title}>INVOICE NO</Text>
+              <Text style={styles.title}>หมายเลขใบเรียกเก็บเงิน</Text>
               <Text style={styles.info}>#{data.invoiceNumber}</Text>
             </View>
             <View>
-              <Text style={styles.title}>INVOICE TO</Text>
+              <Text style={styles.title}>ที่อยู่เรียกเก็บเงิน</Text>
               <Text style={styles.info}>{data.customerName}</Text>
               <Text style={styles.info}> {data.shippingToAddress === null ? "" : (data.shippingToAddress === undefined ? "" : data.shippingToAddress.substring(0, 25))}</Text>
               {/* <Text style={styles.info}>
@@ -192,29 +204,29 @@ const InvoiceForDownload = ({ data }) => {
             <View style={styles.tableRow}>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>Sr.</span>
+                  <span style={styles.header}>ลำดับ</span>
                 </Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>Product Name</span>
+                  <span style={styles.header}>ชื่อสินค้า</span>
                 </Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>Quantity</span>
+                  <span style={styles.header}>จำนวน</span>
                 </Text>
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>Item Price</span>
+                  <span style={styles.header}>ราคาต่อหน่วย</span>
                 </Text>
               </View>
 
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
                   {' '}
-                  <span style={styles.header}>Amount</span>
+                  <span style={styles.header}>ยอดรวม</span>
                 </Text>
               </View>
             </View>
@@ -235,13 +247,13 @@ const InvoiceForDownload = ({ data }) => {
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCell}>
                     {' '}
-                    <span style={styles.quantity}>${item.productVariantPrice}.00</span>{' '}
+                    <span style={styles.quantity}>{currencySign}{item.productVariantPrice}.00</span>{' '}
                   </Text>
                 </View>
 
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCell}>
-                    <span style={styles.amount}>${parseInt(item.quantity) * parseFloat(item.productVariantPrice)}.00</span>{' '}
+                    <span style={styles.amount}>{currencySign}{parseInt(item.quantity) * parseFloat(item.productVariantPrice)}.00</span>{' '}
                   </Text>
                 </View>
               </View>
@@ -250,23 +262,23 @@ const InvoiceForDownload = ({ data }) => {
 
           <View style={styles.invoiceThird}>
             <View>
-              <Text style={styles.title}> Payment Method</Text>
+              <Text style={styles.title}>รูปแบบชำระเงิน {' '}</Text>
               <Text style={styles.info}> {data.paymentMethod} </Text>
             </View>
             <View>
-              <Text style={styles.title}>Shipping Cost</Text>
+              <Text style={styles.title}>ค่าขนส่ง</Text>
               <Text style={styles.info}>
-                ${Math.round(data.shippingFee)}.00
+                {currencySign}{Math.round(data.shippingFee)}.00
               </Text>
             </View>
             <View>
-              <Text style={styles.title}>Discount</Text>
-              <Text style={styles.info}> ${Math.round(data.totalDiscount)}.00</Text>
+              <Text style={styles.title}>ส่วนลด</Text>
+              <Text style={styles.info}> {currencySign}{Math.round(data.totalDiscount)}.00</Text>
             </View>
 
             <View>
-              <Text style={styles.title}>Total Amount</Text>
-              <Text style={styles.amount}>${Math.round(data.orderTotal)}.00</Text>
+              <Text style={styles.title}>ยอดชำระรวม {' '}</Text>
+              <Text style={styles.amount}>{currencySign}{Math.round(data.orderTotal)}.00</Text>
             </View>
           </View>
 
@@ -276,11 +288,11 @@ const InvoiceForDownload = ({ data }) => {
               fontSize: 12,
               paddingBottom: 50,
               paddingTop: 50,
+              fontFamily: 'Kanit',
             }}
           >
             <Text>
-              Thank you <span style={styles.thanks}>{data.customerName},</span> Your
-              order have been received !
+              ขอบคุณที่ใช้บริการ <span style={styles.thanks}>{data.customerName},</span> เราได้รับคำสั่งซื้อของคุณแล้ว !
             </Text>
           </View>
         </Page>

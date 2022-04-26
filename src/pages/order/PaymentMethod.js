@@ -22,23 +22,25 @@ const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId}
   const [bankShow, setBankShow] = useState(false);
   const [qrUrl, setQRUrl] = useState('');
   const [qrLoading, setQRLoading] = useState(false);
-  var bankTransferList = [];
-
+  
+  
+  const [bankTransfers, setBankTransfers] = useState([]);
   useEffect(() => 
   {
     if(sessionStorage.getItem('bankNameAndAccounts'))
     {
       var bankTransferJson = sessionStorage.getItem('bankNameAndAccounts'); 
-      bankTransferList = JSON.parse(bankTransferJson);
-      //alert(JSON.stringify(bankTransferList))
+      var bankTransferListData = JSON.parse(bankTransferJson);
+      setBankTransfers(bankTransferListData)
     }
 
-  });
+  },[]);
   
 
-  const [bankTransfers, setBankTransfers] = useState(bankTransferList);
+  
   const handleBankTransferClick = async() =>
     {
+    
     setBankShow(true);
     setQRShow(false);
     }

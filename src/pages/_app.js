@@ -9,6 +9,7 @@ import DefaultSeo from '@component/common/DefaultSeo';
 import { SidebarProvider } from '@context/SidebarContext';
 //const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || null);
 
+
 function MyApp({ Component, pageProps }) {
   return (
     <>

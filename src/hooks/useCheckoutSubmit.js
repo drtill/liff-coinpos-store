@@ -373,7 +373,7 @@ const useCheckoutSubmit = () => {
 
       //alert("orderId = " + orderId + " shippingId = " + shippingId + " shippingName = " + shippingName + " shippingFee = " + shippingFee + " companyId = " + companyId + " linePOSId = " + linePOSId + " liffId = " + liffId+ " pictureUrl = " +pictureUrl);
       shippingFee = shippingCost;
-      ProductServices.fetchCloseCoinPOSCart({
+      await ProductServices.fetchCloseCoinPOSCart({
         orderId,shippingId,shippingName,shippingFee,companyId,linePOSId,liffId,pictureUrl,firstName,lastName,mobile,email,
         address1,country,city,stateOrProvince,postalCode,district,
         orderDetails,catalogName

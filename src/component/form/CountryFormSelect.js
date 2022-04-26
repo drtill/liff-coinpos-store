@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Label from '@component/form/Label';
 import {Form} from 'react-bootstrap';
 
@@ -16,36 +16,89 @@ const CountryFormSelect = ({
   handleItemChange
 }) => {
 
-  var countryList = [];
-  var countryId = 0;
-  countryId = selectedId;
-  countryList = dataList;
-  var countryOptionIndent = [];
-  var countryIndent = [];
+  
+  
+  const [countryId,setCountryId] = useState(0);
+  const [countryList,setCountryList] = useState(dataList);
+  const [countryOptionIndent,setCountryOptionIndent] = useState([]);
+  
 
-  if(selectedId === 0)
+  useState(() => 
   {
-    //alert("Select == 0")
-    countryOptionIndent.push(<option selected>Select Country</option>)
-  }
-  else
-  {
-    countryOptionIndent.push(<option>Select Country</option>)
-  }
+    //alert('start dataList = ' + JSON.stringify(dataList));
+    //alert('start countryList = ' + JSON.stringify(countryList));
 
-  for(var i=0;i<dataList.length;i++)
-  {
-    if(countryList[i].countryId === countryId)
+    setCountryList(dataList);
+
+    var countryOptionIndentData = [];
+    if(selectedId === 0)
     {
-      //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-      countryOptionIndent.push(<option selected value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+      //alert("Select == 0")
+      countryOptionIndentData.push(<option selected>Select Country</option>)
     }
     else
     {
-      countryOptionIndent.push(<option value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+      countryOptionIndentData.push(<option>Select Country</option>)
+    }
+
+    for(var i=0;i<dataList.length;i++)
+    {
+      if(countryList[i].countryId === countryId)
+      {
+        //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+        countryOptionIndentData.push(<option selected value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+      }
+      else
+      {
+        countryOptionIndentData.push(<option value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+      }
+      
+    }
+    setCountryOptionIndent(countryOptionIndentData);
+    setCountryList(dataList);
+    setCountryId(selectedId);
+  },[])
+  
+  useEffect(() => 
+  {
+    //alert('dataList = ' + JSON.stringify(dataList));
+    //alert('countryList = ' + JSON.stringify(countryList));
+
+    setCountryList(dataList);
+
+    var countryOptionIndentData = [];
+    if(selectedId === 0)
+    {
+      //alert("Select == 0")
+      countryOptionIndentData.push(<option selected>Select Country</option>)
+    }
+    else
+    {
+      countryOptionIndentData.push(<option>Select Country</option>)
+    }
+
+    if(countryList.length > 0)
+    {
+      for(var i=0;i<dataList.length;i++)
+      {
+        if(countryList[i].countryId === countryId)
+        {
+          //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+          countryOptionIndentData.push(<option selected value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+        }
+        else
+        {
+          countryOptionIndentData.push(<option value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
+        }
+        
+      }
     }
     
-  }
+    setCountryOptionIndent(countryOptionIndentData);
+    
+    setCountryId(selectedId);
+
+  });
   
   //alert(JSON.stringify(countryOptionIndent))
   //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);

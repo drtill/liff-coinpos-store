@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Label from '@component/form/Label';
 import {Form} from 'react-bootstrap';
 
@@ -15,35 +15,39 @@ const ShippingFormSelect = ({
   handleItemChange
 }) => {
 
-  var shippingList = [];
-  var shippingId = 0;
-  shippingId = selectedId;
-  shippingList = dataList;
-  var shippingOptionIndent = [];
-  var shippingIndent = [];
+  
+  const [shippingId, setShippingId] = useState(selectedId);
+  const [shippingList, setShippingList] = useState(dataList);
+  const [shippingOptionIndent, setShippingOptionIndent] = useState([]);
+  
 
-  if(selectedId === 0)
-  {
-    //alert("Select == 0")
-    shippingOptionIndent.push(<option selected>Select Shipping</option>)
-  }
-  else
-  {
-    shippingOptionIndent.push(<option>Select Shipping</option>)
-  }
-  for(var i=0;i<dataList.length;i++)
-  {
-    if(shippingList[i].Id === shippingId)
+  useEffect(() => {
+    var shippingOptionIndentData = [];
+    if(selectedId === 0)
     {
-      //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-      shippingOptionIndent.push(<option selected value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+      //alert("Select == 0")
+      shippingOptionIndentData.push(<option selected>Select Shipping</option>)
     }
     else
     {
-        shippingOptionIndent.push(<option value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+      shippingOptionIndentData.push(<option>Select Shipping</option>)
     }
-    
-  }
+    for(var i=0;i<dataList.length;i++)
+    {
+      if(shippingList[i].Id === shippingId)
+      {
+        //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+        shippingOptionIndentData.push(<option selected value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+      }
+      else
+      {
+          shippingOptionIndentData.push(<option value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+      }
+      
+    }
+    setShippingOptionIndent(shippingOptionIndentData);
+  },[])
+  
   
   //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);
   

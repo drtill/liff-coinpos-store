@@ -23,6 +23,7 @@ const EditableCustomerInput = ({
 
   
   var [value, setValue] = useState(dataValue);
+  var [inputType, setInputType] = useState(type);
   
   
   //const [postalcode, setPostalCode] = useState('');
@@ -38,101 +39,66 @@ const EditableCustomerInput = ({
         event.preventDefault();
       }
 
-    if(canAutoChange === true)
-    {
-      //alert("Val = " + value + " DVal = " + dataValue)
-      if(dataValue !== value)
-      {
-        setValue(dataValue);
-      }
-    }
     
-  if(type === 'input')
+    
+    useEffect(() =>
     {
-      /*if(hasChangeData === true)
+      if(canAutoChange === true)
       {
-          alert("Change");
-          hasChangeData = false;
-      }*/
-      
-      /*if(dataVal !== value)
-      {
-        if(isChangeByKey === false)
+        //alert("Val = " + value + " DVal = " + dataValue)
+        if(dataValue !== value)
         {
-          alert("Change By Key");
-          setData(dataVal);
+          setValue(dataValue);
+        }
+      }  
 
-          
-        }
+    },[])
 
-        if(isChangeByKey === true)
-        {
-          setChangeByKey(false);
-        }
-        
-      }*/
-      
-      /* if(dataValue !== value)
+    useEffect(() =>{
+      if(canAutoChange === true)
       {
-        //alert("Return Change = " + isChangeByKey);
-        if(isChangeByKey === false)
+        //alert("Val = " + value + " DVal = " + dataValue)
+        if(dataValue !== value)
         {
-          setValue(value);
+          setValue(dataValue);
         }
-        else
-        {
-          //setValue(value);
-        }
-        //setChangeByKey(false);
-        
-        //setData(dataValue);
-      } */
-      
-        return (
-            <div className="mb-3">
-                <label for="exampleFormControlInput1" style={{color:"dimgray",display:"flex"}} className="form-label">{label}</label>
-                {
-                  isDisable === true
-                  ?
-                    <h3 className="py-2 px-4 md:px-5">{value}</h3>
-                  :
-                    <input 
-                    {...register(`${name}`, {
-                        required: `${label} is required!`,
-                      })}
-                    id={id} 
-                    type={type} 
-                    name={name}
-                    defaultValue={defaultValue}
-                    value={value}
-                    placeholder={placeholder}
-                    
-                    className={
-                    Icon
-                    ? 'py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
-                    : 'py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
-                    }
-                    onChange={handleDataChange}/>
-                
-                }
-                
-            </div>)
-    }
-    else if(type === 'textarea')
-    {
-        return (
-            <div className="mb-3">
-                <label for="exampleFormControlTextarea1" style={{color:"dimgray",display:"flex"}} className="form-label">{label}</label>
-                {isDisable === true
-                  ?
-                    <h3 className="py-2 px-4 md:px-5">{value}</h3>
-                    :
+      }
+    });
+
+    return (
+      <div className="mb-3">
+          <label for="exampleFormControlInput1" style={{color:"dimgray",display:"flex"}} className="form-label">{label}</label>
+          {isDisable === true ?
+          <h3 className="py-2 px-4 md:px-5">{value}</h3>
+        :
+          inputType === 'input'
+            ?
+              <input 
+              {...register(`${name}`, {
+                  required: `${label} is required!`,
+                })}
+              id={id} 
+              type={inputType} 
+              name={name}
+              defaultValue={defaultValue}
+              value={value}
+              placeholder={placeholder}
+              
+              className={
+              Icon
+              ? 'py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
+              : 'py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
+              }
+              onChange={handleDataChange}/>
+            :
+              inputType === 'textarea'
+              ?
                 <textarea 
                 {...register(`${name}`, {
                     required: `${label} is required!`,
                   })}
                   id={id} 
-                type={type} 
+                type={inputType} 
                 name={name}
                 defaultValue={defaultValue}
                 value={value}
@@ -144,40 +110,30 @@ const EditableCustomerInput = ({
                 : 'py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
                 }
                 onChange={handleDataChange}></textarea>
-              }
-            </div>)
-    }
-    else
-    {
-        return (
-            <div className="mb-3">
-                <label for="exampleFormControlInput1" style={{color:"dimgray",display:"flex"}} className="form-label">{label}</label>
-                {isDisable === true ?
-                <h3 className="py-2 px-4 md:px-5">{value}</h3>
               :
-              <input 
-              {...register(`${name}`, {
-                  required: `${label} is required!`,
-                })}
-                id={id} 
-              type={type} 
-              name={name}
-              defaultValue={defaultValue}
-              value={value}
-              placeholder={placeholder}
-              
-              
-              className={
-              
-              Icon
-              ? 'py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
-              : 'py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
-              }
-              onChange={handleDataChange}/>
-              }
+                <input 
+                {...register(`${name}`, {
+                    required: `${label} is required!`,
+                  })}
+                  id={id} 
+                type={inputType} 
+                name={name}
+                defaultValue={defaultValue}
+                value={value}
+                placeholder={placeholder}
                 
+                
+                className={
+                
+                Icon
+                ? 'py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
+                : 'py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12'
+                }
+                onChange={handleDataChange}/>
+          
+              }
             </div>)
-    }
+  
 };
 
 export default EditableCustomerInput;

@@ -634,7 +634,7 @@ const ProductServices = {
   async fetchGetPayOrderById(body) {
     try {
       
-      alert("Get Pay Order = " + JSON.stringify(body));
+      //alert("Get Pay Order = " + JSON.stringify(body));
       var productList
       await fetch(serviceUrl + 'GetPayCart',
       { 
@@ -657,6 +657,41 @@ const ProductServices = {
       return "Error: " + err.message
     }
     
+  },
+  sendBankTransferPayment(body)
+  {
+    return requests.post('/products/SendBankTransferPayment',body);
+  },
+  async fetchSendBankTransferPayment(body)
+  {
+    try
+    {
+      //res.send("Close Bill");
+      //console.log(req.body);
+      //return;
+      var productList = null;
+      await fetch(serviceUrl + 'SendBankTransferPayment',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"OrderId": ${body.orderId},"LiffId":"${body.liffId}","LineUserId":"${body.lineUserId}","PictureUrl":"${body.pictureUrl}", "CompanyId":${body.companyId},"AccountName":"${body.accountName}","AccountNumber":"${body.accountNumber}", "TransferTime":"${body.transferTimeValue}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //console.log(data); // this will be a string
+        productList = data;
+      });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+    }
   },
 };
 

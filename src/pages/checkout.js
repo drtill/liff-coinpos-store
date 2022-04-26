@@ -83,278 +83,121 @@ const Checkout = () => {
   } = useCheckoutSubmit();
 
   
-
-  var disDetailsData = [];
-
-  var totalDiscountData = 0;
-  
-
-  const [discountDetails, setDiscountDetail] = useState(disDetailsData);
-  const [totalDiscount, setTotalDiscount] = useState(totalDiscountData);
+  const [discountDetails, setDiscountDetail] = useState([]);
+  const [totalDiscount, setTotalDiscount] = useState(0);
 
   const [customerInfoLoading, setCustomerInfoLoading] = useState(false);
   const [confirmOrderLoading, setConfirmOrderLoading] = useState(false);
   
-  var customerFirstName = '';
-  var customerLastName = ''
-  var customerEmail = '';
-  var customerPhoneNumber = '';
-  var customerAddress1 = ''
-  var postalCodeData = '';
+  const [catalogName, setCatalogName] = useState('');
   
-  var countryList = [];
-  var provincesList = [];
-  var citiesList = [];
-  var districtsList = [];
-  var shippingsList = [];
+  const [customerId, setCustomerId] = useState(0);
+
   
-
-  var customerAddressIdData = 0
-  var countryIdData = 0;
-  //const [countryId,setCountryId] = useState(0);
-  var provinceIdData = 0;
-  var cityIdData = 0;
-  var districtIdData = 0;
-  var shippingId = 0;
-
-  var provinceTextData = '';
-  var cityTextData = '';
-  var districtTextData = '';
-
-  var countrysData = [];
-
-  var salesOrderId = 0;
-  var lineLiffId = '';
-  var lineLiffUserId = '';
-  
-  var lineCompanyId = 0;
-
-
-  var companyLogoData = '';
-  
-  var locationName = '';
-  var locationAddress1 = '';
-  var locationAddress2 = '';
-  var locationCity = '';
-  var locationStateOrProvince = '';
-  var locationCountry = '';
-  var locationPostalCode = '';
-  var locationEmail = '';
-  var locationTel = '';
-
-  var catalogName = '';
-  var customerId = 0;
-  var isInputAddressData = false;
 
   const [companyName,setCompanyName] = useState('');
   const [dataPath,setDataPath] = useState('');
 
-  useEffect(() => 
+
+  /* useEffect(() => 
   {
     if(sessionStorage.getItem('discountDetails'))
     {
       var discountDetailsJson = sessionStorage.getItem('discountDetails'); 
       
       //alert(discountDetailsJson);
-      disDetailsData = JSON.parse(discountDetailsJson);
-      
+      var disDetailsData = JSON.parse(discountDetailsJson);
+      setDiscountDetail(disDetailsData);
       if(disDetailsData !== null)
       {
-        totalDiscountData = disDetailsData.reduce((discountTotal, item) => (discountTotal += item.discount),0);
+        var totalDiscountData = disDetailsData.reduce((discountTotal, item) => (discountTotal += item.discount),0);
+        setTotalDiscount(totalDiscountData);
         //setTotalDiscount(totalDiscountVal);
       }
     }
 
-  })
+  }) */
   
-  if(sessionStorage.getItem('locationName'))
-  {
-    locationName = sessionStorage.getItem('locationName'); 
-    
-  }
-  if(sessionStorage.getItem('locationAddress1'))
-  {
-    locationAddress1 = sessionStorage.getItem('locationAddress1'); 
-    
-  }
-  if(sessionStorage.getItem('locationAddress2'))
-  {
-    locationAddress2 = sessionStorage.getItem('locationAddress2'); 
-    
-  }
-  if(sessionStorage.getItem('locationCity'))
-  {
-    locationCity = sessionStorage.getItem('locationCity'); 
-    
-  }
-  if(sessionStorage.getItem('locationStateOrProvince'))
-  {
-    locationStateOrProvince = sessionStorage.getItem('locationStateOrProvince'); 
-    
-  }
-  if(sessionStorage.getItem('locationCountry'))
-  {
-    locationCountry = sessionStorage.getItem('locationCountry'); 
-    
-  }
-  if(sessionStorage.getItem('locationPostalCode'))
-  {
-    locationPostalCode = sessionStorage.getItem('locationPostalCode'); 
-    
-  }
-  if(sessionStorage.getItem('locationEmail'))
-  {
-    locationEmail = sessionStorage.getItem('locationEmail'); 
-    
-  }
-  if(sessionStorage.getItem('locationTel'))
-  {
-    locationTel = sessionStorage.getItem('locationTel'); 
-    
-  }
+  
       
-  if(sessionStorage.getItem('orderId'))
-  {
-    salesOrderId = sessionStorage.getItem('orderId'); 
-    //orderId = salesOrderId;
-  }
-  if(sessionStorage.getItem('liffId'))
-  {
-    lineLiffId = sessionStorage.getItem('liffId');
-    //alert(lineLiffId) 
-    //liffId = lineLiffId;
-    //handleLiffId(lineLiffId);
-  }
-  if(sessionStorage.getItem('linePOSId'))
-  {
-    lineLiffUserId = sessionStorage.getItem('linePOSId'); 
-    //linePOSId = lineLiffUserId;
-    //handleLinePOSId(lineLiffUserId);
-  }
-  if(sessionStorage.getItem('companyId'))
-  {
-    lineCompanyId = sessionStorage.getItem('companyId');
-    //alert(lineCompanyId); 
-    //companyId = lineCompanyId;
-    //handleCompanyId(lineCompanyId);
-  }
-  if(sessionStorage.getItem('customerFirstName'))
-  {
-    
-    customerFirstName = sessionStorage.getItem('customerFirstName'); 
-    //alert(customerFirstName);  
-  }
-  if(sessionStorage.getItem('customerLastName'))
-  {
-    customerLastName = sessionStorage.getItem('customerLastName'); 
-      
-  }
-  if(sessionStorage.getItem('customerEmail'))
-  {
-    customerEmail = sessionStorage.getItem('customerEmail'); 
-      
-  }
-  if(sessionStorage.getItem('customerPhoneNumber'))
-  {
-    customerPhoneNumber = sessionStorage.getItem('customerPhoneNumber');
-    //if(customerPhoneNumber == )
-    //alert(customerPhoneNumber); 
-      
-  }
+  
+  
   
 
-  if(sessionStorage.getItem('address1'))
-  {
-    customerAddress1 = sessionStorage.getItem('address1'); 
-    //alert("Address1 = " + customerAddress1);
-      
-  }
-  
-  if(sessionStorage.getItem('provinceId'))
-  {
-    provinceIdData = Number(sessionStorage.getItem('provinceId')); 
-      
-  }
-  if(sessionStorage.getItem('countryId'))
-  {
-    
-    countryIdData = Number(sessionStorage.getItem('countryId')); 
-    
-    
-    //alert("Select Id = " + countryId);
-      
-  }
   
   
-  if(sessionStorage.getItem('cityId'))
-  {
-    cityIdData = Number(sessionStorage.getItem('cityId')); 
-      
-  }
-  if(sessionStorage.getItem('districtId'))
-  {
-    districtIdData = Number(sessionStorage.getItem('districtId')); 
-      
-  }
-  if(sessionStorage.getItem('postalcode'))
-  {
-    postalCodeData = sessionStorage.getItem('postalcode'); 
-      
-  }
-  if(sessionStorage.getItem('shippingId'))
-  {
-    shippingId = sessionStorage.getItem('shippingId'); 
-      
-  }
-
-  
-  if(sessionStorage.getItem('shippings'))
-  {
-    var shippingsJson = sessionStorage.getItem('shippings'); 
-    shippingsList = JSON.parse(shippingsJson);
-  }
-
-  if(sessionStorage.getItem('companyLogo'))
-  {
-    companyLogoData = sessionStorage.getItem('companyLogo'); 
-    
-  }
-  const [companyLogo, setCompanyLogo] = useState(companyLogoData);
+  const [companyLogo, setCompanyLogo] = useState('');
   const [IsApproveCustomerInfo, setApproveCustomerInfo] = useState(false);
   const [IsEditCustomerInfo, setEditCustomerInfo] = useState(false);
   const [IsDisableCustomerInfo, setDisableCustomerInfo] = useState(true);
-  const [customerAddressId, setCustomerAddressId] = useState(customerAddressIdData);
-  const [firstName,setCustomerFirstName] = useState(customerFirstName);
-  const [lastName,setCustomerLastName] = useState(customerLastName);
-  const [email,setCustomerEmail] = useState(customerEmail);
-  const [phoneNumber,setCustomerPhoneNumber] = useState(customerPhoneNumber);
+  const [customerAddressId, setCustomerAddressId] = useState(0);
+  
 
-  const [address1,setCustomerAddress] = useState(customerAddress1);
 
-  const [provinces, setProvinces] = useState(provincesList);
-  const [countrys,setCountry] = useState(countryList);
-  const [cities, setCities] = useState(citiesList);
-  const [districts, setDistricts] = useState(districtsList);
-  const [postalcode, setPostalCode] = useState(postalCodeData);
-  const [districtText, setDistrictText] = useState(districtTextData);
-  const [cityText, setCityText] = useState(cityTextData);
-  const [provinceText, setProvinceText] = useState(provinceTextData);
+  const [address1,setCustomerAddress] = useState('');
+
+  const [provinces, setProvinces] = useState([]);
+  const [countrys,setCountry] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [postalcode, setPostalCode] = useState('');
+  const [districtText, setDistrictText] = useState('');
+  const [cityText, setCityText] = useState('');
+  const [provinceText, setProvinceText] = useState('');
   const [changePostalcode, setChangePostalCode] = useState(false);
-  const [shippingServices, setShippings] = useState(shippingsList);
+  const [shippingServices, setShippings] = useState([]);
 
-  const [countryId, setCountryId] = useState(countryIdData);
-  const [cityId, setCityId] = useState(cityIdData);
-  const [provinceId,setProvinceId] = useState(provinceIdData);
-  const [districtId,setDistrictId] = useState(districtIdData);
+  const [countryId, setCountryId] = useState(0);
+  const [cityId, setCityId] = useState(0);
+  const [provinceId,setProvinceId] = useState(0);
+  const [districtId,setDistrictId] = useState(0);
   
 
   const [qrShow, setQRShow] = useState(false);
   const [bankShow, setBankShow] = useState(false);
   const [qrUrl, setQRUrl] = useState('');
 
-  const [isInputAddress, setIsInputAddress] = useState(isInputAddressData);
+  const [isInputAddress, setIsInputAddress] = useState(false);
 
+  const [firstNameError, setFirstNameError] = useState({});
+  const [lastNameError, setLastNameError] = useState({});
+  const [emailError, setEmailError] = useState({});
   const [contactError, setContactError] = useState({});
+
+  const [countryError, setCountryError] = useState({});
+  const [provinceError, setProvinceError] = useState({});
+  const [cityError, setCityError] = useState({});
+  const [districtError, setDistrictError] = useState({});
+  const [address1Error, setAddress1Error] = useState({});
+  const [postalCodeError, setPostalCodeError] = useState({});
+
+  const [locationName, setLocationName] = useState('');
+  const [locationAddress1, setLocationAddress1] = useState('');
+  const [locationAddress2, setLocationAddress2] = useState('');
+  const [locationCity, setLocationCity] = useState('');
+  const [locationStateOrProvince, setLocationStateOrProvince] = useState('');
+  const [locationCountry, setLocationCountry] = useState('');
+  const [locationPostalCode, setLocationPostalCode] = useState('');
+  const [locationEmail, setLocationEmail] = useState('');
+  const [locationTel, setLocationTel] = useState('');
+
+  const [salesOrderId, setSalesOrderId] = useState(0);
+  const [lineLiffId, setLineLiffId] = useState('');
+  const [lineLiffUserId, setLineLiffUserId] = useState('');
+
+  const [lineCompanyId, setLineCompanyId] = useState(0);
+
+  const [firstName, setCustomerFirstName] = useState('');
+  const [lastName, setCustomerLastName] = useState('');
+  const [email, setCustomerEmail] = useState('');
+  const [phoneNumber, setCustomerPhoneNumber] = useState('');
+  
+  const [customerAddress1, setCustomerAddress1] = useState('');
+
+  const [shippingId, setShippingId] = useState(0);
+  
+  const [currencySign, setCurrencySign] = useState('');
+  
   /* if(sessionStorage.getItem('countrys'))
   {
     var countrysJson = sessionStorage.getItem('countrys'); 
@@ -384,22 +227,22 @@ const Checkout = () => {
     if(Number(countryIdData) !== 10 && Number(countryIdData) !== 0)//thai
     {
       
-      isInputAddressData = true;
+      var isInputAddressData = true;
       setIsInputAddress(isInputAddressData);
       if(sessionStorage.getItem('city'))
       {
-        cityTextData = sessionStorage.getItem('city'); 
+        var cityTextData = sessionStorage.getItem('city'); 
         setCityText(cityTextData);
           
       }
       if(sessionStorage.getItem('district'))
       {
-        districtTextData = sessionStorage.getItem('district'); 
+        var districtTextData = sessionStorage.getItem('district'); 
         setDistrictText(districtTextData);
       }
       if(sessionStorage.getItem('province'))
       {
-        provinceTextData = sessionStorage.getItem('province'); 
+        var provinceTextData = sessionStorage.getItem('province'); 
         setProvinceText(provinceTextData);
       }
       
@@ -412,8 +255,8 @@ const Checkout = () => {
 
     if(sessionStorage.getItem('customerId'))
   {
-    customerId = sessionStorage.getItem('customerId'); 
-    
+    var customerIdData = sessionStorage.getItem('customerId'); 
+    setCustomerId(customerIdData);
           
   }
   if(sessionStorage.getItem('dataPath'))
@@ -424,14 +267,13 @@ const Checkout = () => {
   }
   if(sessionStorage.getItem('catalogName'))
   {
-    catalogName = sessionStorage.getItem('catalogName'); 
-    //alert('first catalogName = ' + catalogName)
-          
+    var catalogNameData = sessionStorage.getItem('catalogName'); 
+    setCatalogName(catalogNameData);      
   }
   if(sessionStorage.getItem('customerAddressId'))
   {
     
-    customerAddressIdData = Number(sessionStorage.getItem('customerAddressId')); 
+    var customerAddressIdData = Number(sessionStorage.getItem('customerAddressId')); 
     //alert("customerAddressIdData = " + customerAddressIdData)
     setCustomerAddressId(customerAddressIdData);
     if(customerAddressId !== undefined && customerAddressId !== null && customerAddressId !== 0)
@@ -448,7 +290,7 @@ const Checkout = () => {
   {
     var countrysJson = sessionStorage.getItem('countrysJSON'); 
     //alert(countrysJson);
-    countryList = JSON.parse(countrysJson);
+    var countryList = JSON.parse(countrysJson);
     if(countryList === null)
     {
       setCountry([])
@@ -462,7 +304,7 @@ const Checkout = () => {
   if(sessionStorage.getItem('provinces'))
   {
     var provincesJson = sessionStorage.getItem('provinces'); 
-    provincesList = JSON.parse(provincesJson);
+    var provincesList = JSON.parse(provincesJson);
     //alert('provincesList = ' + provincesList)
     if(provincesList === null)
     {
@@ -480,7 +322,7 @@ const Checkout = () => {
     //alert('cities');
     var citiesJson = sessionStorage.getItem('cities'); 
     //alert('citiesJson = ' + citiesJson);
-    citiesList = JSON.parse(citiesJson);
+    var citiesList = JSON.parse(citiesJson);
     if(citiesList === null)
     {
       setCities([]);
@@ -493,7 +335,7 @@ const Checkout = () => {
   if(sessionStorage.getItem('districts'))
   {
     var districtsJson = sessionStorage.getItem('districts'); 
-    districtsList = JSON.parse(districtsJson);
+    var districtsList = JSON.parse(districtsJson);
     if(districtsList === null)
     {
       setDistricts([]);
@@ -520,42 +362,210 @@ const Checkout = () => {
     
   }
     
+
+  if(sessionStorage.getItem('locationName'))
+  {
+    var locationNameData = sessionStorage.getItem('locationName'); 
+    setLocationName(locationNameData);
+
+  }
+  if(sessionStorage.getItem('locationAddress1'))
+  {
+    var locationAddress1Data = sessionStorage.getItem('locationAddress1'); 
+    setLocationAddress1(locationAddress1Data);
+  }
+  if(sessionStorage.getItem('locationAddress2'))
+  {
+    var locationAddress2Data = sessionStorage.getItem('locationAddress2'); 
+    setLocationAddress2(locationAddress2Data);
+  }
+  if(sessionStorage.getItem('locationCity'))
+  {
+    var locationCityData = sessionStorage.getItem('locationCity'); 
+    setLocationCity(locationCityData);
+  }
+  if(sessionStorage.getItem('locationStateOrProvince'))
+  {
+    var locationStateOrProvinceData = sessionStorage.getItem('locationStateOrProvince'); 
+    setLocationStateOrProvince(locationStateOrProvinceData);
+  }
+  if(sessionStorage.getItem('locationCountry'))
+  {
+    var locationCountryData = sessionStorage.getItem('locationCountry'); 
+    setLocationCountry(locationCountryData);
+  }
+  if(sessionStorage.getItem('locationPostalCode'))
+  {
+    var locationPostalCodeData = sessionStorage.getItem('locationPostalCode'); 
+    setLocationPostalCode(locationPostalCodeData);
+  }
+  if(sessionStorage.getItem('locationEmail'))
+  {
+    var locationEmailData = sessionStorage.getItem('locationEmail'); 
+    setLocationEmail(locationEmailData);
+  }
+  if(sessionStorage.getItem('locationTel'))
+  {
+    var locationTelData = sessionStorage.getItem('locationTel'); 
+    setLocationTel(locationTelData);
+  }
+  
+  if(sessionStorage.getItem('orderId'))
+  {
+    var salesOrderIdData = sessionStorage.getItem('orderId'); 
+    setSalesOrderId(salesOrderIdData);
+  }
+  if(sessionStorage.getItem('liffId'))
+  {
+    var lineLiffIdData = sessionStorage.getItem('liffId');
+    setLineLiffId(lineLiffIdData);
+  }
+  if(sessionStorage.getItem('linePOSId'))
+  {
+    var lineLiffUserIdData = sessionStorage.getItem('linePOSId'); 
+    setLineLiffUserId(lineLiffUserIdData);
+  }
+
+  if(sessionStorage.getItem('companyId'))
+  {
+    var lineCompanyIdData = sessionStorage.getItem('companyId');
+    setLineCompanyId(lineCompanyIdData);
+  }
+  if(sessionStorage.getItem('customerFirstName'))
+  {
     
+    var customerFirstNameData = sessionStorage.getItem('customerFirstName'); 
+    setCustomerFirstName(customerFirstNameData);
+  }
+  if(sessionStorage.getItem('customerLastName'))
+  {
+    var customerLastNameData = sessionStorage.getItem('customerLastName'); 
+    setCustomerLastName(customerLastNameData);
+  }
+  if(sessionStorage.getItem('customerEmail'))
+  {
+    var customerEmailData = sessionStorage.getItem('customerEmail'); 
+    setCustomerEmail(customerEmailData);
+  }
+  if(sessionStorage.getItem('customerPhoneNumber'))
+  {
+    var customerPhoneNumberData = sessionStorage.getItem('customerPhoneNumber');
+    setCustomerPhoneNumber(customerPhoneNumberData);
+      
+  }
+
+  if(sessionStorage.getItem('address1'))
+  {
+    var customerAddress1Data = sessionStorage.getItem('address1'); 
+    setCustomerAddress1(customerAddress1Data);
+      
+  }
+  
+  if(sessionStorage.getItem('provinceId'))
+  {
+    var provinceIdData = Number(sessionStorage.getItem('provinceId')); 
+    setProvinceId(provinceIdData);
+  }
+  if(sessionStorage.getItem('countryId'))
+  {
+    
+    var countryIdData = Number(sessionStorage.getItem('countryId')); 
+    //alert('countryIdData = ' + countryIdData)
+    setCountryId(countryIdData);
+    
+      
+  }
+  
+  
+  if(sessionStorage.getItem('cityId'))
+  {
+    var cityIdData = Number(sessionStorage.getItem('cityId')); 
+     setCityId(cityIdData); 
+  }
+  if(sessionStorage.getItem('districtId'))
+  {
+    var districtIdData = Number(sessionStorage.getItem('districtId')); 
+    setDistrictId(districtIdData);
+  }
+  if(sessionStorage.getItem('postalcode'))
+  {
+    var postalCodeData = sessionStorage.getItem('postalcode'); 
+    setPostalCode(postalCodeData);
+  }
+
+  if(sessionStorage.getItem('shippingId'))
+  {
+    var shippingIdData = Number(sessionStorage.getItem('shippingId')); 
+    setShippingId(shippingIdData)
+  }
+
+  
+  if(sessionStorage.getItem('shippings'))
+  {
+    var shippingsJson = sessionStorage.getItem('shippings'); 
+    var shippingsList = JSON.parse(shippingsJson);
+    setShippings(shippingsList);
+  }
+
+  if(sessionStorage.getItem('companyLogo'))
+  {
+    var companyLogoData = sessionStorage.getItem('companyLogo'); 
+    setCompanyLogo(companyLogoData);
+  }
+
+  
+  if(sessionStorage.getItem('currencySign'))
+  {
+    var currencySignData = sessionStorage.getItem('currencySign'); 
+    setCurrencySign(currencySignData);
+    
+  }
   },[]);
 
   const UpdateTotal = (id,qty,discountRate) =>
   {
     //alert("UpdateTotal");
-    var totalDiscountValue = 0;
-    for(var i=0;i<items.length;i++)
+    try
     {
-      var item = items[i];
-      if(item.id === id)
+      var totalDiscountValue = 0;
+      for(var i=0;i<items.length;i++)
       {
-        totalDiscountValue += (qty * item.price) * discountRate; 
-
-      }
-      else
-      {
-        for(var j=0;j<discountDetails.length;j++)
+        var item = items[i];
+        if(item.id === id)
         {
-          var discountItem = discountDetails[j];
-          if(discountItem.id === item.id)
-          {
-            totalDiscountValue += (item.quantity * item.price * (discountItem.discountRate ? discountItem.discountRate : 0));
-          } 
+          totalDiscountValue += (qty * item.price) * discountRate; 
+
         }
-        
+        else
+        {
+          for(var j=0;j<discountDetails.length;j++)
+          {
+            var discountItem = discountDetails[j];
+            if(discountItem.id === item.id)
+            {
+              totalDiscountValue += (item.quantity * item.price * (discountItem.discountRate ? discountItem.discountRate : 0));
+            } 
+          }
+          
+        }
       }
+      //alert(totalDiscountValue);
+      setTotalDiscount(totalDiscountValue);
+      //setTotalDiscount(์totalDiscountValue);
     }
-    //alert(totalDiscountValue);
-    setTotalDiscount(totalDiscountValue);
-    //setTotalDiscount(์totalDiscountValue);
+    catch(ex)
+    {
+      alert("Update Total Error: " + ex.message);
+    }
+    
   }
-  const submitContact = async (event) => {
+  const submitContact = async () => {
     setCustomerInfoLoading(true);
     setConfirmOrderLoading(true);
-    event.preventDefault();
+    //event.preventDefault();
+
+    //alert("Confirm");
+    
     
     
     //alert(`submitContact`);
@@ -646,9 +656,10 @@ const Checkout = () => {
     }
     else
     {
-      submitHandler(data);
+      //alert("Confirm");
+      await submitHandler(data);
     }
-
+    
     setConfirmOrderLoading(false);
     setCustomerInfoLoading(false);
   };
@@ -1013,6 +1024,64 @@ const SaveCustomerInfo = async (companyId) =>
     
 }
 
+const SaveCustomerInfo1 = async () =>
+{
+  //alert(countryId);
+  setCustomerInfoLoading(true);
+  var countryItem = countrys.find(x => x.countryId === countryId);
+  //alert(JSON.stringify(countryItem));
+    var countryString = countryItem === null ? "" : countryItem.countryLocalName;
+
+    //alert("cityId = " + cityId);
+
+    var cityString = '';
+    var provinceString = '';
+    var districtString = '';
+    if(isInputAddress === true)
+    {
+      cityString = cityText;
+      provinceString = provinceText;
+      districtString = districtText;
+    }
+    else
+    {
+      var cityItem = cities.find(x => x.Id === cityId);
+      cityString = cityItem === null ? "" : cityItem.Name_th;
+
+      var provinceItem = provinces.find(x => x.Id === provinceId);
+      provinceString = provinceItem === null ? "" : provinceItem.Name_th;
+
+      var districtItem = districts.find(x => x.Id === districtId);
+      districtString = districtItem === null ? "" : districtItem.Name_th;
+    }
+    //alert(JSON.stringify(cityItem));
+    
+    
+    //alert("provinceId = " + provinceId);
+    //alert(JSON.stringify(provinceItem));
+    
+    //alert("districtId = " + districtId);
+    //alert(JSON.stringify(districtItem));
+    
+    var postalCodeString = postalcode;
+    //alert(companyId)
+    //alert(firstName);
+    //return;
+
+    if(!checkValid(firstName,lastName,email,phoneNumber, address1, countryId, provinceString, districtString, cityString))
+    {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน")
+      //return;
+    }
+    else
+    {
+      alert("Ok")
+    }
+
+    setCustomerInfoLoading(false);
+    
+}
+
 const clearErrorMessage = () =>
 {
   setContactError('');
@@ -1022,14 +1091,23 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
   var isComplete = true;
   if(firstName.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setFirstNameError(error);
     isComplete = false;
   }
   if(lastName.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setLastNameError(error);
     isComplete = false;
   }
   if(email.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setEmailError(error);
     isComplete = false;
   }
   if(phoneNumber.length <= 0)
@@ -1042,22 +1120,37 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
   }
   if(address1.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setAddress1Error(error);
     isComplete = false;
   }
   if(countryId === 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setCountryError(error);
     isComplete = false;
   }
   if(provinceString.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setProvinceError(error);
     isComplete = false;
   }
   if(districtString.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setDistrictError(error);
     isComplete = false;
   }
   if(cityString.length <= 0)
   {
+    var error = {};
+    error['message'] = 'ชื่อต้นว่างไม่ได้';
+    setCityError(error);
     isComplete = false;
   }
 
@@ -1065,12 +1158,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
 }
 
 
-  var currencySign = '';
-    if(sessionStorage.getItem('currencySign'))
-    {
-      currencySign = sessionStorage.getItem('currencySign'); 
-      //alert('liffId = ' + sessionStorage.getItem('liffId'))
-    }
+  
     
   return (
     <>
@@ -1088,481 +1176,393 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                   <Loading loading={confirmOrderLoading} />
               
                 :
-                  <form onSubmit={submitContact}>
-                    {customerInfoLoading === true ? 
+                  /* <form onSubmit={submitContact}>
+                  
+                  </form> */
+                  customerInfoLoading === true ? 
                     
-                      <Loading loading={customerInfoLoading} />
-                    :
-                    <>
-                      <div className="form-group">
-                        <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                          01. ข้อมูลส่วนบุคคล
-                        </h2>
-                        <div className="grid grid-cols-6 gap-6">
-                          <div className="col-span-6 sm:col-span-3">
-                            {/* <InputArea
-                              register={register}
-                              label="First Name"
-                              name="firstName"
-                              type="text"
-                              placeholder="John"
-                              dataValue={firstName}
-                            /> */}
-                            
-                            <EditableCustomerInput register={register}
-                            label="ชื่อต้น" 
-                            name="firstName"
-                            type="text"
-                            placeholder="John"
-                            isDisable={IsDisableCustomerInfo}
-                              dataValue={firstName}
-                              canAutoChange={true}
-                            handleDataChange={handleFirstNameChange}
-                            />
-                            <Error errorName={errors.firstName} />
-                          </div>
-
-                          <div className="col-span-6 sm:col-span-3">
-                            {/* <InputArea
-                              register={register}
-                              label="Last name"
-                              name="lastName"
-                              type="text"
-                              placeholder="Doe"
-                              dataValue={lastName}
-                            /> */}
-                            <EditableCustomerInput register={register}
-                            label="นามสกุล" 
-                            name="lastName"
-                            type="text"
-                            placeholder="Doe"
-                            isDisable={IsDisableCustomerInfo}
-                              dataValue={lastName}
-                              canAutoChange={true}
-                            handleDataChange={handleLastNameChange}
-                            />
-                            <Error errorName={errors.lastName} />
-                          </div>
-
-                          <div className="col-span-6 sm:col-span-3">
-                            {/* <InputArea
-                              register={register}
-                              label="Email address"
-                              name="email"
-                              type="email"
-                              placeholder="youremail@gmail.com"
-                              dataValue={email}
-                            /> */}
-                            <EditableCustomerInput register={register}
-                            label="Email address"
-                            name="email"
-                            type="email"
-                            placeholder="youremail@gmail.com"
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={email}
-
+                    <Loading loading={customerInfoLoading} />
+                  :
+                  <>
+                    <div className="form-group">
+                      <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
+                        01. ข้อมูลส่วนบุคคล
+                      </h2>
+                      <div className="grid grid-cols-6 gap-6">
+                        <div className="col-span-6 sm:col-span-3">
+                          
+                          
+                          <EditableCustomerInput register={register}
+                          label="ชื่อต้น" 
+                          name="firstName"
+                          type="text"
+                          placeholder="ชื่อต้น"
+                          isDisable={IsDisableCustomerInfo}
+                            dataValue={firstName}
                             canAutoChange={true}
-                            handleDataChange={handleEmailChange}
-                            />
-                            <Error errorName={errors.email} />
-                          </div>
+                          handleDataChange={handleFirstNameChange}
+                          />
+                          <Error errorName={firstNameError} />
+                        </div>
 
-                          <div className="col-span-6 sm:col-span-3">
-                            {/* <InputArea
-                              register={register}
-                              label="Phone number"
-                              name="contact"
-                              type="tel"
-                              placeholder="+062-6532956"
-                              dataValue={phoneNumber}
-                            /> */}
-                            <EditableCustomerInput register={register}
-                            label="เบอร์ติดต่อ"
-                            name="contact"
-                            type="tel"
-                            placeholder="+062-6532956"
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={phoneNumber}
+                        <div className="col-span-6 sm:col-span-3">
+                          
+                          <EditableCustomerInput register={register}
+                          label="นามสกุล" 
+                          name="lastName"
+                          type="text"
+                          placeholder="ชื่อสกุล"
+                          isDisable={IsDisableCustomerInfo}
+                            dataValue={lastName}
                             canAutoChange={true}
-                            handleDataChange={handleContactChange}
-                            />
+                          handleDataChange={handleLastNameChange}
+                          />
+                          <Error errorName={lastNameError} />
+                        </div>
 
-                            <Error errorName={contactError} />
-                          </div>
+                        <div className="col-span-6 sm:col-span-3">
+                          
+                          <EditableCustomerInput register={register}
+                          label="Email address"
+                          name="email"
+                          type="email"
+                          placeholder="youremail@gmail.com"
+                          isDisable={IsDisableCustomerInfo}
+                          dataValue={email}
+
+                          canAutoChange={true}
+                          handleDataChange={handleEmailChange}
+                          />
+                          <Error errorName={emailError} />
+                        </div>
+
+                        <div className="col-span-6 sm:col-span-3">
+                          
+                          <EditableCustomerInput register={register}
+                          label="เบอร์ติดต่อ"
+                          name="contact"
+                          type="tel"
+                          placeholder="+062-6532956"
+                          isDisable={IsDisableCustomerInfo}
+                          dataValue={phoneNumber}
+                          canAutoChange={true}
+                          handleDataChange={handleContactChange}
+                          />
+
+                          <Error errorName={contactError} />
                         </div>
                       </div>
+                    </div>
 
-                      <div className="form-group mt-12">
-                        <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                          02. ที่อยู่ขนส่ง
-                        </h2>
+                    <div className="form-group mt-12">
+                      <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
+                        02. ที่อยู่ขนส่ง
+                      </h2>
 
-                        <div className="grid grid-cols-6 gap-6 mb-8">
-                          <div className="col-span-6">
-                            {/* <InputArea
-                              register={register}
-                              label="Street address"
-                              name="address"
-                              type="text"
-                              placeholder="123 Boulevard Rd, Beverley Hills"
-                              dataValue={address1}
-                            /> */}
-                            <EditableCustomerInput register={register}
-                            label="บ้านเลขที่ ซอย ถนน"
-                            name="address"
+                      <div className="grid grid-cols-6 gap-6 mb-8">
+                        <div className="col-span-6">
+                          
+                          <EditableCustomerInput register={register}
+                          label="บ้านเลขที่ ซอย ถนน"
+                          name="address"
+                          type="text"
+                          placeholder="บ้านเลขที่ ซอย ถนน"
+                          isDisable={IsDisableCustomerInfo}
+                          dataValue={address1}
+                          canAutoChange={true}
+                          handleDataChange={handleAddress1Change}
+                          />
+                          <Error errorName={address1Error} />
+                        </div>
+
+                        <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                          
+                          
+                          <CountryFormSelect register={register}
+                            label="ประเทศ"
+                            name="province1"
                             type="text"
-                            placeholder="บ้านเลขที่ ซอย ถนน"
                             isDisable={IsDisableCustomerInfo}
-                            dataValue={address1}
-                            canAutoChange={true}
-                            handleDataChange={handleAddress1Change}
+                            handleItemChange={handleCountryChange}
+                            dataList={countrys} selectedId={countryId}
                             />
-                            <Error errorName={errors.address} />
-                          </div>
+                          
+                          <Error errorName={countryError} />
+                        </div>
 
-                          <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                            {/* <InputArea
-                              register={register}
-                              label="City"
-                              name="city"
-                              type="text"
-                              placeholder="Los Angeles"
-                            /> */}
-                            
-                            <CountryFormSelect register={register}
-                              label="ประเทศ"
-                              name="province1"
-                              type="text"
-                              isDisable={IsDisableCustomerInfo}
-                              handleItemChange={handleCountryChange}
-                              dataList={countrys} selectedId={countryId}
-                              />
-                            
-                            <Error errorName={errors.country} />
-                          </div>
-
-                          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            {/* <InputArea
-                              register={register}
-                              label="Country"
-                              name="country"
-                              type="text"
-                              placeholder="United States"
-                            /> */}
-                            {
-                              isInputAddress === true 
-                              ?
-                                /*<InputArea
-                                register={register}
-                                label="จังหวัด"
-                                name="province"
-                                type="text"
-                                placeholder="Please insert state/province."
-                              />*/
-                                <EditableCustomerInput register={register}
-                                    id="province"
-                                    label="จังหวัด"
-                                    name="province"
-                                    type="input"
-                                    placeholder="Please insert state/province."
-                                    isDisable={IsDisableCustomerInfo}
-                                    dataValue={provinceText}
-                                    changeData={changePostalcode}
-                                    canAutoChange={true}
-                                    handleDataChange={handleProvinceTextChange}
-                                    />
-                              :
-                                <ProvinceFormSelect register={register}
-                                label="จังหวัด"
-                                name="province"
-                                type="text"
-                                isDisable={IsDisableCustomerInfo}
-                                handleItemChange={handleProvinceChange}
-                                dataList={provinces} selectedId={provinceId}
-                                />
-                            }
-                            
-                            <Error errorName={errors.province} />
-                          </div>
-
-                          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            {/* <InputArea
-                              register={register}
-                              label="ZIP / Postal"
-                              name="zipCode"
-                              type="text"
-                              placeholder="2345"
-                            /> */}
-                            {
-                              isInputAddress === true 
-                              ?
-                                /* <InputArea
-                                register={register}
-                                label="เขต/อำเภอ"
-                                name="province2"
-                                type="text"
-                                placeholder="Please insert city."
-                              /> */
-                                <EditableCustomerInput register={register}
-                                  id="city"
-                                  label="เขต/อำเภอ"
-                                  name="province2"
+                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                          
+                          {
+                            isInputAddress === true 
+                            ?
+                              
+                              <EditableCustomerInput register={register}
+                                  id="province"
+                                  label="จังหวัด"
+                                  name="province"
                                   type="input"
-                                  placeholder="Please insert city."
+                                  placeholder="Please insert state/province."
                                   isDisable={IsDisableCustomerInfo}
-                                  dataValue={cityText}
+                                  dataValue={provinceText}
                                   changeData={changePostalcode}
                                   canAutoChange={true}
-                                  handleDataChange={handleCityTextChange}
+                                  handleDataChange={handleProvinceTextChange}
                                   />
-                              :
-                              <CityFormSelect register={register}
-                              label="เขต/อำเภอ"
-                              name="province2"
-                              type="text"
-                              isDisable={IsDisableCustomerInfo}
-                              handleItemChange={handleCityChange}
-                              dataList={cities} selectedId={cityId}
-                              />
-                            }
-                            
-                            <Error errorName={errors.city} />
-                          </div>
-                          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            {/* <InputArea
-                              register={register}
-                              label="ZIP / Postal"
-                              name="zipCode"
-                              type="text"
-                              placeholder="2345"
-                            /> */}
-                            {isInputAddress === true 
-                            ?
-                              /* <InputArea
-                              register={register}
-                              label="แขวง/ตำบล"
-                              name="district"
-                              type="text"
-                              placeholder="Please insert district."
-                            /> */
-                              <EditableCustomerInput register={register}
-                              id="district"
-                              label="แขวง/ตำบล"
-                              name="district"
-                              type="input"
-                              placeholder="Please insert district."
-                              isDisable={IsDisableCustomerInfo}
-                              dataValue={districtText}
-                              changeData={changePostalcode}
-                              canAutoChange={true}
-                              handleDataChange={handleDistrictTextChange}
-                              />
                             :
-                              <DistrictFormSelect register={register}
-                                label="แขวง/ตำบล"
-                                name="district"
-                                type="text"
-                                isDisable={IsDisableCustomerInfo}
-                                handleItemChange={handleDistrictChange}
-                                dataList={districts} selectedId={districtId}
-                                />
-                            }
-                            
-                            <Error errorName={errors.district} />
-                          </div>
-                          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            {/* <InputArea
-                              register={register}
-                              label="ZIP / Postal"
-                              name="zipCode"
+                              <ProvinceFormSelect register={register}
+                              label="จังหวัด"
+                              name="province"
                               type="text"
-                              placeholder="2345"
-                              dataValue={postalcode}
-                            /> */}
-                            <EditableCustomerInput register={register}
-                            id="postalCode"
-                            label="รหัสไปรษณีย์"
-                            name="zipCode"
-                            type="input"
-                            placeholder="รหัสไปรษณีย์"
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={postalcode}
-                            changeData={changePostalcode}
-                            canAutoChange={true}
-                            handleDataChange={handlePostalCodeChange}
-                            />
-                            
-                            <Error errorName={errors.zipCode} />
-                          </div>
+                              isDisable={IsDisableCustomerInfo}
+                              handleItemChange={handleProvinceChange}
+                              dataList={provinces} selectedId={provinceId}
+                              />
+                          }
+                          
+                          <Error errorName={provinceError} />
                         </div>
 
-                        {/* <Label label="Shipping Cost" /> */}
-                        
-                      </div>
-                      {
-                        customerAddressId === 0 ?
-                          <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                            <div className="col-span-6 sm:col-span-3">
-
-                            </div>
-                            <div className="col-span-6 sm:col-span-3">
-                              <button
-                                type="button"
-                                disabled={isEmpty || isCheckoutSubmit}
-                                onClick={() => SaveCustomerInfo(lineCompanyId)}
-                                className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                              >
-                                บันทึกข้อมูลลูกค้า{' '}
-                                <span className="text-xl ml-2">
-                                  {' '}
-                                  <IoSaveOutline />
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        :
+                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                           
-                            IsEditCustomerInfo === true ?
-                              <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                          {
+                            isInputAddress === true 
+                            ?
                               
-                                <div className="col-span-6 sm:col-span-3">
-                                  <button
-                                    type="button"
-                                    disabled={isEmpty || isCheckoutSubmit}
-                                    onClick={() => CancelCustomerInfo()}
-                                    className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
-                                  >
-                                    ยกเลิก{' '}
-                                    <span className="text-xl ml-2">
-                                      {' '}
-                                      <IoCloseCircleOutline />
-                                    </span>
-                                  </button>
-                                </div>
-                                <div className="col-span-6 sm:col-span-3">
-                                  <button
-                                    type="button"
-                                    disabled={isEmpty || isCheckoutSubmit}
-                                    onClick={() => SaveCustomerInfo(lineCompanyId)}
-                                    className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                  >
-                                    บันทึกข้อมูลลูกค้า{' '}
-                                    <span className="text-xl ml-2">
-                                      {' '}
-                                      <IoSaveOutline />
-                                    </span>
-                                  </button>
-                                </div>
-                              </div>
+                              <EditableCustomerInput register={register}
+                                id="city"
+                                label="เขต/อำเภอ"
+                                name="province2"
+                                type="input"
+                                placeholder="Please insert city."
+                                isDisable={IsDisableCustomerInfo}
+                                dataValue={cityText}
+                                changeData={changePostalcode}
+                                canAutoChange={true}
+                                handleDataChange={handleCityTextChange}
+                                />
                             :
-                              <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                                
-                                <div className="col-span-6 sm:col-span-3">
-                                  <button
-                                    type="button"
-                                    disabled={isEmpty || isCheckoutSubmit}
-                                    onClick={() => AcceptCustomerInfo()}
-                                    className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                  >
-                                    อนุมัติข้อมูลลูกค้า{' '}
-                                    <span className="text-xl ml-2">
-                                      {' '}
-                                      <IoCheckboxOutline />
-                                    </span>
-                                  </button>
-                                </div>
-                                <div className="col-span-6 sm:col-span-3">
-                                  <button
-                                    type="button"
-                                    disabled={isEmpty || isCheckoutSubmit}
-                                    onClick={() => EditCustomerInfo()}
-                                    className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                  >
-                                    แก้ไขข้อมูลลูกค้า{' '}
-                                    <span className="text-xl ml-2">
-                                      {' '}
-                                      <IoCreateOutline />
-                                    </span>
-                                  </button>
-                                </div>
+                            <CityFormSelect register={register}
+                            label="เขต/อำเภอ"
+                            name="province2"
+                            type="text"
+                            isDisable={IsDisableCustomerInfo}
+                            handleItemChange={handleCityChange}
+                            dataList={cities} selectedId={cityId}
+                            />
+                          }
+                          
+                          <Error errorName={cityError} />
+                        </div>
+                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                          
+                          {isInputAddress === true 
+                          ?
+                            
+                            <EditableCustomerInput register={register}
+                            id="district"
+                            label="แขวง/ตำบล"
+                            name="district"
+                            type="input"
+                            placeholder="Please insert district."
+                            isDisable={IsDisableCustomerInfo}
+                            dataValue={districtText}
+                            changeData={changePostalcode}
+                            canAutoChange={true}
+                            handleDataChange={handleDistrictTextChange}
+                            />
+                          :
+                            <DistrictFormSelect register={register}
+                              label="แขวง/ตำบล"
+                              name="district"
+                              type="text"
+                              isDisable={IsDisableCustomerInfo}
+                              handleItemChange={handleDistrictChange}
+                              dataList={districts} selectedId={districtId}
+                              />
+                          }
+                          
+                          <Error errorName={districtError} />
+                        </div>
+                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                          
+                          <EditableCustomerInput register={register}
+                          id="postalCode"
+                          label="รหัสไปรษณีย์"
+                          name="zipCode"
+                          type="input"
+                          placeholder="รหัสไปรษณีย์"
+                          isDisable={IsDisableCustomerInfo}
+                          dataValue={postalcode}
+                          changeData={changePostalcode}
+                          canAutoChange={true}
+                          handleDataChange={handlePostalCodeChange}
+                          />
+                          
+                          <Error errorName={postalCodeError} />
+                        </div>
+                      </div>
+
+                      {/* <Label label="Shipping Cost" /> */}
+                      
+                    </div>
+                    {
+                      customerAddressId === 0 ?
+                        <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                          <div className="col-span-6 sm:col-span-3">
+
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <button
+                              type="button"
+                              disabled={isEmpty || isCheckoutSubmit}
+                              onClick={() => SaveCustomerInfo(lineCompanyId)}
+                              className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                            >
+                              บันทึกข้อมูลลูกค้า{' '}
+                              <span className="text-xl ml-2">
+                                {' '}
+                                <IoSaveOutline />
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      :
+                        
+                          IsEditCustomerInfo === true ?
+                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                            
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => CancelCustomerInfo()}
+                                  className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
+                                >
+                                  ยกเลิก{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCloseCircleOutline />
+                                  </span>
+                                </button>
                               </div>
-                          
-                          
-                      }
-                      {
-                        customerAddressId === 0 ? 
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => SaveCustomerInfo(lineCompanyId)}
+                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  บันทึกข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoSaveOutline />
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          :
+                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                              
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => AcceptCustomerInfo()}
+                                  className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  อนุมัติข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCheckboxOutline />
+                                  </span>
+                                </button>
+                              </div>
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => EditCustomerInfo()}
+                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  แก้ไขข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCreateOutline />
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                        
+                        
+                    }
+                    {
+                      customerAddressId === 0 ? 
+                        <>
+                          <br/>
+                          <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
+                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                          </h2>
+                        </> 
+                      : 
+                        IsApproveCustomerInfo === false ?
                           <>
                             <br/>
                             <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                              กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
                             </h2>
-                          </> 
-                        : 
-                          IsApproveCustomerInfo === false ?
-                            <>
-                              <br/>
-                              <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                                กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
-                              </h2>
-                            </>
-                          :
-                          <>
-                            <div className="form-group mt-12">
-                                  <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                                    03. รูปแบบขนส่ง
-                                  </h2>
-                                  <div className="grid grid-cols-6 gap-6">
-                                    <div className="col-span-6 sm:col-span-3">
-                                    <ShippingFormSelect register={register}
-                                      label="Shipping"
-                                      name="shippingOption"
-                                      type="text"
-                                      handleItemChange={handleShippingChange} 
-                                      dataList={shippingServices} selectedId={shippingId}/>
-                                    </div>
-                                    
-                                    
+                          </>
+                        :
+                        <>
+                          <div className="form-group mt-12">
+                                <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
+                                  03. รูปแบบขนส่ง
+                                </h2>
+                                <div className="grid grid-cols-6 gap-6">
+                                  <div className="col-span-6 sm:col-span-3">
+                                  <ShippingFormSelect register={register}
+                                    label="Shipping"
+                                    name="shippingOption"
+                                    type="text"
+                                    handleItemChange={handleShippingChange} 
+                                    dataList={shippingServices} selectedId={shippingId}/>
                                   </div>
                                   
+                                  
                                 </div>
-            
-                                <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                                  <div className="col-span-6 sm:col-span-3">
-                                    <Link href={dataPath}>
-                                      <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
-                                        <span className="text-xl mr-2">
-                                          <IoReturnUpBackOutline />
-                                        </span>
-                                        ช็อบต่อ
-                                      </a>
-                                    </Link>
-                                  </div>
-                                  <div className="col-span-6 sm:col-span-3">
-                                    <button
-                                      type="submit"
-                                      disabled={isEmpty || isCheckoutSubmit}
-                                      className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                    >
-                                      อนุมัติ คำสั่งขาย{' '}
-                                      <span className="text-xl ml-2">
-                                        {' '}
-                                        <IoArrowForward />
+                                
+                              </div>
+          
+                              <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                                <div className="col-span-6 sm:col-span-3">
+                                  <Link href={dataPath}>
+                                    <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
+                                      <span className="text-xl mr-2">
+                                        <IoReturnUpBackOutline />
                                       </span>
-                                    </button>
-                                  </div>
+                                      ช็อบต่อ
+                                    </a>
+                                  </Link>
                                 </div>
-                          </>
-                        }
-                    </>
-                    
-                    }
-                    
-
-                    
-                    
-                    
-                  </form>
-                
+                                <div className="col-span-6 sm:col-span-3">
+                                  <button
+                                    type="button"
+                                    onClick={()=> submitContact()}
+                                    disabled={isEmpty || isCheckoutSubmit}
+                                    className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                  >
+                                    อนุมัติ คำสั่งขาย{' '}
+                                    <span className="text-xl ml-2">
+                                      {' '}
+                                      <IoArrowForward />
+                                    </span>
+                                  </button>
+                                </div>
+                              </div>
+                        </>
+                      }
+                  </>
+                  
+                  
                 }
                 
               </div>
@@ -1614,15 +1614,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               placeholder="ระบุ รหัสส่วนลดของคุณ"
                               className="form-input py-2 px-3 md:px-4 w-full appearance-none transition ease-in-out border text-input text-sm rounded-md h-12 duration-200 bg-white border-gray-200 focus:ring-0 focus:outline-none focus:border-cyan-500 placeholder-gray-500 placeholder-opacity-75"
                             />
-                            {/* <button
-                              onClick={handleCouponCode}
-                              className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 hover:text-white hover:bg-cyan-500 h-12 text-sm lg:text-base w-full sm:w-auto"
-                            >
-                              ใช้รหัสคูปอง
-                            </button> ApplyPromotionCode
                             
-                            bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full
-                            */}
                             <button
                               onClick={ApplyPromotionCode}
                               className="md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold text-center justify-center border border-gray-200 rounded-md placeholder-white focus-visible:outline-none focus:outline-none px-5 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-3 mt-3 sm:mt-0 sm:ml-3 md:mt-0 md:ml-3 lg:mt-0 lg:ml-3 bg-cyan-500 hover:bg-cyan-600 text-white h-12 text-sm lg:text-base w-full sm:w-auto"
