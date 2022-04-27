@@ -271,7 +271,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
         else
         {
           //alert('Login 5');
-          alert('Logout');
+          alert('Logout 5');
           dispatch({ type: 'USER_LOGOUT' });
           Cookies.remove('userInfo');
           Cookies.remove('couponInfo');
@@ -365,7 +365,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
                     className="text-emerald-600 bg-emerald-200"
                   />
                 </div>
-                <RecentOrder />
+                {/* <RecentOrder /> */}
               </div>
             )}
             {children}

@@ -2,8 +2,8 @@ import requests from './httpServices';
 import jwt from 'jsonwebtoken';
 const {tokenForVerify } = require('../config/auth');
 
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const JWT_SECRET_FOR_VERIFY = 'lfjfjasjfr09ri09wrilfdjdjgdfgd';
 const JWT_SECRET = 'fgdfgdfgdfgfgfdgdfgdfgfgfgtrgrtg5455454y4646hhgdfg';
 
@@ -193,7 +193,7 @@ const UserServices = {
   async fetchCoinposLineLogin(body) {
     try {
       //alert("Body = " + JSON.stringify(body));
-      const userJson = await findCoinPOSCustomerAccountByLineUserId(body.companyId,body.liffId,body.lineUserId, body.linePOSId);//findCoinPOSEmail(req.body.companyId,req.body.email);
+      const userJson = await findCoinPOSCustomerAccountByLineUserId(body.companyId,body.liffId,body.lineUserId, body.linePOSId, body.email, body.image);//findCoinPOSEmail(req.body.companyId,req.body.email);
   
       //alert('UserJson = ' + userJson )
       if(userJson)
@@ -316,6 +316,10 @@ const UserServices = {
       
     }
   },
+  coinposCheckExpired(body) {
+    return requests.post(`/user/coinpos-check-expired`, body);
+  },
+  
   /* async fetchVerifyCoinPOSEmailAddress(body) {
     const isAdded = await findCoinPOSEmail(body.companyId,body.email);
   
@@ -442,7 +446,7 @@ const loginCoinPOSCustomerGoogleAccount = async(companyId, name, email, imageUrl
     
   }
 };
-const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUserId,linePOSId) => 
+const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUserId,linePOSId, email, image) => 
 {
   try
   {
@@ -452,7 +456,7 @@ const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUser
       method:'POST',
       //credentials:"include",
       headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-      body:`{"CompanyId":${companyId},"LiffId":"${liffId}", "LineUserId":"${lineUserId}","LinePOSId":"${linePOSId}"}`
+      body:`{"CompanyId":${companyId},"LiffId":"${liffId}", "LineUserId":"${lineUserId}","LinePOSId":"${linePOSId}","Email":"${email}","ImageUrl":"${image}"}`
       }).then(function(response) {
         return response.text();
       }).then(function(data) {

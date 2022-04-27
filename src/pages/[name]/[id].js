@@ -115,7 +115,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
     
     useEffect(async () => {
 
-      //alert("catalogName = " + catalogName)
+      alert("catalogName = " + catalogName)
       setPromotionLoading(true);
       
       //alert(JSON.stringify(promotions))
@@ -124,30 +124,34 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
         Cookies.remove('userInfo');
       } 
       var userLocalJson = localStorage.getItem('userInfo');
-      //alert("userLocalJson = " + userLocalJson);
+      alert("userLocalJson = " + userLocalJson);
       if(userLocalJson === null)
       {
-        //alert('Logout');
+        alert('Logout ????');
         dispatch({ type: 'USER_LOGOUT' });
         Cookies.remove('userInfo');
         Cookies.remove('couponInfo');
       }
       else
       {
+        alert('Get userInfo')
         Cookies.set('userInfo', userLocalJson);
+        alert('Get cookie userInfo')
         var userLocal = JSON.parse(userLocalJson)
+        alert('Get parse userInfo')
         try
         {
-          const expiredDate = await UserServices.coinposCheckExpired(
+          const expiredDate = await UserServices.fetchCoinposCheckExpired(
             {
               email:userLocal.email,
               companyId:catalogCompanyId
             });
-            
+            alert('Get expiredDate 0 = ' + expiredDate); 
           sessionStorage.setItem('expiredDate',expiredDate);
-          if(expiredDate === false)
+          alert('Get expiredDate 1 = ' + expiredDate); 
+          if(expiredDate === 'false')
           {
-            //alert('Login');
+            alert('Login ex');
             dispatch({ type: 'USER_LOGIN', payload: userLocal });
 
 
@@ -177,7 +181,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
           }
           else
           {
-            //alert('Logout');
+            alert('Logout ex');
             
             dispatch({ type: 'USER_LOGOUT' });
             Cookies.remove('userInfo');
@@ -189,7 +193,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
         }
         catch(e)
         {
-          //alert("error = " + e.message);
+          alert("error = " + e.message);
         }
       }
       

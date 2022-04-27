@@ -25,6 +25,7 @@ const useLoginSubmit = (setModalOpen) => {
   const submitHandler = async ({
     name,
     email,
+    image,
     registerEmail,
     verifyEmail,
     password,
@@ -57,6 +58,66 @@ const useLoginSubmit = (setModalOpen) => {
             //return;
             //router.push(redirect || '/checkout');
         router.push(redirect || '/' + userLogin.paramPath);
+            //router.push(redirect);
+
+        sessionStorage.setItem('customerId', userLogin.customerId);
+        sessionStorage.setItem('customerFirstName', userLogin.firstName);
+        sessionStorage.setItem('customerLastName', userLogin.lastName);
+        sessionStorage.setItem('customerEmail', userLogin.email);
+        sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
+
+        sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
+
+
+        sessionStorage.setItem('address1', userLogin.address1);
+        sessionStorage.setItem('country', userLogin.country);
+        sessionStorage.setItem('province', userLogin.province);
+        sessionStorage.setItem('city', userLogin.city);
+        sessionStorage.setItem('district', userLogin.district);
+
+        sessionStorage.setItem('countryId', userLogin.countryId);
+        sessionStorage.setItem('provinceId', userLogin.provinceId);
+        sessionStorage.setItem('cityId', userLogin.cityId);
+        sessionStorage.setItem('districtId', userLogin.districtId);
+        sessionStorage.setItem('postalcode', userLogin.postalcode);
+
+        sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
+        sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
+        sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
+        sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
+
+
+        notifySuccess('Login Success!');
+        dispatch({ type: 'USER_LOGIN', payload: userLogin });
+        Cookies.set('userInfo', JSON.stringify(userLogin));
+
+        localStorage.setItem('userInfo', JSON.stringify(userLogin));
+
+        
+      }
+      else
+      {
+        notifyError('Login fail please check your email or password and try again');
+      }
+    }
+    else if(liffId && lineUserId)
+    {
+      alert("Liff catalog Login");
+      var userLogin = await UserServices.fetchCoinposLineLogin({
+        companyId,
+        liffId,
+        lineUserId,
+        linePOSId:'',
+        paramPath,
+        email:email,
+        image:image
+
+      });
+      if(userLogin !== undefined && userLogin !== null)
+      {
+            //return;
+            //router.push(redirect || '/checkout');
+        //router.push(redirect || '/' + userLogin.paramPath);
             //router.push(redirect);
 
         sessionStorage.setItem('customerId', userLogin.customerId);
@@ -244,9 +305,86 @@ const useLoginSubmit = (setModalOpen) => {
 
     
   };
+  const lineSignInManager = async (user) =>
+  {
+    if(!user)
+    {
+      return;
+    }
+    setLoading(true);
+
+    var companyId = 0;
+    if(sessionStorage.getItem('companyId'))
+    {
+      companyId = sessionStorage.getItem('companyId'); 
+      //alert("Google CompanyId = " + companyId);
+            
+    }
+
+    await UserServices.fetchCoinposLineLogin({
+      companyId:companyId,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      liffId: user.liffId,
+      lineUserId: user.lineUserId,
+
+    })
+      .then((res) => {
+        setModalOpen(false);
+        //alert(JSON.stringify(res));
+
+        var userLogin = res;
+        sessionStorage.removeItem('targetPage');
+        
+        sessionStorage.setItem('customerId', userLogin.customerId);
+        sessionStorage.setItem('customerFirstName', userLogin.firstName);
+        sessionStorage.setItem('customerLastName', userLogin.lastName);
+        sessionStorage.setItem('customerEmail', userLogin.email);
+        sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
+
+        sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
+
+
+        sessionStorage.setItem('address1', userLogin.address1);
+        sessionStorage.setItem('country', userLogin.country);
+        sessionStorage.setItem('province', userLogin.province);
+        sessionStorage.setItem('city', userLogin.city);
+        sessionStorage.setItem('district', userLogin.district);
+
+        sessionStorage.setItem('countryId', userLogin.countryId);
+        sessionStorage.setItem('provinceId', userLogin.provinceId);
+        sessionStorage.setItem('cityId', userLogin.cityId);
+        sessionStorage.setItem('districtId', userLogin.districtId);
+        sessionStorage.setItem('postalcode', userLogin.postalcode);
+
+        sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
+        sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
+        sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
+        sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
+
+        notifySuccess('Login success!');
+        //router.push(redirect || '/');
+        
+
+
+
+        dispatch({ type: 'USER_LOGIN', payload: res });
+        Cookies.set('userInfo', JSON.stringify(res));
+
+        localStorage.setItem('userInfo', JSON.stringify(userLogin));
+      })
+
+      .catch((err) => {
+        notifyError(err.message);
+        setModalOpen(false);
+      });
+
+  }
 
   const handleGoogleSignIn = async (user) => {
     
+    alert(JSON.stringify(user))
     if(!user)
     {
       return;
@@ -362,6 +500,8 @@ const useLoginSubmit = (setModalOpen) => {
     if(sessionStorage.getItem('fromPage') === 'liff')
     {
       alert('from liff');
+      var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
+
       const liff = (await import('@line/liff')).default
       try {
         await liff.init({ liffId:liffData });
@@ -371,7 +511,7 @@ const useLoginSubmit = (setModalOpen) => {
 
       if (!liff.isLoggedIn()) {
         
-        var url = 'https://d69e-124-120-152-48.ap.ngrok.io' + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
+        var url = liffEndpoint + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
         alert(url);
         liff.login({ redirectUri: url});
       }
@@ -416,7 +556,63 @@ const useLoginSubmit = (setModalOpen) => {
     else if(sessionStorage.getItem('fromPage') === 'catalog')
     {
       alert('from catalog');
-      router.push(redirect || '/' + 'liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName);
+      var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
+
+      const liff = (await import('@line/liff')).default
+      
+      
+      try {
+        await liff.init({ liffId:liffData });
+      } catch (error) {
+        console.error('liff init error', error.message)
+      }
+      if(liff.isLoggedIn())
+      {
+        liff.logout();
+      }
+      if (!liff.isLoggedIn()) {
+        
+        var url = liffEndpoint + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
+        alert(url);
+        liff.login({ redirectUri: url});
+      }
+      else
+      {
+        alert("Logined")
+        let getProfile = await liff.getProfile();
+        
+        alert("GetProfile")
+        var lineUsername = getProfile.displayName;
+                  
+                  
+        var lineLiffUserId = getProfile.userId;
+                  
+        var lineProfileImage = getProfile.pictureUrl;
+        const email = liff.getDecodedIDToken().email;
+        alert("GetEmail = " + JSON.stringify(email));
+        alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
+
+        sessionStorage.setItem('lineUsername', lineUsername);
+        sessionStorage.setItem('lineUserId', lineLiffUserId);
+        sessionStorage.setItem('lineProfileImage', lineProfileImage);
+        
+        var dataUser = {};
+        dataUser['image'] = lineProfileImage;
+        dataUser['name'] = lineUsername;
+        dataUser['email'] = email;
+
+        
+                  //orderData['_id']
+                  //Cookies.set('lineUserName', lineUsername);
+        Cookies.set('userInfo', JSON.stringify(dataUser));
+        sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
+        localStorage.setItem('userInfo', JSON.stringify(dataUser));
+        dispatch({ type: 'USER_LOGIN', payload: dataUser });
+      }
+
+
+
+      //router.push(redirect || '/' + 'liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName);
     }
     //alert('liffData = ' + liffData);
     
@@ -445,38 +641,7 @@ const useLoginSubmit = (setModalOpen) => {
                 
     }
     return JSON.stringify(getProfile);*/
-    var companyId = 0;
-    if(sessionStorage.getItem('companyId'))
-    {
-      companyId = sessionStorage.getItem('companyId'); 
-      alert("Google CompanyId = " + companyId);
-            
-    }
-    UserServices.fetchCoinposGoogleLogin({
-      companyId:companyId,
-      name: user.profileObj.name,
-      email: user.profileObj.email,
-      image: user.profileObj.imageUrl,
-    })
-      .then((res) => {
-        setModalOpen(false);
-        alert(JSON.stringify(res));
-        notifySuccess('Login success!');
-        //router.push(redirect || '/');
-        
-
-
-
-        dispatch({ type: 'USER_LOGIN', payload: res });
-        Cookies.set('userInfo', JSON.stringify(res));
-      })
-
-      .catch((err) => {
-        notifyError(err.message);
-        setModalOpen(false);
-      });
-
-      setLoading(false);
+    
   };
 
   return {
@@ -484,6 +649,7 @@ const useLoginSubmit = (setModalOpen) => {
     submitHandler,
     handleGoogleSignIn,
     handleLineSignIn,
+    lineSignInManager,
     register,
     errors,
     GoogleLogin,

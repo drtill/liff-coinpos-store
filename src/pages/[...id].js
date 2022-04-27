@@ -103,7 +103,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
           const {dispatch} = useContext(UserContext);
       
-          const { handleSubmit, submitHandler, register, errors } =
+          const { handleSubmit, submitHandler,lineSignInManager, register, errors } =
           useLoginSubmit();
           
           useEffect(async () => {
@@ -199,7 +199,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                 } catch (error) {
                   //alert('liff init error' + error.message)
                 }
-                if (!liff.isLoggedIn()) {
+                if (!liff.isLoggedIn()) 
+                {
                   //alert("Will Login")
                   //alert("Logined")
                   //liffId=1656555843-E6WV7arj
@@ -247,6 +248,11 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   dataUser['image'] = lineProfileImage;
                   dataUser['name'] = lineUsername;
                   dataUser['email'] = email;
+                  //dataUser['liffId'] = liffData;
+                  //dataUser['lineUserId'] = lineLiffUserId;
+                  //dataUser['linePOSId'] = linePOSIdData;
+
+
 
         
                   //orderData['_id']
@@ -262,12 +268,15 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   var liffId = liffData;
                   var lineUserId = lineLiffUserId;
                   var linePOSId = linePOSIdData;
+
+                  alert('liffId = ' + liffId + ' lineUserId = ' + lineUserId);
                   if(liffId.length > 0 &&  lineUserId.length > 0)
                   {
                     data["liffId"] = liffId;
                     data["lineUserId"] = lineUserId;
                     data["linePOSId"] = linePOSId;
                     data["email"] = email;
+                    data["image"] = lineProfileImage;
                     var companyId = Number(liffCompanyId);
                     var paramPath = dataPath;
                   
