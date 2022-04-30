@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Font,
 } from '@react-pdf/renderer';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 
 Font.register({
@@ -140,7 +141,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const InvoiceForDownload = ({ data,companyLogo, currencySign }) => {
+const InvoiceForDownload = ({ data, currencySign,companyName, locationName, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode,
+  locationEmail,locationTel }) => {
+
+    const [companyLogo,setCompanyLogo] = useState('')
+  useEffect(() =>
+  {
+    if(sessionStorage.getItem('companyLogo'))
+      {
+        var companyLogoData = sessionStorage.getItem('companyLogo'); 
+        //alert('companyLogoData = ' + companyLogoData);
+        setCompanyLogo(companyLogoData);
+      }
+
+  },[]);
   return (
     <>
       <Document>
@@ -171,10 +185,19 @@ const InvoiceForDownload = ({ data,companyLogo, currencySign }) => {
             </View>
             <View>
               <Image style={styles.logo} src={companyLogo} />
+
               <Text style={styles.info}>
-                Cecilia Chapman, 561-4535 Nulla LA,
+                {companyName}
               </Text>
-              <Text style={styles.info}> United States 96522</Text>
+              <Text style={styles.info}>
+                สาขา: {locationName}
+              </Text>
+              <Text style={styles.info}>
+                {locationAddress1} {locationAddress2} {locationCity} {locationStateOrProvince}
+              </Text>
+
+              <Text style={styles.info}> {locationCountry} {locationPostalCode}</Text>
+              <Text style={styles.info}> {locationEmail} {locationTel}</Text>
             </View>
           </View>
 
@@ -194,17 +217,19 @@ const InvoiceForDownload = ({ data,companyLogo, currencySign }) => {
             <View>
               <Text style={styles.title}>ที่อยู่เรียกเก็บเงิน</Text>
               <Text style={styles.info}>{data.customerName}</Text>
-              <Text style={styles.info}> {data.shippingToAddress === null ? "" : (data.shippingToAddress === undefined ? "" : data.shippingToAddress.substring(0, 25))}</Text>
-              {/* <Text style={styles.info}>
-                {data.city}, {data.country}, {data.zipCode}
-              </Text> */}
+              {/* <Text style={styles.info}> {data.shippingToAddress === null ? "" : (data.shippingToAddress === undefined ? "" : data.shippingToAddress.substring(0, 25))}</Text> */}
+              <Text style={styles.info}> {data.shippingAddress === null ? "" : (data.shippingAddress === undefined ? "" : data.shippingAddress.substring(0, 25))}</Text>
+              <br/>
+              <Text style={styles.info}>
+                {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
+              </Text>
             </View>
           </View>
           <View style={styles.table}>
             <View style={styles.tableRow}>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>ลำดับ</span>
+                  <span style={styles.header}>ลำดับ </span>
                 </Text>
               </View>
               <View style={styles.tableCol}>
@@ -214,7 +239,7 @@ const InvoiceForDownload = ({ data,companyLogo, currencySign }) => {
               </View>
               <View style={styles.tableCol}>
                 <Text style={styles.tableCell}>
-                  <span style={styles.header}>จำนวน</span>
+                  <span style={styles.header}>จำนวน </span>
                 </Text>
               </View>
               <View style={styles.tableCol}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 
@@ -24,8 +24,90 @@ const ContactUs = () => {
     );
   };
 
+  const [companyLogo, setCompanyLogo] = useState('');
+  const [companyId, setCompanyId] = useState(0);
+  const [companyName,setCompanyName] = useState('');
+
+  const [locationName, setLocationName] = useState('');
+  const [locationAddress1, setLocationAddress1] = useState('');
+  const [locationAddress2, setLocationAddress2] = useState('');
+  const [locationCity, setLocationCity] = useState('');
+  const [locationStateOrProvince, setLocationStateOrProvince] = useState('');
+  const [locationCountry, setLocationCountry] = useState('');
+  const [locationPostalCode, setLocationPostalCode] = useState('');
+  const [locationEmail, setLocationEmail] = useState('');
+  const [locationTel, setLocationTel] = useState('');
+  useEffect(() => 
+  {
+    
+    if(sessionStorage.getItem('companyLogo'))
+    {
+      var companyLogoData = sessionStorage.getItem('companyLogo'); 
+      setCompanyLogo(companyLogoData);
+    }
+    if(sessionStorage.getItem('companyId'))
+    {
+      var lineCompanyIdData = sessionStorage.getItem('companyId');
+      setCompanyId(lineCompanyIdData);
+    }
+    if(sessionStorage.getItem('companyName'))
+    {
+      var companyNameData = sessionStorage.getItem('companyName'); 
+      setCompanyName(companyNameData);
+      
+    }
+    if(sessionStorage.getItem('locationName'))
+    {
+      var locationNameData = sessionStorage.getItem('locationName'); 
+      setLocationName(locationNameData);
+
+    }
+    if(sessionStorage.getItem('locationAddress1'))
+    {
+      var locationAddress1Data = sessionStorage.getItem('locationAddress1'); 
+      setLocationAddress1(locationAddress1Data);
+    }
+    if(sessionStorage.getItem('locationAddress2'))
+    {
+      var locationAddress2Data = sessionStorage.getItem('locationAddress2'); 
+      setLocationAddress2(locationAddress2Data);
+    }
+    if(sessionStorage.getItem('locationCity'))
+    {
+      var locationCityData = sessionStorage.getItem('locationCity'); 
+      setLocationCity(locationCityData);
+    }
+    if(sessionStorage.getItem('locationStateOrProvince'))
+    {
+      var locationStateOrProvinceData = sessionStorage.getItem('locationStateOrProvince'); 
+      setLocationStateOrProvince(locationStateOrProvinceData);
+    }
+    if(sessionStorage.getItem('locationCountry'))
+    {
+      var locationCountryData = sessionStorage.getItem('locationCountry'); 
+      setLocationCountry(locationCountryData);
+    }
+    if(sessionStorage.getItem('locationPostalCode'))
+    {
+      var locationPostalCodeData = sessionStorage.getItem('locationPostalCode'); 
+      setLocationPostalCode(locationPostalCodeData);
+    }
+    if(sessionStorage.getItem('locationEmail'))
+    {
+      var locationEmailData = sessionStorage.getItem('locationEmail'); 
+      setLocationEmail(locationEmailData);
+    }
+    if(sessionStorage.getItem('locationTel'))
+    {
+      var locationTelData = sessionStorage.getItem('locationTel'); 
+      setLocationTel(locationTelData);
+    }
+  },[])
   return (
-    <Layout title="Contact Us" description="This is contact us page">
+    <Layout title="Contact Us" description="This is contact us page" companyName={companyName} locationName={locationName} companyLogo={companyLogo}
+    locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+      locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+      locationEmail={locationEmail} locationTel={locationTel}>
       <PageHeader title="Contact Us" />
 
       <div className="bg-white">
@@ -38,21 +120,53 @@ const ContactUs = () => {
                   <data.icon />
                 </span>
                 <h5 className="text-xl mb-2 font-bold">{data.title}</h5>
-                <p className="mb-0 text-base opacity-90 leading-7">
-                  <a
-                    href={`mailto:${data.contact}`}
-                    className="text-emerald-500"
-                  >
-                    {data.contact}
-                  </a>{' '}
-                  {data.info}
-                </p>
+                {
+                  data.id === 1
+                  ?
+                    <p className="mb-0 text-base opacity-90 leading-7">
+                      <a
+                        href={`mailto:${locationEmail}`}
+                        className="text-emerald-500"
+                      >
+                        {data.contact}
+                      </a>{' '}
+                      
+                    </p>
+                  :
+                    data.id === 2
+                    ?
+                      <p className="mb-0 text-base opacity-90 leading-7">
+                        <a
+                          href={`${locationTel}`}
+                          className="text-emerald-500"
+                        >
+                          {data.contact}
+                        </a>{' '}
+                        
+                      </p>
+                    :
+                      data.id === 3
+                      ?
+                        <p className="mb-0 text-base opacity-90 leading-7">
+                          <a
+                            href={`mailto:${locationTel}`}
+                            className="text-emerald-500"
+                          >
+                            {data.contact}
+                          </a>{' '}
+                          {locationAddress1 + ' ' + locationAddress2 + ' ' +  locationCity + ' ' + locationStateOrProvince
+                          + ' ' + locationCountry + ' ' + locationPostalCode}
+                        </p>
+                      :
+                        <></>
+                }
+                
               </div>
             ))}
           </div>
 
           {/* contact form */}
-          <div className="px-0 pt-24 mx-auto items-center flex flex-col md:flex-row w-full justify-between">
+          {/* <div className="px-0 pt-24 mx-auto items-center flex flex-col md:flex-row w-full justify-between">
             <div className="hidden md:w-full lg:w-5/12 lg:flex flex-col h-full">
               <Image
                 width={874}
@@ -137,11 +251,13 @@ const ContactUs = () => {
                 </div>
               </form>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Layout>
   );
 };
+
+
 
 export default ContactUs;

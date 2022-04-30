@@ -117,12 +117,12 @@ const NavbarPromo = ({FilterProduct}) => {
           <div className="flex">
             <Link href="/privacy-policy">
               <a className="font-serif mx-4 py-2 text-sm font-medium hover:text-cyan-600">
-                Privacy Policy
+                นโยบายความเป็นส่วนตัว
               </a>
             </Link>
             <Link href="/terms-and-conditions">
               <a className="font-serif mx-4 py-2 text-sm font-medium hover:text-cyan-600">
-                Terms & Conditions
+                ข้อกำหนดและเงื่อนไข
               </a>
             </Link>
           </div>

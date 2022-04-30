@@ -226,7 +226,7 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
     
 
 
-    const detail = ProductServices.removeCoinPOSCartDetail({
+    const detail = ProductServices.fetchRemoveCoinPOSCartDetail({
       orderId,
       pvId,
       linePOSId,
@@ -252,8 +252,7 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
     var pictureUrl = _pictureUrl;
     var userId = 1;
 
-
-    const detail = await ProductServices.updateCoinPOSCartDetail({
+    const detail = await ProductServices.fetchUpdateCoinPOSCartDetail({
       orderDetailId,
       userId,
       quantity,
@@ -286,7 +285,7 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
     }
     //alert(promotionCode);
     //alert("liffId = " + liffId + " lineUserId = " + lineUserId + " OrderId = " + orderId)
-    const products = await ProductServices.addToCoinPOSCart({
+    const products = await ProductServices.fetchAddToCoinPOSCart({
       orderId,
       pvId,
       companyId,locationId,

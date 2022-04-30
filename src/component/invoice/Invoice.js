@@ -82,10 +82,10 @@ const Invoice = ({ data, printRef, companyName, locationName, currencySign, loca
             <span className="text-sm text-gray-500 block">
               {data.customerName}
               <br />
-              {data.shippingToAddress}
-              {/* {data.address}
+              {/*data.shippingToAddress*/}
+              {data.shippingAddress}
               <br />
-              {data.city}, {data.country}, {data.zipCode} */}
+              {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
             </span>
           </div>
         </div>

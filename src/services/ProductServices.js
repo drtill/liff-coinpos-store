@@ -1,7 +1,7 @@
 import requests from './httpServices';
 
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
   getShowingProducts() {
     return requests.get('/products/show');
@@ -9,6 +9,185 @@ const ProductServices = {
 
   getDiscountedProducts() {
     return requests.get('/products/discount');
+  },
+  async fetchCreateLiffOrder(body)
+  {
+    try
+    {
+      var productList = null;
+        const products = await fetch(serviceUrl + 'CreateNewLiffOrder',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"CompanyId": ${body.companyId === null ? 0 : body.companyId}, "LocationId":${body.locationId === null ? 0 : body.locationId},"CompanyName":"${body.companyName}",
+          "LocationName":"${body.locationName}","Email":"${body.email}",
+          "LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","GroupId":"${body.groupId}",
+          "PictureUrl":"${body.pictureUrl}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          alert("Data = " + data);
+          var obj = JSON.parse(data);
+          //var pvJson = obj.ProductVariantListJson
+          productList = obj
+          
+        });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  async fetchUpdateSocialPOSShipping(body){
+    try
+    {
+      var productList = null;
+        const products = await fetch(serviceUrl + 'NotifyShippingMethod',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"OrderId": ${body.orderId},"OrderNumber": "${body.orderNumber}", "CompanyId": ${body.companyId === null ? 0 : body.companyId}, "StockLocationId":${body.locationId === null ? 0 : body.locationId},"LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}","ShippingLabel":"${body.shippingLabel}","ShippingId":${body.shippingId},"ShippingFee":${body.shippingCost}}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          
+          var obj = JSON.parse(data);
+          //var pvJson = obj.ProductVariantListJson
+          productList = obj
+          
+        });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  addToCoinPOSCart(body){
+    return requests.post('/products/AddToCoinPOSCart',body);
+  },
+  async fetchAddToCoinPOSCart(body){
+    try
+    {
+      var productList = null;
+        const products = await fetch(serviceUrl + 'AddToLiffOrder',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"OrderId": ${body.orderId},"ProductVariantId": ${body.pvId}, "CompanyId": ${body.companyId === null ? 0 : body.companyId}, "StockLocationId":${body.locationId === null ? 0 : body.locationId},"PromotionCode":"","TaxTypeId":2,"LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","GroupId":"${body.groupId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}","PromotionCode":"${body.promotionCode}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          
+          var obj = JSON.parse(data);
+          //var pvJson = obj.ProductVariantListJson
+          productList = obj
+          
+        });
+      
+        return productList;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  updateCoinPOSCartDetail(body)
+  {
+    return requests.post('/products/UpdateCoinPOSCartDetail',body);
+  },
+  async fetchUpdateCoinPOSCartDetail(body)
+  {
+    try
+    {
+      var obj = null;
+      await fetch(serviceUrl + 'UpdateOrderDetail', 
+            { 
+              method:'POST',
+              headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+              body:`{"OrderDetailId":${body.orderDetailId},"UserId":${body.userId},"Quantity":${body.quantity},"CompanyId":${body.companyId},"OrderId": ${body.orderId},"ProductVariantId": ${body.pvId},"UpdateType":"${body.updateType}","LineUserId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}"}`
+              
+            }).then(function(response) {
+              return response.text();
+            }).then(function(data) {
+      
+              
+              try
+              {
+                obj = JSON.parse(data);
+                
+
+              }
+              catch(ex)
+              {
+                
+              }
+              
+            });
+
+            return obj;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  removeCoinPOSCartDetail(body)
+  {
+    return requests.post('/products/RemoveCoinPOSCartDetail',body);
+  },
+  async fetchRemoveCoinPOSCartDetail(body)
+  {
+    try
+    {
+      var obj = null;
+      await fetch(serviceUrl + 'DeleteOrderDetail', 
+            { 
+              method:'POST',
+              headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+              body:`{"OrderId": ${body.orderId}, "ProductVariantId":${body.pvId},"LineUserId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}"}`
+              
+            }).then(function(response) {
+              return response.text();
+            }).then(function(data) {
+      
+              
+              try
+              {
+                obj = JSON.parse(data);
+                
+
+              }
+              catch(ex)
+              {
+                
+              }
+              
+            });
+
+            return obj;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
   },
   applyPromotionCode(body) {
     return requests.post('/products/ApplyPromotionCode',body);

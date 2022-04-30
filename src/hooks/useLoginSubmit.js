@@ -44,15 +44,17 @@ const useLoginSubmit = (setModalOpen) => {
     setLoading(true);
     if(liffId && lineUserId && linePOSId)
     {
-      alert("Liff Login");
+      //alert("Liff Login");
       var userLogin = await UserServices.fetchCoinposLineLogin({
         companyId,
         liffId,
         lineUserId,
         linePOSId,
-        paramPath
-
+        paramPath,
+        email:email,
+        image:image
       });
+      //alert("userLogin = " + JSON.stringify(userLogin));
       if(userLogin !== undefined && userLogin !== null)
       {
             //return;

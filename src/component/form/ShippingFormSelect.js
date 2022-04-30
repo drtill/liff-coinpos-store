@@ -37,11 +37,11 @@ const ShippingFormSelect = ({
       if(shippingList[i].Id === shippingId)
       {
         //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-        shippingOptionIndentData.push(<option selected value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+        shippingOptionIndentData.push(<option selected value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge + ":" + shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
       }
       else
       {
-          shippingOptionIndentData.push(<option value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
+          shippingOptionIndentData.push(<option value={shippingList[i].providerId + ":" + shippingList[i].serviceCharge + ":" + shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}>{shippingList[i].serviceName + ":" + shippingList[i].serviceChargeDisplay}</option>)
       }
       
     }

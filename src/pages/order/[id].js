@@ -465,7 +465,9 @@ const Order = ({ params }) => {
                 {/* <p>{JSON.stringify(data)}</p>
                 <p>{data.orderNumber}</p> */}
                 <PDFDownloadLink
-                  document={<InvoiceForDownload data={data} companyLogo={companyLogo} currencySign={data.currencySign}/>}
+                  document={<InvoiceForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+                  locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+                   locationName={locationName} companyName={companyName}/>}
                   fileName="Invoice"
                 >
                   {({ blob, url, loading, error }) =>

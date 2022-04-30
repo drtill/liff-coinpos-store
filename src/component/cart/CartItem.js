@@ -332,7 +332,7 @@ const CartItem = ({ item, UpdateTotal }) => {
 
 
 
-    const detail = await ProductServices.updateCoinPOSCartDetail({
+    const detail = await ProductServices.fetchUpdateCoinPOSCartDetail({
       orderDetailId,
       userId,
       quantity,
@@ -355,7 +355,7 @@ const CartItem = ({ item, UpdateTotal }) => {
     
 
 
-    const detail = ProductServices.removeCoinPOSCartDetail({
+    const detail = ProductServices.fetchRemoveCoinPOSCartDetail({
       orderId,
       pvId,
       linePOSId,

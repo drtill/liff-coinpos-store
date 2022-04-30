@@ -26,11 +26,14 @@ import { UserContext } from '@context/UserContext';
 import Loading from '@component/preloader/Loading';
 
 import useLoginSubmit from '@hooks/useLoginSubmit';
+import NewOrderModal from '@component/modal/NewOrderModal';
+
+import { notifyError, notifySuccess } from '@utils/toast';
 
 const isLiffLogin = true;//process.env.NEXT_PUBLIC_ISLOGIN
 var itemPerPage = 30;
 
-const Details = ({params,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,companyCode,catalogName,coinPOSLiffData,
+const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,liffData,linePOSIdData,companyCode,catalogName,coinPOSLiffData,
     groupIdData, liffOrderId, liffCompanyId,liffLocationId,countPage,currentPage,
     products,salesOrder, orderDetails,categories,shippingServices,bankNameAndAccounts,
     currencySign, companyName, locationName,companyLogo,catalogLiffId,
@@ -66,6 +69,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           const [newProductLoading, setNewProductLoading] = useState(true);
       
           const [promotionLoading, setPromotionLoading] = useState(false);
+          const [newOrderLoading, setNewOrderLoading] = useState(false);
       
           //this.setState({liffId:liffData});
           const [productList, setProductList] = useState([]);
@@ -99,6 +103,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           const [catalogPromotionIsAllProduct,setCatalogPromotionIsAllProduct] = useState(false);
           const [catalogMinimumAmount,setCatalogMinimumAmount] = useState(0);
           const [catalogProductType,setCatalogProductType] = useState('');
+
+          const [newOrderModalOpen, setNewOrderModalOpen] = useState(false);
       
           const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
           const {dispatch} = useContext(UserContext);
@@ -108,7 +114,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           
           useEffect(async () => {
             
-      
+            var userLocalJson = undefined;
             //var getPromotionCode = localStorage.getItem('promotionCode')
       
             //alert("coinPOSLiffData = " + coinPOSLiffData);
@@ -261,6 +267,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
                   localStorage.setItem('userInfo', JSON.stringify(dataUser));
                   dispatch({ type: 'USER_LOGIN', payload: dataUser });
+
+                  userLocalJson = localStorage.getItem('userInfo');
                   //Cookies.set('lineUserId', lineUserId);
                   //Cookies.set('lineProfileImage', lineProfileImage);
                   var data = {};
@@ -269,7 +277,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   var lineUserId = lineLiffUserId;
                   var linePOSId = linePOSIdData;
 
-                  alert('liffId = ' + liffId + ' lineUserId = ' + lineUserId);
+                  //alert('liffId = ' + liffId + ' lineUserId = ' + lineUserId);
                   if(liffId.length > 0 &&  lineUserId.length > 0)
                   {
                     data["liffId"] = liffId;
@@ -303,7 +311,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
         
 
             //alert("Liff Init = " + lineUserId);
-
+            //alert("companyCode = " + companyCode + " catalogName = " + catalogName);
             if(companyCode && catalogName)
             {
               //alert('Back To catalog')
@@ -312,6 +320,7 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
             }
             else if(companyCode && !catalogName)
             {
+              alert("Companycode only")
               if(isGetProfile)
               {
                 if(catalogName)
@@ -336,7 +345,18 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                 var companyName = '';
                 var locationName = '';
                 
-                await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
+                if(targetPage.length > 0)
+                {
+                  //alert('Go');
+                  RedirectPageManager(targetPage,userLocalJson,catalogName);
+          
+                }
+                else
+                {
+                  await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
+                }
+
+                
               
                 setPromotionLoading(false);
                 setCategoryLoading(false);
@@ -373,7 +393,8 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   if(salesOrder.orderStatusId !== 1)
                   {
                     //alert("Goto Order")
-                    router.push('/order/' + salesOrder.orderId);
+                    setNewOrderModalOpen(true);
+                    //router.push('/order/' + salesOrder.orderId);
         
                     return ;
                   }
@@ -423,7 +444,17 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
                   
         
                   //alert("Get Product")
-                  await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
+                  if(targetPage.length > 0)
+                  {
+                    //alert('Go');
+                    RedirectPageManager(targetPage,userLocalJson,catalogName);
+          
+                  }
+                  else
+                  {
+                    await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
+                  }
+                    
                   //setProductList([]);
                   //alert("Set Product")
                   //pagingManager();
@@ -605,6 +636,95 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
           
       
       }*/
+
+      const RedirectPageManager = (target,userLocalJson,catalogName) =>
+    {
+      alert("target = " + target);
+      var userLocal = JSON.parse(userLocalJson)
+      var fullTarget = ''
+      if(target === 'update-profile' || target === 'dashboard' || target === 'my-orders' || target === 'recent-order')
+      {
+        fullTarget = '/user/' + target;
+        //alert('catalogName = ' + JSON.stringify(userLocal));
+        router.push(fullTarget);
+      }
+      else if(target === 'checkout')
+      {
+        fullTarget = '/' + target;
+        //alert('catalogName = ' + JSON.stringify(userLocal));
+        router.push(fullTarget);
+      }
+      
+      //alert('catalogName = ' + catalogName);
+      
+    }
+
+    const CreateNewOrder = async() =>
+    {
+      alert("New Order");
+      setNewOrderLoading(true);
+        
+      try
+      {
+        var userInfoJson = localStorage.getItem('userInfo');
+        var userInfo = JSON.parse(userInfoJson);
+        var email = userInfo.email;
+        var profileImage = userInfo.image;
+        const salesOrder = await ProductServices.fetchCreateLiffOrder({
+          companyId:liffCompanyId,
+          locationId:liffLocationId,
+          companyName:companyName,
+          locationName:locationName,
+          email:email,
+          liffId:liffData,
+          lineUserId:lineUserId,
+          linePOSId:linePOSId,
+          groupId:groupId,
+          pictureUrl:profileImage
+        });
+
+        //alert('salesOrder = ' + salesOrder);
+        
+        var orderId = salesOrder.orderId;
+        var fullTarget = ''
+        fullTarget = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + orderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+        
+        //alert("New Url = " + fullTarget)
+        router.push(fullTarget);
+
+        setNewOrderModalOpen(false);
+        notifySuccess('Create New Order Success!');
+
+        await GetProductData('','','','',0,liffCompanyId,liffLocationId,companyName,locationName,'','',0,9,1,itemPerPage,'','','');
+        
+        setPromotionLoading(false);
+        setCategoryLoading(false);
+        setNewProductLoading(false);
+        setLoading(false);
+      }
+      catch(ex)
+      {
+        alert("Error: " + ex.message);
+      }
+      setNewOrderLoading(false);
+    }
+    const GotoOrder = () =>
+    {
+      alert("Goto Order");
+      setNewOrderLoading(true);
+      try
+      {
+        var fullTarget = ''
+        fullTarget = '/order/' + liffOrderId;
+        router.push(fullTarget);
+      }
+      catch(ex)
+      {
+        alert("Error: " + ex.message);
+      }
+      
+      setNewOrderLoading(false);
+    }
       const GetProductData = async(liffId,
         lineUserId,
         linePOSId,
@@ -1142,6 +1262,9 @@ const Details = ({params,dataPath,title,description, liffEndpoint,liffData,lineP
 
   return (
     <>
+      {newOrderModalOpen && (
+          <NewOrderModal modalOpen={newOrderModalOpen} setModalOpen={setNewOrderModalOpen} createNewOrder={CreateNewOrder} goToOrder={GotoOrder} loading={newOrderLoading} />
+        )}
       <Layout title={title} description={description} dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo} 
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
@@ -1345,7 +1468,7 @@ export const getServerSideProps = async ({req, res,params }) => {
 
     var liffCompanyId = 0;
     var liffLocationId = 0;
-    var liffProcess = "";
+    var liffPage = "";
     var catalogName = "";
     var companyCode = "";
     var liffCompanyName = "";
@@ -1427,9 +1550,9 @@ export const getServerSideProps = async ({req, res,params }) => {
         {
             liffLocationId = Number(pair[1]);
         }
-        if(pair[0] === 'process')
+        if(pair[0] === 'page')
         {
-            liffProcess = pair[1];
+            liffPage = pair[1];
         }
         if(pair[0] === 'companycode')
         {
@@ -1482,9 +1605,9 @@ export const getServerSideProps = async ({req, res,params }) => {
             {
               liffLocationId = Number(paramValue[1]);
             }
-            if(paramValue[0] === 'process')
+            if(paramValue[0] === 'page')
             {
-              liffProcess = paramValue[1];
+              liffPage = paramValue[1];
             }
             if(pair[0] === 'companycode')
             {
@@ -1594,6 +1717,7 @@ export const getServerSideProps = async ({req, res,params }) => {
   return {
     props: {
         params: dataParam,
+        targetPage:liffPage,
         dataPath:dataPath,
         coinPOSLiffData:coinPOSLiffData,
         catalogName:catalogName,

@@ -360,12 +360,12 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       {
         fullTarget = '/user/' + target;
       }
-      else if(target === checkout)
+      else if(target === 'checkout')
       {
         fullTarget = '/' + target;
       }
       
-      //alert('catalogName = ' + catalogName);
+      
       if (userLocal?.email) 
       {
         sessionStorage.setItem('catalogName',catalogName);

@@ -73,7 +73,6 @@ const Checkout = () => {
     isCheckoutSubmit,
     orderId,
     companyId,
-    linePOSId,
     liffId,
     pictureUrl,
     setItems,
@@ -183,7 +182,8 @@ const Checkout = () => {
 
   const [salesOrderId, setSalesOrderId] = useState(0);
   const [lineLiffId, setLineLiffId] = useState('');
-  const [lineLiffUserId, setLineLiffUserId] = useState('');
+  const [lineUserId, setLineUserId] = useState('');
+  const [linePOSId, setLinePOSId] = useState('');
 
   const [lineCompanyId, setLineCompanyId] = useState(0);
 
@@ -197,6 +197,7 @@ const Checkout = () => {
   const [shippingId, setShippingId] = useState(0);
   
   const [currencySign, setCurrencySign] = useState('');
+  const [profileImageUrl, setProfileImage] = useState('');
   
   /* if(sessionStorage.getItem('countrys'))
   {
@@ -223,10 +224,18 @@ const Checkout = () => {
 
   useEffect(() => 
   {
-    
-    if(Number(countryIdData) !== 10 && Number(countryIdData) !== 0)//thai
+    if(sessionStorage.getItem('countryId'))
     {
       
+      var countryIdData = Number(sessionStorage.getItem('countryId')); 
+      //alert('countryIdData = ' + countryIdData)
+      setCountryId(countryIdData);
+      
+        
+    }
+    if(Number(countryIdData) !== 10 && Number(countryIdData) !== 0)//thai
+    {
+      //alert()
       var isInputAddressData = true;
       setIsInputAddress(isInputAddressData);
       if(sessionStorage.getItem('city'))
@@ -253,6 +262,11 @@ const Checkout = () => {
       //alert('thai')
     }
 
+    if(sessionStorage.getItem('lineProfileImage'))
+    {
+      var profileImageData = sessionStorage.getItem('lineProfileImage'); 
+      setProfileImage(profileImageData);
+    }
     if(sessionStorage.getItem('customerId'))
   {
     var customerIdData = sessionStorage.getItem('customerId'); 
@@ -422,8 +436,13 @@ const Checkout = () => {
   }
   if(sessionStorage.getItem('linePOSId'))
   {
-    var lineLiffUserIdData = sessionStorage.getItem('linePOSId'); 
-    setLineLiffUserId(lineLiffUserIdData);
+    var linePOSIdData = sessionStorage.getItem('linePOSId'); 
+    setLinePOSId(linePOSIdData);
+  }
+  if(sessionStorage.getItem('lineUserId'))
+  {
+    var lineUserIdData = sessionStorage.getItem('lineUserId'); 
+    setLineUserId(lineUserIdData);
   }
 
   if(sessionStorage.getItem('companyId'))
@@ -466,15 +485,7 @@ const Checkout = () => {
     var provinceIdData = Number(sessionStorage.getItem('provinceId')); 
     setProvinceId(provinceIdData);
   }
-  if(sessionStorage.getItem('countryId'))
-  {
-    
-    var countryIdData = Number(sessionStorage.getItem('countryId')); 
-    //alert('countryIdData = ' + countryIdData)
-    setCountryId(countryIdData);
-    
-      
-  }
+  
   
   
   if(sessionStorage.getItem('cityId'))
@@ -690,7 +701,7 @@ const Checkout = () => {
       }
 
       var orderId = catalogOrderId;
-      var companyId = catalogCompanyId;
+      var companyId = lineCompanyId;
       var locationId = catalogLocationId;
       var qrPromotion = promotionCode;
       var pictureUrl = '';
@@ -815,7 +826,7 @@ const Checkout = () => {
 
   const handleShippingChange = async(event) => {
     console.log(event.target.value);
-    //alert('shipping Id = ' + event.target.value);
+    //alert('shipping Id = ' + event.target.name);
     var shippingData = event.target.value;
     var shippingDatas = shippingData.split(':');
 
@@ -840,6 +851,47 @@ const Checkout = () => {
        }
     }
     handleShippingName(shippingName)
+
+    //alert("liffId = " + lineLiffId);
+    if(lineLiffId !== undefined)
+    {
+      if(lineLiffId.length > 0)
+      {
+        var shippingLabel = '';
+        if(shippingDatas.length > 3)
+        {
+          shippingLabel = shippingDatas[2] + ":" + shippingDatas[3];
+        }
+        //alert("updateSocialPOSShipping " + shippingDatas[2] + ":" + shippingDatas[3])
+        updateSocialPOSShipping(Number(shippingDatas[0]), shippingLabel, shippingCost);
+      }
+    }
+}
+const updateSocialPOSShipping = async(shippingId, shippingLabel, shippingCost) =>
+{
+  var stockLocationId = 0;
+  
+  if(sessionStorage.getItem('locationId'))
+  {
+    stockLocationId = sessionStorage.getItem('locationId'); 
+    
+  }
+
+  await ProductServices.fetchUpdateSocialPOSShipping(
+    {
+      orderId:salesOrderId,
+      orderNumber:'',
+      locationId:stockLocationId,
+      shippingLabel:shippingLabel,
+      shippingId:shippingId,
+      shippingCost:shippingCost,
+      liffId:lineLiffId,
+      lineUserId:lineUserId,
+      linePOSId:linePOSId,
+      pictureUrl:profileImageUrl,
+      companyId:lineCompanyId,
+
+    })
 }
 const handleCountryChange = async(event) => {
     console.log(event.target.value);
@@ -1309,6 +1361,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   handleDataChange={handleProvinceTextChange}
                                   />
                             :
+                            
                               <ProvinceFormSelect register={register}
                               label="จังหวัด"
                               name="province"
@@ -1409,7 +1462,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                       customerAddressId === 0 ?
                         <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
                           <div className="col-span-6 sm:col-span-3">
-
+                            {'customerAddressId = ' + customerAddressId}
                           </div>
                           <div className="col-span-6 sm:col-span-3">
                             <button
