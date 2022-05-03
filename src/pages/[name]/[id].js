@@ -107,7 +107,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
 
     const [isCatalogPromotion,setIsCatalogPromotion] = useState(false);
     
-    
+    const [productListHeader, setProductListHeader] = useState('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
 
 
     const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
@@ -728,7 +728,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       catalogCompanyId,companyCode,
       catalogLocationId === undefined ? 0 : catalogLocationId ,
       catalogName,
-      '','',promotionId,customerTypeId,1,itemPerPage,searchText)
+      '','',promotionId,customerTypeId,1,itemPerPage,searchText,'','','query')
     }
     const FilterCategory = async (categoty) => 
     {
@@ -742,7 +742,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       catalogCompanyId,companyCode,
       catalogLocationId === undefined ? 0 : catalogLocationId ,
       catalogName,
-      '','',promotionId,customerTypeId,1,itemPerPage,'',categoty)
+      '','',promotionId,customerTypeId,1,itemPerPage,'',categoty,'','category')
     }
     const FilterProduct = async (category,product) => 
     {
@@ -754,9 +754,9 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       catalogCompanyId,companyCode,
       catalogLocationId === undefined ? 0 : catalogLocationId ,
       catalogName,
-      '','',promotionId,customerTypeId,1,itemPerPage,'',category,product)
+      '','',promotionId,customerTypeId,1,itemPerPage,'',category,product,'product')
     }
-    const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,companyCode,locationId,catalogName,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
+    const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,companyCode,locationId,catalogName,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product,refreshMode) =>
     {
       setLoading(true);
       
@@ -814,12 +814,31 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
             productVariants.push(productItem);
           }
         }
+
+        if(refreshMode === 'category')
+        {
+          setProductListHeader('รายการสินค้า ในหมวดหมู่ "' + products.categoryName + '"');
+        }
+        else if(refreshMode === 'product')
+        {
+          setProductListHeader('รายการสินค้า ในกลุ่ม "' + products.productName + '"');
+        }
+        else if(refreshMode === 'query')
+        {
+          setProductListHeader('รายการสินค้า ค้นหาโดยคำ "' + query + '"');
+        }
+        else
+        {
+          setProductListHeader('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
+        }
       }
       
       
 
       pagingManager();
       setProductList(productVariants);
+
+
 
 
       setLoading(false);
@@ -1069,7 +1088,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
             <div className="mb-10 flex justify-center">
               <div className="text-center w-full lg:w-2/5">
                 <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                  สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ
+                  {productListHeader}
                 </h2>
                 
               </div>

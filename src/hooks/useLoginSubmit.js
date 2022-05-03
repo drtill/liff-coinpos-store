@@ -189,7 +189,8 @@ const useLoginSubmit = (setModalOpen) => {
         }
         else
         {
-          router.push(redirect || '/' + userLogin.paramPath);
+          alert('paramPath = ' + paramPath);
+          //router.push(redirect || '/' + userLogin.paramPath);
         }
           
             //router.push(redirect);
@@ -290,10 +291,10 @@ const useLoginSubmit = (setModalOpen) => {
         });
     }
     if (verifyEmail) {
-      //alert("verifyEmail");
+      alert("verifyEmail");
       //UserServices.forgetPassword({ verifyEmail })
 
-      UserServices.forgetCoinPOSCustomerPassword({ email:verifyEmail, companyName:companyName, locationEmail:locationEmail,companyId:companyId })
+      await UserServices.fetchForgetCoinPOSCustomerPassword({ email:verifyEmail, companyName:companyName, locationEmail:locationEmail,companyId:companyId })
         .then((res) => {
           setLoading(false);
           notifySuccess(res.message);
@@ -458,6 +459,7 @@ const useLoginSubmit = (setModalOpen) => {
         Cookies.set('userInfo', JSON.stringify(res));
 
         localStorage.setItem('userInfo', JSON.stringify(userLogin));
+
       })
 
       .catch((err) => {
@@ -465,11 +467,12 @@ const useLoginSubmit = (setModalOpen) => {
         setModalOpen(false);
       });
 
+      setLoading(false);
       
   };
   const handleLineSignIn = async () => {
     setLoading(true);
-    alert("Line SignIn")
+    //alert("Line SignIn")
     var dataPath = '';
     var companyCode = '';
     var catalogName = '';
@@ -491,17 +494,17 @@ const useLoginSubmit = (setModalOpen) => {
         
               
       }
-      alert("dataPath = " + dataPath + " companyCode = " + companyCode + " catalogName = " + catalogName);
+      //alert("dataPath = " + dataPath + " companyCode = " + companyCode + " catalogName = " + catalogName);
 
     var liffData = '';
     if(sessionStorage.getItem('catalogLiffId'))
     {
-      alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
+      //alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
       liffData = sessionStorage.getItem('catalogLiffId');
     }
     if(sessionStorage.getItem('fromPage') === 'liff')
     {
-      alert('from liff');
+      //alert('from liff');
       var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
 
       const liff = (await import('@line/liff')).default
@@ -514,15 +517,15 @@ const useLoginSubmit = (setModalOpen) => {
       if (!liff.isLoggedIn()) {
         
         var url = liffEndpoint + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
-        alert(url);
+        //alert(url);
         liff.login({ redirectUri: url});
       }
       else
       {
-        alert("Logined")
+        //alert("Logined")
         let getProfile = await liff.getProfile();
         
-        alert("GetProfile")
+        //alert("GetProfile")
         var lineUsername = getProfile.displayName;
                   
                   
@@ -530,8 +533,8 @@ const useLoginSubmit = (setModalOpen) => {
                   
         var lineProfileImage = getProfile.pictureUrl;
         const email = liff.getDecodedIDToken().email;
-        alert("GetEmail = " + JSON.stringify(email));
-        alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
+        //alert("GetEmail = " + JSON.stringify(email));
+        //alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
 
         sessionStorage.setItem('lineUsername', lineUsername);
         sessionStorage.setItem('lineUserId', lineLiffUserId);
@@ -557,7 +560,7 @@ const useLoginSubmit = (setModalOpen) => {
     }
     else if(sessionStorage.getItem('fromPage') === 'catalog')
     {
-      alert('from catalog');
+      //alert('from catalog');
       var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
 
       const liff = (await import('@line/liff')).default
@@ -575,15 +578,15 @@ const useLoginSubmit = (setModalOpen) => {
       if (!liff.isLoggedIn()) {
         
         var url = liffEndpoint + '/liffId=' + liffData + '?companycode=' + companyCode + '&catalog=' + catalogName;
-        alert(url);
+        //alert(url);
         liff.login({ redirectUri: url});
       }
       else
       {
-        alert("Logined")
+        //alert("Logined")
         let getProfile = await liff.getProfile();
         
-        alert("GetProfile")
+        //alert("GetProfile")
         var lineUsername = getProfile.displayName;
                   
                   
@@ -591,8 +594,8 @@ const useLoginSubmit = (setModalOpen) => {
                   
         var lineProfileImage = getProfile.pictureUrl;
         const email = liff.getDecodedIDToken().email;
-        alert("GetEmail = " + JSON.stringify(email));
-        alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
+        //alert("GetEmail = " + JSON.stringify(email));
+        //alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
 
         sessionStorage.setItem('lineUsername', lineUsername);
         sessionStorage.setItem('lineUserId', lineLiffUserId);

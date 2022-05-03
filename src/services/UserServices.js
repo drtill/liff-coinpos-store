@@ -2,6 +2,7 @@ import requests from './httpServices';
 import jwt from 'jsonwebtoken';
 const {tokenForVerify } = require('../config/auth');
 
+//const serviceUrl = 'https://coinpos.io/lineliff/';
 const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
 //const serviceUrl = 'http://localhost:41781/lineliff/';
 const JWT_SECRET_FOR_VERIFY = 'lfjfjasjfr09ri09wrilfdjdjgdfgd';
@@ -251,7 +252,7 @@ const UserServices = {
     alert('run Regis')
     return requests.post('/user/verify-coinpos-email', body);
   },
-  async fetchVerifyCoinPOSEmailAddress(body) {
+  async fetchForgetCoinPOSCustomerPassword(body) {
     try
     {
       //alert('fetchVerify')
@@ -286,6 +287,140 @@ const UserServices = {
       //alert("Error: " + err.message);
       return "Error: " + err.message;
       
+    }
+  },
+  async fetchVerifyCoinPOSEmailAddress(body) {
+    try
+    {
+      //alert('fetchVerify')
+      //alert('process.env.JWT_SECRET_FOR_VERIFY = ' + JWT_SECRET_FOR_VERIFY)
+      const token = tokenForVerify(body);
+      //alert('token = ' + token)
+      //return;
+      var productList = null;
+      //await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
+      //await fetch('http://localhost:5055/api' + '/user/verify-coinpos-email', 
+      await fetch(serviceUrl + 'CoinPOSCustomerRegister',
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"companyId":${body.companyId},"locationId":${body.locationId},"email":"${body.email}","companyName":"${body.companyName}","locationEmail":"${body.locationEmail}","dataPath":"${body.dataPath}","token":"${token}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //alert("expired = " + data)
+        console.log("expired = " + data); // this will be a string
+        productList = data;
+      });
+      
+      return productList;
+      
+    }
+    catch (err) {
+      //alert("Error: " + err.message);
+      return "Error: " + err.message;
+      
+    }
+  },
+  async fetchResetPassword(body) {
+    try
+    {
+      //alert('fetchVerify')
+      //alert('process.env.JWT_SECRET_FOR_VERIFY = ' + JWT_SECRET_FOR_VERIFY)
+      const token = tokenForVerify(body);
+      //alert('token = ' + token)
+      //return;
+      var productList = null;
+      //await fetch('https://api.coinpos.app/api' + '/user/verify-coinpos-email', 
+      //await fetch('http://localhost:5055/api' + '/user/verify-coinpos-email', 
+      await fetch(serviceUrl + 'ResetCustomerAccountPassword',
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":${body.companyId},"LocationId":${body.locationId},"Email":"${body.email}","CompanyName":"${body.companyName}","LocationEmail":"${body.locationEmail}","DataPath":"${body.dataPath}","Password":"${body.password}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        //alert("expired = " + data)
+        console.log("expired = " + data); // this will be a string
+        productList = data;
+      });
+      
+      return productList;
+      
+    }
+    catch (err) {
+      //alert("Error: " + err.message);
+      return "Error: " + err.message;
+      
+    }
+  },
+  async resetCoinPOSCustomerPassword(body) {
+    try
+    {
+      const token = req.body.token;
+      const { email, companyId} = jwt.decode(token);
+  
+      console.log("email = " + email + " companyId = " + companyId);
+
+      const user = await findCoinPOSEmail(companyId,email);
+      if (token) {
+        jwt.verify(token, process.env.JWT_SECRET_FOR_VERIFY, (err, decoded) => {
+          if (err) {
+            return res.status(500).send({
+              message: 'Token expired, please try again!',
+            });
+          } else {
+           resetCustomerAccountPassword(companyId,email,req.body.newPassword);
+            //user.password = bcrypt.hashSync(req.body.newPassword);
+            //user.save();
+            res.send({
+              message: 'Your password change successful, you can login now!',
+            });
+          }
+        });
+      }
+    }
+    catch (err) {
+      //alert("Error: " + err.message);
+      return "Error: " + err.message;
+      
+    }
+  },
+  async fetchResetCoinPOSCustomerPassword(body) {
+    try
+    {
+      await fetch(serviceUrl + 'ResetCustomerAccountPassword',//fetch('http://localhost:5002/simple-cors3', 
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:`{"CompanyId":${companyId},"Email":"${email}", "Password":"${password}"}`
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //console.log("Obj = " + obj);
+        console.log(data); // this will be a string
+        productList = data;
+      });
+      
+      return productList;
+        //res.send(productList);
+    }
+    catch (err) {
+      res.status(500).send({
+        message: err.message,
+      });
     }
   },
   async fetchCoinposCheckExpired(body) {

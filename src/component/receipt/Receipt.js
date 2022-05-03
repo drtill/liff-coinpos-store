@@ -1,36 +1,51 @@
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 //internal import
 import OrderTable from '@component/order/OrderTable';
 
-const Receipt = ({ data, printRef, companyName, locationName, companyLogo, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode}) => {
+const Receipt = ({ data, printRef, companyName, locationName, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode, dataPath}) => {
 
 
-  
+  const [companyLogo,setCompanyLogo] = useState('')
+  useEffect(() =>
+  {
+    if(sessionStorage.getItem('companyLogo'))
+      {
+        var companyLogoData = sessionStorage.getItem('companyLogo'); 
+        setCompanyLogo(companyLogoData);
+      }
+
+  },[]);
 
   return (
     <div ref={printRef}>
       <div className="bg-indigo-50 p-8 rounded-t-xl">
         <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-gray-50">
-          <h1 className="font-bold font-serif text-2xl uppercase">Receipt</h1>
+          <h1 className="font-bold font-serif text-2xl uppercase">ใบเสร็จรับเงิน</h1>
           <div className="lg:text-right text-left">
             <h2 className="text-lg font-serif font-semibold mt-4 lg:mt-0 md:mt-0">
-              <Link href="/">
-                <a className="">
-                  <Image
-                    width={70}
-                    height={70}
-                    src={companyLogo}
-                    alt="logo"
-                  />
-                </a>
+              <Link href={"/" + dataPath}>
+                <a className="mr-3 lg:mr-12 xl:mr-12 hidden md:hidden lg:block">
+                    {companyLogo === ''
+                    ?
+                      companyLogo
+                    :
+                    <Image
+                      width={70}
+                      height={70}
+                      src={companyLogo}
+                      alt="logo"
+                    />
+                    }
+                    
+                  </a>
               </Link>
             </h2>
             <h2>{companyName}</h2>
-            <p className="text-sm text-gray-500">Location: {locationName}</p>
+            <p className="text-sm text-gray-500">สาขา: {locationName}</p>
             <p className="text-sm text-gray-500">
               {locationAddress1} {locationAddress2} 
                 <br /> 
@@ -42,7 +57,7 @@ const Receipt = ({ data, printRef, companyName, locationName, companyLogo, curre
         <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
           <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              Date
+              วันที่
             </span>
             <span className="text-sm text-gray-500 block">
               {/* {data.createdAt !== undefined && (
@@ -55,21 +70,21 @@ const Receipt = ({ data, printRef, companyName, locationName, companyLogo, curre
           </div>
           <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              Invoice No.
+              หมายเลขใบเสร็จรับเงิน
             </span>
-            <span className="text-sm text-gray-500 block">#{data.invoiceNumber}</span>
+            <span className="text-sm text-gray-500 block">#{data.receiptNumber}</span>
           </div>
           <div className="flex flex-col lg:text-right text-left">
             <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-              Invoice To.
+              ที่อยู่เรียกเก็บเงิน
             </span>
             <span className="text-sm text-gray-500 block">
               {data.customerName}
               <br />
-              {data.shippingToAddress}
-              {/* {data.address}
+              {/*data.shippingToAddress*/}
+              {data.shippingAddress}
               <br />
-              {data.city}, {data.country}, {data.zipCode} */}
+              {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
             </span>
           </div>
         </div>
@@ -84,32 +99,32 @@ const Receipt = ({ data, printRef, companyName, locationName, companyLogo, curre
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-left"
                   >
-                    Sr.
+                    ลำดับ
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-left"
                   >
-                    Product Name
+                    ชื่อสินค้า
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-center"
                   >
-                    Quantity
+                    จำนวน
                   </th>
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-center"
                   >
-                    Item Price
+                    ราคาต่อหน่วย
                   </th>
 
                   <th
                     scope="col"
                     className="font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider text-right"
                   >
-                    Amount
+                    ยอดรวม
                   </th>
                 </tr>
               </thead>

@@ -1,5 +1,6 @@
 import requests from './httpServices';
 
+//const serviceUrl = 'https://coinpos.io/lineliff/';
 const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
 //const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
@@ -819,7 +820,7 @@ const ProductServices = {
         body:`{"OrderId": ${body.orderId},"ShippingId":${body.shippingId},"ShippingName":"${body.shippingName}","ShippingFee":${body.shippingFee},"CompanyId":"${body.companyId}","LineUserId":"${body.linePOSId}","LiffId":"${body.liffId}","PictureUrl":"${body.pictureUrl}",
         "FirstName":"${body.firstName}","LastName":"${body.lastName}","Mobile":"${body.mobile}","Email":"${body.email}",
         "Address1":"${body.address1}","District":"${body.district}","Country":"${body.country}","City":"${body.city}","StateOrProvince":"${body.stateOrProvince}","PostalCode":"${body.postalCode}",
-        "OrderDetails":${body.orderDetails},"CatalogName":"${body.catalogName}"}`
+        "OrderDetails":${body.orderDetails},"CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}"}`
         }).then(function(response) {
           return response.text();
         }).then(function(data) {

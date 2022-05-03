@@ -6,6 +6,7 @@ import { FiMail } from 'react-icons/fi';
 import Error from '@component/form/Error';
 import InputArea from '@component/form/InputArea';
 import useLoginSubmit from '@hooks/useLoginSubmit';
+import Loading from '@component/preloader/Loading';
 
 const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
   const { handleSubmit, submitHandler, register, errors, loading } =
@@ -57,12 +58,16 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
     <>
       <div className="text-center mb-6">
         <Link href="/">
-          <a className="text-3xl font-bold font-serif">Forget Password</a>
+          <a className="text-3xl font-bold font-serif">ลืมรหัสผ่าน</a>
         </Link>
         <p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
-          Reset Your Password
+          รีเซ็ต รหัสผ่านของคุณ
         </p>
       </div>
+      {loading 
+      ?
+        <Loading loading={loading}/>
+      :
       <form
         onSubmit={submitReset}
         className="flex flex-col justify-center"
@@ -87,7 +92,7 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
                 onClick={() => setShowResetPassword(true)}
                 className="text-end text-sm text-heading ps-3 underline hover:no-underline focus:outline-none"
               >
-                Forgot password?
+                ลืมรหัสผ่าน?
               </button>
             </div>
           </div>
@@ -96,10 +101,12 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
             type="submit"
             className="w-full text-center py-3 rounded bg-cyan-500 text-white hover:bg-cyan-600 transition-all focus:outline-none my-1"
           >
-            Recover password
+            กู้คืนรหัสผ่าน
           </button>
         </div>
       </form>
+      }
+      
     </>
   );
 };

@@ -30,6 +30,7 @@ import InvoiceForDownload from '@component/invoice/InvoiceForDownload';
 import ReceiptForDownload from '@component/receipt/ReceiptForDownload';
 import PaymentMethod from './PaymentMethod';
 import ShippingTracking from './ShippingTracking';
+import Receipt from '@component/receipt/Receipt';
 
 
 const Order = ({ params }) => {
@@ -451,54 +452,110 @@ const Order = ({ params }) => {
               ขอบคุณที่ใช้บริการ{' '} 
               {/* <span className="font-bold text-cyan-600">{data.name},</span>{' '} */}
               <span className="font-bold text-cyan-600">{data.customerName},</span>{' '}
+              
               เราได้รับคำสั่งซื้อของคุณแล้ว !
 
               
             </label>
           </div>
           <div className="bg-white rounded-lg shadow-sm">
-            <Invoice data={data} printRef={printRef} companyName={companyName} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
-      locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-       locationName={locationName} currencySign={data.currencySign} dataPath={dataPath}/>
-            <div className="bg-white p-8 rounded-b-xl">
-              <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between">
-                {/* <p>{JSON.stringify(data)}</p>
-                <p>{data.orderNumber}</p> */}
-                <PDFDownloadLink
-                  document={<InvoiceForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+            {
+              data.paymentStatusId === 1
+              ?
+              <>
+                <Invoice data={data} printRef={printRef} companyName={companyName} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
                   locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-                   locationName={locationName} companyName={companyName}/>}
-                  fileName="Invoice"
-                >
-                  {({ blob, url, loading, error }) =>
-                    loading ? (
-                      'Loading...'
-                    ) : (
-                      <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
-                        Download Invoice{' '}
-                        <span className="ml-2 text-base">
-                          <IoCloudDownloadOutline />
-                        </span>
-                      </button>
-                    )
-                  }
-                </PDFDownloadLink>
+                  locationName={locationName} currencySign={data.currencySign} dataPath={dataPath}/>
+                        <div className="bg-white p-8 rounded-b-xl">
+                          <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between">
+                            {/* <p>{JSON.stringify(data)}</p>
+                            <p>{data.orderNumber}</p> */}
+                            <PDFDownloadLink
+                              document={<InvoiceForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+                              locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+                              locationName={locationName} companyName={companyName}/>}
+                              fileName="Invoice"
+                            >
+                              {({ blob, url, loading, error }) =>
+                                loading ? (
+                                  'Loading...'
+                                ) : (
+                                  <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                                    Download Invoice{' '}
+                                    <span className="ml-2 text-base">
+                                      <IoCloudDownloadOutline />
+                                    </span>
+                                  </button>
+                                )
+                              }
+                            </PDFDownloadLink>
 
-                <ReactToPrint
-                  trigger={() => (
-                    <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
-                      Print Invoice{' '}
-                      <span className="ml-2">
-                        <IoPrintOutline />
-                      </span>
-                    </button>
-                  )}
-                  content={() => printRef.current}
-                  documentTitle="Invoice"
-                />
-                
-              </div>
-            </div>
+                            <ReactToPrint
+                              trigger={() => (
+                                <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                                  Print Invoice{' '}
+                                  <span className="ml-2">
+                                    <IoPrintOutline />
+                                  </span>
+                                </button>
+                              )}
+                              content={() => printRef.current}
+                              documentTitle="Invoice"
+                            />
+                            
+                          </div>
+                        </div>
+              </>
+
+              :
+              <>
+                <Receipt data={data} printRef={printRef} companyName={companyName} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+                  locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+                  locationName={locationName} currencySign={data.currencySign} dataPath={dataPath}/>
+                        <div className="bg-white p-8 rounded-b-xl">
+                          <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between">
+                            {/* <p>{JSON.stringify(data)}</p>
+                            <p>{data.orderNumber}</p> */}
+                            <PDFDownloadLink
+                              document={<ReceiptForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
+                              locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
+                              locationName={locationName} companyName={companyName}/>}
+                              fileName="Receipt"
+                            >
+                              {({ blob, url, loading, error }) =>
+                                loading ? (
+                                  'Loading...'
+                                ) : (
+                                  <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                                    Download Receipt{' '}
+                                    <span className="ml-2 text-base">
+                                      <IoCloudDownloadOutline />
+                                    </span>
+                                  </button>
+                                )
+                              }
+                            </PDFDownloadLink>
+
+                            <ReactToPrint
+                              trigger={() => (
+                                <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                                  Print Receipt{' '}
+                                  <span className="ml-2">
+                                    <IoPrintOutline />
+                                  </span>
+                                </button>
+                              )}
+                              content={() => printRef.current}
+                              documentTitle="Invoice"
+                            />
+                            
+                          </div>
+                        </div>
+              
+              </>
+
+            }
+            
             
             {
               data.paymentStatusId === 1 //UnPaid

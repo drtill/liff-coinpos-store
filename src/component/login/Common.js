@@ -16,7 +16,7 @@ const Common = ({ setModalOpen }) => {
 
   const [loginLoading, setLoginLoading] = useState(false);
 
-  const { handleGoogleSignIn,handleLineSignIn, GoogleLogin } = useLoginSubmit(setModalOpen);
+  const { handleGoogleSignIn,handleLineSignIn, GoogleLogin, loading } = useLoginSubmit(setModalOpen);
 
   const handleModal = () => {
     setShowRegister(!showRegister);
@@ -33,36 +33,38 @@ const Common = ({ setModalOpen }) => {
     
     <>
         <div className="overflow-hidden bg-white mx-auto">
-          {showResetPassword ? (
-            <ResetPassword
-              setShowResetPassword={setShowResetPassword}
-              setModalOpen={setModalOpen}
-              setLoginLoading={handleLoading}
-            />
-          ) : showRegister ? (
-            <Register
-              setShowResetPassword={setShowResetPassword}
-              setModalOpen={setModalOpen}
-              setLoginLoading={handleLoading}
-            />
-          ) : (
-            <Login
-              setShowResetPassword={setShowResetPassword}
-              setModalOpen={setModalOpen}
-              setLoginLoading={handleLoading}
-            />
-          )}
+          
 
-          <div className="my-4 after:bg-gray-100 before:bg-gray-100 fo10t-sans text-center font-medium">
-            หรือ
-          </div>
+          
 
             {
-              loginLoading
+              loading
               ?
-                <Loading loading={loginLoading} />
+                <Loading loading={loading} />
               :
               <>
+                {showResetPassword ? (
+                  <ResetPassword
+                    setShowResetPassword={setShowResetPassword}
+                    setModalOpen={setModalOpen}
+                    setLoginLoading={handleLoading}
+                  />
+                ) : showRegister ? (
+                  <Register
+                    setShowResetPassword={setShowResetPassword}
+                    setModalOpen={setModalOpen}
+                    setLoginLoading={handleLoading}
+                  />
+                ) : (
+                  <Login
+                    setShowResetPassword={setShowResetPassword}
+                    setModalOpen={setModalOpen}
+                    setLoginLoading={handleLoading}
+                  />
+                )}
+                <div className="my-4 after:bg-gray-100 before:bg-gray-100 fo10t-sans text-center font-medium">
+                  หรือ
+                </div>
                 <div className="flex justify-between flex-col lg:flex-row">
                   <button className="text-sm inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center rounded-md focus:outline-none text-gray-600 bg-gray-100 shadow-sm md:px-2 my-1 sm:my-1 md:my-1 lg:my-0 lg:px-3 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-green-600 h-11 md:h-12 w-full mr-2"
                   onClick={() => handleLineSignIn()}

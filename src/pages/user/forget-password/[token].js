@@ -28,12 +28,14 @@ const ForgetPassword = () => {
 
   password.current = watch('newPassword');
 
-  const submitHandler = ({ registerEmail, password, newPassword }) => {
+  const submitHandler = async({ registerEmail, password, newPassword }) => {
     
     setLoading(true);
     if (newPassword) {
       alert("submit Reset = " + router.query?.token)
-      UserServices.resetCoinPOSCustomerPassword({ newPassword, token: router.query?.token })
+      const token = router.query?.token;
+      const { email, companyId,} = jwt.decode(token);
+      await UserServices.resetCoinPOSCustomerPassword({ newPassword, token: router.query?.token })
         .then((res) => {
           setLoading(false);
           setShowLogin(true);
@@ -59,7 +61,7 @@ const ForgetPassword = () => {
           
       }
 
-      UserServices.coinposUserLogin({
+      await UserServices.fetchCoinposUserLogin({
         registerEmail,
         password,
         companyId
@@ -114,6 +116,7 @@ const ForgetPassword = () => {
           notifyError(err ? err.response.data.message : err.message);
         });*/
     }
+    setLoading(false);
   };
 
   return (

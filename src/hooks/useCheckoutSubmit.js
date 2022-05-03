@@ -355,6 +355,14 @@ const useCheckoutSubmit = () => {
         //alert('catalogName = ' + catalogName)
               
       }
+      var companyCode = '';
+      if(sessionStorage.getItem('companyCode'))
+      {
+        
+        companyCode = sessionStorage.getItem('companyCode'); 
+        //alert('catalogName = ' + catalogName)
+              
+      }
       //alert(data.firstName);
 
       var firstName = data.firstName;
@@ -376,7 +384,7 @@ const useCheckoutSubmit = () => {
       await ProductServices.fetchCloseCoinPOSCart({
         orderId,shippingId,shippingName,shippingFee,companyId,linePOSId,liffId,pictureUrl,firstName,lastName,mobile,email,
         address1,country,city,stateOrProvince,postalCode,district,
-        orderDetails,catalogName
+        orderDetails,catalogName,companyCode
       })
         .then((res) => {
           

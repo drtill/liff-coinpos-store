@@ -105,6 +105,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           const [catalogProductType,setCatalogProductType] = useState('');
 
           const [newOrderModalOpen, setNewOrderModalOpen] = useState(false);
+
+          const [productListHeader, setProductListHeader] = useState('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
       
           const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
           const {dispatch} = useContext(UserContext);
@@ -320,7 +322,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             }
             else if(companyCode && !catalogName)
             {
-              alert("Companycode only")
+              //alert("Companycode only")
               if(isGetProfile)
               {
                 if(catalogName)
@@ -1102,19 +1104,19 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           const SearchProduct = async (searchText) => 
           {
             //alert("Searching = " + searchText);
-            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,searchText)
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,searchText,'','','query')
           }
           const FilterCategory = async (categoty) => 
           {
             //alert("categoty = " + categoty);
-            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',categoty)
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',categoty,'','category')
           }
           const FilterProduct = async (category,product) => 
           {
             //alert("product = " + product);
-            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',category,product)
+            RefreshProductList(liffData,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,'','',0,9,1,itemPerPage,'',category,product,'product')
           }
-          const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,locationId,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
+          const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,locationId,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product,refreshMode) =>
           {
             setLoading(true);
             //alert("Refresh");
@@ -1167,6 +1169,23 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               productVariants.push(productItem);
             }
       
+            if(refreshMode === 'category')
+            {
+              setProductListHeader('รายการสินค้า ในหมวดหมู่ "' + products.categoryName + '"');
+            }
+            else if(refreshMode === 'product')
+            {
+              setProductListHeader('รายการสินค้า ในกลุ่ม "' + products.productName + '"');
+            }
+            else if(refreshMode === 'query')
+            {
+              setProductListHeader('รายการสินค้า ค้นหาโดยคำ "' + query + '"');
+            }
+            else
+            {
+              setProductListHeader('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
+            }
+
             pagingManager();
             setProductList(productVariants);
       
@@ -1369,7 +1388,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             <div className="mb-10 flex justify-center">
               <div className="text-center w-full lg:w-2/5">
                 <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                  สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ
+                  {productListHeader}
                 </h2>
                 
               </div>

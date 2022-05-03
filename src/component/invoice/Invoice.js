@@ -135,7 +135,7 @@ const Invoice = ({ data, printRef, companyName, locationName, currencySign, loca
         </div>
       </div>
 
-      <div className="border-t border-b border-gray-100 p-10 bg-cyan-50">
+      {/* <div className="border-t border-b border-gray-100 p-10 bg-cyan-50">
         <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
           <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
             <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600 block">
@@ -170,7 +170,7 @@ const Invoice = ({ data, printRef, companyName, locationName, currencySign, loca
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
