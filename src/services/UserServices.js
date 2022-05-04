@@ -2,8 +2,8 @@ import requests from './httpServices';
 import jwt from 'jsonwebtoken';
 const {tokenForVerify } = require('../config/auth');
 
-const serviceUrl = 'https://coinpos.io/lineliff/';
-//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+//const serviceUrl = 'https://coinpos-prod.azurewebsites.net/lineliff/';
+const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
 //const serviceUrl = 'http://localhost:41781/lineliff/';
 const JWT_SECRET_FOR_VERIFY = 'lfjfjasjfr09ri09wrilfdjdjgdfgd';
 const JWT_SECRET = 'fgdfgdfgdfgfgfdgdfgdfgfgfgtrgrtg5455454y4646hhgdfg';

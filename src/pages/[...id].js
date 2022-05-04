@@ -116,6 +116,12 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           
           useEffect(async () => {
             
+            if(liffCompanyId === 0)
+            {
+                  //alert("Liff Data is not found.");
+              router.push('/404');
+              return;
+            }
             var userLocalJson = undefined;
             //var getPromotionCode = localStorage.getItem('promotionCode')
       
@@ -951,27 +957,30 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       
                 const productDs = [];
                 const discountDetails = [];
-                
-                for(var i = 0;i<salesOrderDetails.length;i++)
+                i(salesOrderDetails !== undefined)
                 {
-                  var detail = {
-                    id: Number(salesOrderDetails[i].productVariantId),
-                    slug:salesOrderDetails[i].productId,
-                    name: salesOrderDetails[i].upc,
-                    title:salesOrderDetails[i].productVariantName,
-                    sku: salesOrderDetails[i].sku,
-                    quantity:salesOrderDetails[i].quantity,
-                    price: salesOrderDetails[i].productVariantPrice,
-                    image:salesOrderDetails[i].imageUrl,
+                  for(var i = 0;i<salesOrderDetails.length;i++)
+                  {
+                    var detail = {
+                      id: Number(salesOrderDetails[i].productVariantId),
+                      slug:salesOrderDetails[i].productId,
+                      name: salesOrderDetails[i].upc,
+                      title:salesOrderDetails[i].productVariantName,
+                      sku: salesOrderDetails[i].sku,
+                      quantity:salesOrderDetails[i].quantity,
+                      price: salesOrderDetails[i].productVariantPrice,
+                      image:salesOrderDetails[i].imageUrl,
+                    }
+                    var discountDetail = {
+                      id: Number(salesOrderDetails[i].productVariantId),
+                      discount:Number(salesOrderDetails[i].discount),
+                      discountRate:Number(salesOrderDetails[i].discountRate)
+                    }
+                    productDs.push(detail);
+                    discountDetails.push(discountDetail);
                   }
-                  var discountDetail = {
-                    id: Number(salesOrderDetails[i].productVariantId),
-                    discount:Number(salesOrderDetails[i].discount),
-                    discountRate:Number(salesOrderDetails[i].discountRate)
-                  }
-                  productDs.push(detail);
-                  discountDetails.push(discountDetail);
                 }
+                
             //alert("Apply Promotion2 = " + promotionCode + " " + lineUserId);
             
             setItems(productDs);
@@ -1645,9 +1654,9 @@ export const getServerSideProps = async ({req, res,params }) => {
   }
 
   var liffId = liffData;
-  var orderId = liffOrderId;
-  var companyId = liffCompanyId;
-  var locationId = liffLocationId;
+  var orderId = liffOrderId === null ? 0 : liffOrderId;
+  var companyId = liffCompanyId === null ? 0 : liffCompanyId;
+  var locationId = liffLocationId === null ? 0 : liffLocationId;
   var dataPath = '';
   if(liffId.length > 0)
   {
