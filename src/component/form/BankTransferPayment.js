@@ -21,7 +21,8 @@ const BankTransferPayment = (
         orderId,
         liffId,
         lineUserId,
-        companyId
+        companyId,
+        setPaymentStatus
     }) => {
   
       const [payLoading, setPayLoading] = useState(false);
@@ -107,7 +108,8 @@ const BankTransferPayment = (
 
 
         })
-      alert("Inform " + bankAccount);
+      setPaymentStatus(2)
+        //alert("Inform " + bankAccount);
       setPayLoading(false);
     }
         

@@ -151,6 +151,72 @@ const Order = ({ params }) => {
             }
           }
           setPaymentContent(paymentContentData);
+        };
+        const paymentContentUpdate = (paymentStatusId,orderStatusId) =>
+        {
+          var paymentContentData = []
+          if(paymentStatusId === 2)//Paid
+          {
+            if(orderStatusId === 2)//Active
+            {
+              paymentContentData.push(<><h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-serif mb-3">
+                  เราได้รับการชำระเงินเรียบร้อยแล้ว เจ้าหน้าที่ของเราจะรีบดำเนินการส่งสินค้าให้เร็วที่สุด
+                  </h3>
+                  <p className="text-base opacity-90 leading-7">
+                  ขอบคุณที่ใช้บริการ
+                  </p></>)
+            }
+            else if(orderStatusId === 3)//Finalized
+            {
+              paymentContentData.push(<><h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-serif mb-3">
+                  เราได้รับการชำระเงินเรียบร้อยแล้ว เจ้าหน้าที่ของเราจะรีบดำเนินการส่งสินค้าให้เร็วที่สุด
+                  </h3>
+                  <p className="text-base opacity-90 leading-7">
+                  ขอบคุณที่ใช้บริการ
+                  </p></>)
+            }
+            else if(orderStatusId === 4)//Fulfilled
+            {
+              paymentContentData.push(<><h3 className="text-xl md:text-2xl lg:text-3xl font-bold font-serif mb-3">
+                  ดำเนินการจัดส่งแล้ว
+                  </h3>
+                  <p className="text-base opacity-90 font-bold leading-7">
+                  {data.serviceFullDisplay}
+                  </p>
+                  <p className="text-base opacity-90 leading-7">
+                  ขอบคุณที่ใช้บริการ
+                  </p>
+                  
+                  
+                  </>)
+              if(data.dataTrackings !== null)
+              {
+                if(data.trackingNumber !== null)
+                {
+                  paymentContentData.push(
+                    <p className="text-base opacity-90 font-bold leading-7">
+                    Tracking Number: 
+                    <b> {data.trackingNumber} </b>
+                    </p>
+                  )
+                  paymentContentData.push(
+                  <Link href={data.trackingUrl}>
+                    <a className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-cyan-500 hover:bg-cyan-600 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                      Tracking {' '}
+                      <span className="text-xl mr-2">
+                        <IoLink />
+                      </span>
+                      
+                    </a>
+                  </Link>)
+                  
+                }
+                paymentContentData.push(<ShippingTracking data={data}/>);
+                
+              }
+            }
+          }
+          setPaymentContent(paymentContentData);
         }
 
     
@@ -434,7 +500,14 @@ const Order = ({ params }) => {
   });
   
 
+  const setPaymentStatus = (statusId) => {
+    alert("statusId = " + statusId);
+    setOrderStatusId(statusId);
+    setPaymentStatusId(statusId);  
+    paymentContentUpdate(statusId,statusId);
     
+  }
+  
   
     
   
@@ -558,9 +631,9 @@ const Order = ({ params }) => {
             
             
             {
-              data.paymentStatusId === 1 //UnPaid
+              paymentStatusId === 1 //UnPaid
               ?
-                <PaymentMethod salesOrderId={orderId} lineLiffId={liffId} lineLiffUserId={lineUserId} lineCompanyId={companyId} />
+                <PaymentMethod salesOrderId={orderId} lineLiffId={liffId} lineLiffUserId={lineUserId} lineCompanyId={companyId} setPaymentStatus={setPaymentStatus} />
               :
               <div id="downloadApp" className="bg-indigo-50 py-10 lg:py-16 bg-repeat bg-center overflow-hidden">
                 <div className="max-w-screen-2xl mx-auto px-4 sm:px-10">

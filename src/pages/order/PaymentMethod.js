@@ -15,7 +15,7 @@ import {
   import { ImCreditCard } from 'react-icons/im';
   import Loading from '@component/preloader/Loading';
 
-const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId}) => {
+const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId, setPaymentStatus}) => {
 
 
     const [qrShow, setQRShow] = useState(false);
@@ -102,6 +102,7 @@ const PaymentMethod = ({salesOrderId, lineLiffId, lineLiffUserId, lineCompanyId}
                                 liffId={lineLiffId}
                                 lineUserId={lineLiffUserId}
                                 companyId={lineCompanyId}
+                                setPaymentStatus={setPaymentStatus}
                                 Icon={ImCreditCard}/>
                               {/* <p className="text-red-400 text-sm mt-1">{error}</p> */}
                             </div>

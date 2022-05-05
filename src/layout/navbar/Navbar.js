@@ -115,26 +115,32 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
           <div className="w-full transition-all duration-200 ease-in-out lg:flex lg:max-w-[410px] xl:max-w-[500px] 2xl:max-w-[790px] md:mx-12 lg:mx-4 xl:mx-0">
               <div className="w-full flex flex-col justify-center flex-shrink-0 relative z-30">
                 <div className="flex flex-col mx-auto w-full">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="relative pr-12 md:pr-14 bg-white overflow-hidden shadow-sm rounded-md w-full"
-                  >
-                    <label className="flex items-center py-0.5">
-                      <input
-                        onChange={(e) => setSearchText(e.target.value)}
-                        value={searchText}
-                        className="form-input w-full pl-5 appearance-none transition ease-in-out border text-input text-sm font-sans rounded-md min-h-10 h-10 duration-200 bg-white focus:ring-0 outline-none border-none focus:outline-none placeholder-gray-500 placeholder-opacity-75"
-                        placeholder="ระบุคำค้นหาสินค้า (เช่น ชื่อ, บาร์โค้ด)"
-                      />
-                    </label>
-                    <button
-                      aria-label="Search"
-                      type="submit"
-                      className="outline-none text-xl text-gray-400 absolute top-0 right-0 end-0 w-12 md:w-14 h-full flex items-center justify-center transition duration-200 ease-in-out hover:text-heading focus:outline-none"
+                  {page !== 'product'
+                  ?
+                    <></>
+                  :
+                    <form
+                      onSubmit={handleSubmit}
+                      className="relative pr-12 md:pr-14 bg-white overflow-hidden shadow-sm rounded-md w-full"
                     >
-                      <IoSearchOutline />
-                    </button>
-                  </form>
+                      <label className="flex items-center py-0.5">
+                        <input
+                          onChange={(e) => setSearchText(e.target.value)}
+                          value={searchText}
+                          className="form-input w-full pl-5 appearance-none transition ease-in-out border text-input text-sm font-sans rounded-md min-h-10 h-10 duration-200 bg-white focus:ring-0 outline-none border-none focus:outline-none placeholder-gray-500 placeholder-opacity-75"
+                          placeholder="ระบุคำค้นหาสินค้า (เช่น ชื่อ, บาร์โค้ด)"
+                        />
+                      </label>
+                      <button
+                        aria-label="Search"
+                        type="submit"
+                        className="outline-none text-xl text-gray-400 absolute top-0 right-0 end-0 w-12 md:w-14 h-full flex items-center justify-center transition duration-200 ease-in-out hover:text-heading focus:outline-none"
+                      >
+                        <IoSearchOutline />
+                      </button>
+                    </form>
+                  }
+                  
                 </div>
               </div>
             </div>
