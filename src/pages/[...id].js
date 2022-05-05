@@ -1536,7 +1536,12 @@ export const getServerSideProps = async ({req, res,params }) => {
       if(coinPOSLiffData.includes('?'))
       {
         const parms = coinPOSLiffData.split('?');
-        companyCode = params[1];    
+        if(parms[1].includes('='))
+        {
+          const parms1 =parms[1].split('=');
+          companyCode = parms1[1];
+        }
+            
       }
       else
       {
