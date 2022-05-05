@@ -184,12 +184,12 @@ const useLoginSubmit = (setModalOpen) => {
             //router.push(redirect || '/checkout');
         if(targetPage.length > 0)
         {
-          alert('targetPage = ' + targetPage + ' catalogName = ' + catalogName);
+          //alert('targetPage = ' + targetPage + ' catalogName = ' + catalogName);
           router.push(targetPage);
         }
         else
         {
-          alert('paramPath = ' + paramPath);
+          //alert('paramPath = ' + paramPath);
           //router.push(redirect || '/' + userLogin.paramPath);
         }
           

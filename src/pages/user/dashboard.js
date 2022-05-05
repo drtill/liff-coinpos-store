@@ -195,12 +195,12 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
       liffData = sessionStorage.getItem('catalogLiffId');
     }
     
-    alert("liffData log out = " + liffData);
+    //alert("liffData log out = " + liffData);
     if(!liffData)
     {
       const liff = (await import('@line/liff')).default
       try {
-        alert("Liff init")
+        //alert("Liff init")
         await liff.init({ liffId:liffData });
       } catch (error) {
         console.error('liff init error', error.message)
@@ -208,12 +208,12 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
 
       if (liff.isLoggedIn())
       {
-        alert("Liff log out")
+        //alert("Liff log out")
         liff.logout();
       }
     }
     
-    alert("dataPath log out = " + dataPath);
+    //alert("dataPath log out = " + dataPath);
     router.push('/' + dataPath);
   };
 
