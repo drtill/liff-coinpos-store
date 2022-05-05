@@ -442,7 +442,7 @@ const Order = ({ params }) => {
     <Layout title="Invoice" description="order confirmation page" dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo}
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}>
+      locationEmail={locationEmail} locationTel={locationTel} page='order'>
       {loading ? (
         <Loading loading={loading} />
       ) : (

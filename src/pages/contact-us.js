@@ -37,8 +37,15 @@ const ContactUs = () => {
   const [locationPostalCode, setLocationPostalCode] = useState('');
   const [locationEmail, setLocationEmail] = useState('');
   const [locationTel, setLocationTel] = useState('');
+  const [dataPath,setDataPath] = useState('');
   useEffect(() => 
   {
+    if(sessionStorage.getItem('dataPath'))
+    {
+      var dataPathData = sessionStorage.getItem('dataPath'); 
+      setDataPath(dataPathData);
+            
+    }
     
     if(sessionStorage.getItem('companyLogo'))
     {
@@ -104,10 +111,10 @@ const ContactUs = () => {
     }
   },[])
   return (
-    <Layout title="Contact Us" description="This is contact us page" companyName={companyName} locationName={locationName} companyLogo={companyLogo}
+    <Layout title="Contact Us" description="This is contact us page" dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo}
     locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}>
+      locationEmail={locationEmail} locationTel={locationTel} page='contact-us'>
       <PageHeader title="Contact Us" />
 
       <div className="bg-white">

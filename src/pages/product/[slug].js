@@ -541,7 +541,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
       companyName={companyName} locationName={locationName} companyLogo={companyLogo}  
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}>
+      locationEmail={locationEmail} locationTel={locationTel} page='slug'>
       <div className="px-0 py-10 lg:py-10">
         {
           isLoading === true

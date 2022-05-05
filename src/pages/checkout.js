@@ -1217,7 +1217,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
       <Layout title="Checkout" description="this is checkout page" dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo}  
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}>
+      locationEmail={locationEmail} locationTel={locationTel} page='checkout'>
         <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
           <div className="py-10 lg:py-12 px-0 2xl:max-w-screen-2xl w-full xl:max-w-screen-xl flex flex-col md:flex-row lg:flex-row">
             <div className="md:w-full lg:w-3/5 flex h-full flex-col order-2 sm:order-1 lg:order-1">

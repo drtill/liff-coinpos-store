@@ -15,10 +15,11 @@ import LoginModal from '@component/modal/LoginModal';
 import CartDrawer from '@component/drawer/CartDrawer';
 import { SidebarContext } from '@context/SidebarContext';
 
-const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct}) => {
+const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct, page}) => {
   const [imageUrl, setImageUrl] = useState('');
   const [searchText, setSearchText] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentPage, setPage] = useState(page);
   const { toggleCartDrawer } = useContext(SidebarContext);
   const { totalItems } = useCart();
   const router = useRouter();
@@ -26,6 +27,8 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
   const {
     state: { userInfo },
   } = useContext(UserContext);
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,6 +43,12 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
     }
   };
 
+  useEffect(() => 
+    {
+      
+      setPage(page);
+
+    },[])
   
   useEffect(() => {
       //alert("Check UserInfo")
@@ -288,7 +297,7 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
         </div>
 
         {/* second header */}
-        <NavbarPromo FilterProduct={FilterProduct}/>
+        <NavbarPromo FilterProduct={FilterProduct} dataPath={dataPath} page={currentPage}/>
       </div>
     </>
   );

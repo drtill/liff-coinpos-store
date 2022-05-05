@@ -101,7 +101,7 @@ const TermAndConditions = () => {
       description="This is terms and conditions page" dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo}
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
         locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-        locationEmail={locationEmail} locationTel={locationTel}
+        locationEmail={locationEmail} locationTel={locationTel} page='terms'
     >
       <PageHeader title="ข้อกำหนดและเงื่อนไข" />
       <div className="bg-white">

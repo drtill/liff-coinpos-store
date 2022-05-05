@@ -1298,7 +1298,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
       locationEmail={locationEmail} locationTel={locationTel}
-      RefreshProductList={SearchProduct} FilterProduct={FilterProduct} >
+      RefreshProductList={SearchProduct} FilterProduct={FilterProduct} page='product'>
         <div className="min-h-screen">
           <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>
           <div className="bg-white">

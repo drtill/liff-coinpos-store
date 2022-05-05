@@ -965,7 +965,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       <Layout title={title} description={description} dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo} 
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}
+      locationEmail={locationEmail} locationTel={locationTel} page='product'
       RefreshProductList={SearchProduct} 
       FilterProduct={FilterProduct} 
       updateProfileClick={handleUpdateProfileClick}>

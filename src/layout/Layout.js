@@ -12,8 +12,11 @@ import NavBarTop from './navbar/NavBarTop';
 const Layout = ({ title, description,dataPath, children, companyName, locationName, companyLogo,
   locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode,
   locationEmail,locationTel,
-  RefreshProductList, FilterProduct, updateProfileClick }) => {
+  RefreshProductList, FilterProduct, updateProfileClick, page }) => {
 
+    const [currentPage,setPage] = useState(page);
+
+    
   // var companyName = null;
   // var locationName = null;
   
@@ -38,6 +41,7 @@ const Layout = ({ title, description,dataPath, children, companyName, locationNa
         <Head>
           <title>
             {`CoinPOS | ${title}`}
+            
             {/* {title
 
               ? `${companyName === null ? "CoinPOS" : companyName} | ${title}`
@@ -47,7 +51,7 @@ const Layout = ({ title, description,dataPath, children, companyName, locationNa
           <link ref="icon" href="/favicon.ico"/>
         </Head>
         {/* <NavBarTop /> */}
-        <Navbar companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
+        <Navbar companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} page={currentPage} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
         <div className="bg-gray-50">{children}</div>
         <MobileFooter companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} RefreshProductList={RefreshProductList} FilterProduct={FilterProduct}/>
         <div className="w-full">

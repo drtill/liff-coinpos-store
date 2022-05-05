@@ -300,7 +300,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
       companyName={companyName} locationName={locationName} companyLogo={companyLogo}  
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}
+      locationEmail={locationEmail} locationTel={locationTel} page='dashboard'
     >
       <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
         <div className="py-10 lg:py-12 flex flex-col lg:flex-row w-full">

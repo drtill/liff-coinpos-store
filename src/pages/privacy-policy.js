@@ -98,7 +98,7 @@ const PrivacyPolicy = () => {
     <Layout title="Privacy Policy" description="This is privacy policy page" dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo}
     locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}>
+      locationEmail={locationEmail} locationTel={locationTel} page='privacy'>
       <PageHeader title="นโยบายความเป็นส่วนตัว" />
       <div className="bg-white">
         <div className="max-w-screen-2xl mx-auto lg:py-20 py-10 px-4 sm:px-10">
