@@ -116,6 +116,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           
           useEffect(async () => {
             
+            alert('liffCompanyId = ' + liffCompanyId)
             if(liffCompanyId === 0)
             {
                   //alert("Liff Data is not found.");
@@ -1522,6 +1523,12 @@ export const getServerSideProps = async ({req, res,params }) => {
     const description = "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.";
 
 
+    //coinPOSLiffData = coinPOSLiffData.replaceAll("%3D","=");
+    //coinPOSLiffData = coinPOSLiffData.replaceAll("%26","&");
+    //coinPOSLiffData = coinPOSLiffData.replaceAll("%3F","?");
+    //coinPOSLiffData = coinPOSLiffData.replaceAll("%2F","/");
+
+    //console.log('coinPOSLiffData = ' + coinPOSLiffData);
   if(coinPOSLiffData.length > 0)
   {
     if(!coinPOSLiffData.includes('liffId'))
@@ -1537,8 +1544,12 @@ export const getServerSideProps = async ({req, res,params }) => {
       const liffQuery = parms[0];
       var liffOrderQuery = parms[1];
 
-      
+      //console.log('liffQuery = ' + liffQuery);
+      //console.log('liffOrderQuery = ' + liffOrderQuery);
       var liffVar = liffQuery.split("=");
+      //console.log('liffVar count = ' + liffVar.length)
+      //console.log('liffVar[0] = ' + liffVar[0])
+      //console.log('liffVar[1] = ' + liffVar[1])
       if(liffVar[0] === 'liffId')
       {
         liffData = liffVar[1];
@@ -1548,6 +1559,7 @@ export const getServerSideProps = async ({req, res,params }) => {
       var vars = liffOrderQuery.split("&");
       for (var i=0;i<vars.length;i++)
       {
+        //console.log('vars = ' + vars[i]);
         var pair = vars[i].split("=");
         if(pair[0] === 'liffId')
         {
@@ -1609,9 +1621,11 @@ export const getServerSideProps = async ({req, res,params }) => {
           param = param.replaceAll("%3F","?");
           param = param.replaceAll("%2F","/");
           param = param.replace("?","");
+          //console.log('param = ' + param);
           var m_params = param.split("&");
           for (var j=0;j<m_params.length;j++)
           {
+            //console.log('m_params[' + j + '] = ' + m_params[j]);
             var paramValue = m_params[j].split("=");
             if(paramValue[0] === 'linePOSId')
             {
@@ -1637,13 +1651,13 @@ export const getServerSideProps = async ({req, res,params }) => {
             {
               liffPage = paramValue[1];
             }
-            if(pair[0] === 'companycode')
+            if(paramValue[0] === 'companycode')
             {
-                companyCode = pair[1];
+                companyCode = paramValue[1];
             }
-            if(pair[0] === 'catalog')
+            if(paramValue[0] === 'catalog')
             {
-                catalogName = pair[1];
+                catalogName = paramValue[1];
             }
           }
 
@@ -1660,6 +1674,7 @@ export const getServerSideProps = async ({req, res,params }) => {
   var dataPath = '';
   if(liffId.length > 0)
   {
+
     dataPath = 'liffId=' + liffId + '?linePOSId=' + linePOSId + '&groupId=' + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
   }
   else

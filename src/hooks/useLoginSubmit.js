@@ -387,7 +387,7 @@ const useLoginSubmit = (setModalOpen) => {
 
   const handleGoogleSignIn = async (user) => {
     
-    alert(JSON.stringify(user))
+    //alert(JSON.stringify(user))
     if(!user)
     {
       return;
@@ -502,6 +502,7 @@ const useLoginSubmit = (setModalOpen) => {
       //alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
       liffData = sessionStorage.getItem('catalogLiffId');
     }
+
     if(sessionStorage.getItem('fromPage') === 'liff')
     {
       //alert('from liff');

@@ -161,7 +161,7 @@ const ReceiptForDownload = ({ data, currencySign,companyName, locationName, loca
         <Page size="A4" style={styles.page}>
           <View style={styles.invoiceFirst}>
             <View>
-              <Text style={{ fontFamily: 'Open Sans', fontWeight: 'bold' }}>
+              <Text style={{ fontFamily: 'Kanit', fontWeight: 'bold' }}>
                 ใบเสร็จรับเงิน
               </Text>
               <Text style={styles.info}>
@@ -313,6 +313,7 @@ const ReceiptForDownload = ({ data, currencySign,companyName, locationName, loca
               fontSize: 12,
               paddingBottom: 50,
               paddingTop: 50,
+              fontFamily: 'Kanit',
             }}
           >
             <Text>

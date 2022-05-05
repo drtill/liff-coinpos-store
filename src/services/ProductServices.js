@@ -578,7 +578,7 @@ const ProductServices = {
           return response.text();
         }).then(function(data) {
 
-          console.log("GetData = " + data)
+          //console.log("GetData = " + data)
           try
           {
             var obj = JSON.parse(data);

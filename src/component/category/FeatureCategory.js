@@ -10,8 +10,8 @@ import CategoryServices from '@services/CategoryServices';
 
 const FeatureCategory = ({categories,FilterCategory, FilterProduct}) => {
   const router = useRouter();
-  const { data, error } = useAsync(() => CategoryServices.getShowingCategory());
-
+  // const { data, error } = useAsync(() => CategoryServices.getShowingCategory());
+  var error = false;
   return (
     <>
       {error ? (
