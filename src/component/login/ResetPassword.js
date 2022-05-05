@@ -26,6 +26,7 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
         
         var companyName = '';
         var companyId = 0;
+        var locationId = 0;
         var locationEmail = '';
   
         if(sessionStorage.getItem('companyName'))
@@ -36,7 +37,7 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
         if(sessionStorage.getItem('companyId'))
         {
           companyId = sessionStorage.getItem('companyId'); 
-          alert("CompanyId = " + companyId);
+          //alert("CompanyId = " + companyId);
             
         }
         if(sessionStorage.getItem('locationEmail'))
@@ -44,13 +45,21 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
           locationEmail = sessionStorage.getItem('locationEmail'); 
             
         }
+        if(sessionStorage.getItem('locationId'))
+        {
+          locationId = sessionStorage.getItem('locationId'); 
+          //alert("LocationId = " + locationId);
+            
+        }
+
         data["companyId"] = companyId;
+        data["locationId"] = locationId;
         data["companyName"] = companyName;
         data["locationEmail"] = locationEmail;
       
       
 
-      alert("Login Handle")
+      //alert("Login Handle")
       submitHandler(data)
       }
     }

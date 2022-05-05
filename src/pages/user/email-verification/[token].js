@@ -20,7 +20,7 @@ const EmailVerification = ({ params }) => {
 
     
     setLoading(true);
-    UserServices.coinposUserRegister(params?.token)
+    UserServices.fetchCoinposUserRegister(params?.token)
       .then((res) => {
         alert(JSON.stringify(res));
         //router.push('/');
@@ -34,7 +34,7 @@ const EmailVerification = ({ params }) => {
       })
       .catch((err) => {
         setLoading(false);
-        setError(err ? err.response.data.message : err.message);
+        setError(err ? err.message : err.message);
       });
   }, []);
 

@@ -26,52 +26,73 @@ const ForgetPassword = () => {
     formState: { errors },
   } = useForm();
 
+  const [companyId,setCompanyId] = useState(0);
+  const [dataPath,setDataPath] = useState('');
   password.current = watch('newPassword');
 
   const submitHandler = async({ registerEmail, password, newPassword }) => {
     
     setLoading(true);
     if (newPassword) {
-      alert("submit Reset = " + router.query?.token)
+      //alert("submit Reset = " + router.query?.token)
       const token = router.query?.token;
-      const { email, companyId,} = jwt.decode(token);
-      await UserServices.resetCoinPOSCustomerPassword({ newPassword, token: router.query?.token })
+      //const { email, companyId,} = jwt.decode(token);
+      UserServices.resetCoinPOSCustomerPassword({ newPassword, token: router.query?.token })
         .then((res) => {
           setLoading(false);
-          setShowLogin(true);
-          notifySuccess(res.message);
-          setValue('newPassword');
+          //alert('res = ' + JSON.stringify(res));
+          if(res.message.includes("Error:"))
+          {
+            notifyError(res.message);
+          }
+          else
+          {
+            
+            setShowLogin(true);
+            notifySuccess(res.message);
+            setCompanyId(Number(res.companyId));
+            setDataPath(res.dataPath);
+            setValue('newPassword');
+          }
+          
+          
         })
         .catch((err) => {
           setLoading(false);
-          notifyError(err ? err.response.data.message : err.message);
+          //alert('err = ' + JSON.stringify(err));
+          notifyError(err ? err.message : err.message);
         });
     }
 
     if (registerEmail && password) {
 
-      alert("Login");
-      var companyId = 0;
-      alert("Login 2 ");
+      //alert("Login");
+      var companyIdData = 0;
+      //alert("Login 2 ");
       if(sessionStorage.getItem('companyId'))
       {
-        alert("Get CompanyId");
-        companyId = sessionStorage.getItem('companyId'); 
-        alert("CompanyId = " + companyId);
+        //alert("Get CompanyId");
+        companyIdData = sessionStorage.getItem('companyId'); 
+        //alert("CompanyId = " + companyIdData);
           
       }
+      else
+      {
+        companyIdData = companyId;
+      }
+      
 
       await UserServices.fetchCoinposUserLogin({
         registerEmail,
         password,
-        companyId
+        companyId:companyIdData
       })
         .then((res) => {
           setLoading(false);
-          setModalOpen(false);
-          alert(JSON.stringify(res));
+          //setModalOpen(false);
+          //alert(JSON.stringify(res));
           //return;
-          router.push(redirect || '/checkout');
+          router.push('/' + dataPath);
           //router.push(redirect);
 
           sessionStorage.setItem('customerFirstName', res.firstName);
@@ -97,7 +118,7 @@ const ForgetPassword = () => {
           Cookies.set('userInfo', JSON.stringify(res));
         })
         .catch((err) => {
-          notifyError(err ? err.response.data.message : err.message);
+          notifyError(err ? err.message : err.message);
           setLoading(false);
         });
       /*UserServices.userLogin({
@@ -126,12 +147,12 @@ const ForgetPassword = () => {
         <div className="bg-white rounded-lg shadow max-w-md w-full space-y-8 py-12 px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold font-serif">
-              {showLogin ? 'Login' : 'Forget Password'}
+              {showLogin ? 'เข้าสู่ระบบ' : 'ลืมรหัสผ่าน'}
             </h2>
             <p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
               {showLogin
-                ? 'Login with your email and new password'
-                : 'Reset Your Password'}
+                ? 'เข้าสู่ระบบด้วย Email และ รหัสผ่านใหม่ ของคุณ'
+                : 'รีเซ็ทรหัสผ่าน ของคุณ'}
             </p>
           </div>
           <form
@@ -175,15 +196,15 @@ const ForgetPassword = () => {
                     <input
                       name="newPassword"
                       type="password"
-                      placeholder="New password"
+                      placeholder="รหัสผ่านใหม่"
                       {...register('newPassword', {
-                        required: 'You must specify a password',
+                        required: 'ต้องระบุรหัสผ่าน',
                         minLength: {
                           value: 8,
-                          message: 'Password must have at least 8 characters',
+                          message: 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',
                         },
                       })}
-                      className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-gray-100 border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
+                      className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-gray-100 border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12"
                     />
 
                     <Error errorName={errors.newPassword} />
@@ -192,13 +213,13 @@ const ForgetPassword = () => {
                     <input
                       name="confirm_password"
                       type="password"
-                      placeholder="Confirm password"
+                      placeholder="ยืนยันรหัสผ่าน"
                       {...register('confirm_password', {
                         validate: (value) =>
                           value === password.current ||
-                          'The passwords do not match',
+                          'รหัสผ่านไม่ตรงกัน',
                       })}
-                      className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-gray-100 border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
+                      className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-gray-100 border-gray-200 focus:outline-none focus:border-cyan-500 h-11 md:h-12"
                     />
 
                     <Error errorName={errors.confirm_password} />
@@ -209,9 +230,9 @@ const ForgetPassword = () => {
               <button
                 disabled={loading}
                 type="submit"
-                className="w-full text-center py-3 rounded bg-emerald-500 font-medium text-sm text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"
+                className="w-full text-center py-3 rounded bg-cyan-500 text-white hover:bg-cyan-600 font-medium text-sm text-white transition-all focus:outline-none my-1"
               >
-                {showLogin ? 'Login' : 'Reset Password'}
+                {showLogin ? 'เข้าสู่ระบบ' : 'รีเซ็ท รหัสผ่าน'}
               </button>
             </div>
           </form>

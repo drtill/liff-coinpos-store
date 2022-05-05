@@ -291,10 +291,17 @@ const useLoginSubmit = (setModalOpen) => {
         });
     }
     if (verifyEmail) {
-      alert("verifyEmail");
+      //alert("verifyEmail");
       //UserServices.forgetPassword({ verifyEmail })
 
-      await UserServices.fetchForgetCoinPOSCustomerPassword({ email:verifyEmail, companyName:companyName, locationEmail:locationEmail,companyId:companyId })
+      var dataPath = '';
+      if(sessionStorage.getItem('dataPath'))
+      {
+        dataPath = sessionStorage.getItem('dataPath'); 
+        
+              
+      }
+      await UserServices.fetchForgetCoinPOSCustomerPassword({ email:verifyEmail, companyName:companyName, locationEmail:locationEmail,companyId:companyId, locationId:locationId,dataPath:dataPath })
         .then((res) => {
           setLoading(false);
           notifySuccess(res.message);

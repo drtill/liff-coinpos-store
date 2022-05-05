@@ -10,7 +10,7 @@ module.exports = withPWA({
     scope: '/',
     sw: 'service-worker.js',
     skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development',
+    disable: process.env.NODE_ENV === 'production',
   },
 
   reactStrictMode: true,
