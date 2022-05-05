@@ -195,10 +195,12 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
       liffData = sessionStorage.getItem('catalogLiffId');
     }
     
+    alert("liffData log out = " + liffData);
     if(!liffData)
     {
       const liff = (await import('@line/liff')).default
       try {
+        alert("Liff init")
         await liff.init({ liffId:liffData });
       } catch (error) {
         console.error('liff init error', error.message)
@@ -211,7 +213,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
       }
     }
     
-    
+    alert("dataPath log out = " + dataPath);
     router.push('/' + dataPath);
   };
 
@@ -271,7 +273,7 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
         else
         {
           //alert('Login 5');
-          alert('Logout 5');
+          //alert('Logout 5');
           dispatch({ type: 'USER_LOGOUT' });
           Cookies.remove('userInfo');
           Cookies.remove('couponInfo');

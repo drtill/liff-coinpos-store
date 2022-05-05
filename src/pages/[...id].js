@@ -116,7 +116,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           
           useEffect(async () => {
             
-            alert('liffCompanyId = ' + liffCompanyId)
+            //alert('liffCompanyId = ' + liffCompanyId)
             if(liffCompanyId === 0)
             {
                   //alert("Liff Data is not found.");
@@ -1528,12 +1528,23 @@ export const getServerSideProps = async ({req, res,params }) => {
     //coinPOSLiffData = coinPOSLiffData.replaceAll("%3F","?");
     //coinPOSLiffData = coinPOSLiffData.replaceAll("%2F","/");
 
-    //console.log('coinPOSLiffData = ' + coinPOSLiffData);
+    console.log('coinPOSLiffData = ' + coinPOSLiffData);
   if(coinPOSLiffData.length > 0)
   {
     if(!coinPOSLiffData.includes('liffId'))
     {
-      companyCode = coinPOSLiffData
+      if(coinPOSLiffData.includes('?'))
+      {
+        const parms = coinPOSLiffData.split('?');
+        companyCode = params[1];    
+      }
+      else
+      {
+        companyCode = coinPOSLiffData
+      }
+      
+
+      console.log('companyCode = ' + companyCode);
     }
     const parms = coinPOSLiffData.split('?');
 
