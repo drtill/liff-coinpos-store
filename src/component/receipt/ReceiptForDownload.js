@@ -313,7 +313,7 @@ const ReceiptForDownload = ({ data, currencySign,companyName, locationName, loca
               fontSize: 12,
               paddingBottom: 50,
               paddingTop: 50,
-              fontFamily: 'Kanit',
+              fontFamily: 'Kanit'
             }}
           >
             <Text>

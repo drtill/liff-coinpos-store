@@ -120,7 +120,7 @@ const useCheckoutSubmit = () => {
     
     if(Cookies.get('userInfo'))
       {
-        alert('Remove UserInfo');
+        //alert('Remove UserInfo');
         Cookies.remove('userInfo');
       } 
       var userLocalJson = localStorage.getItem('userInfo');
@@ -140,7 +140,7 @@ const useCheckoutSubmit = () => {
         {
           if(expiredDate === false)
           {
-            alert('Login');
+            //alert('Login');
             dispatch({ type: 'USER_LOGIN', payload: userLocal });
 
 
@@ -163,7 +163,7 @@ const useCheckoutSubmit = () => {
           }
           else
           {
-            alert('Logout 11');
+            //alert('Logout 11');
             dispatch({ type: 'USER_LOGOUT' });
             Cookies.remove('userInfo');
             Cookies.remove('couponInfo');
