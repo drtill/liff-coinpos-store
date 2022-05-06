@@ -1167,8 +1167,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
 
               productItem['tag'] = products.productVariantPresenters[i].ProductId;
-              productItem['originalPrice'] = products.productVariantPresenters[i].PriceDisplay;
-              productItem['price'] = products.productVariantPresenters[i].PriceDisplay;
+              productItem['originalPrice'] = products.productVariantPresenters[i].Price;
+              productItem['price'] = products.productVariantPresenters[i].Price;
               productItem['type'] = '';
               productItem['sku'] = products.productVariantPresenters[i].SKU;
               productItem['discount'] = 0;

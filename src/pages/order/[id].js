@@ -501,7 +501,7 @@ const Order = ({ params }) => {
   
 
   const setPaymentStatus = (statusId) => {
-    alert("statusId = " + statusId);
+    //alert("statusId = " + statusId);
     setOrderStatusId(statusId);
     setPaymentStatusId(statusId);  
     paymentContentUpdate(statusId,statusId);

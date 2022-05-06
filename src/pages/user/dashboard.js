@@ -25,20 +25,8 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
     state: { userInfo },
   } = useContext(UserContext);
 
-  var companyLogo = '';
-  var companyName = '';
-  var locationName = '';
-  var locationAddress1 = '';
-  var locationAddress2 = '';
-  var locationCity = '';
-  var locationStateOrProvince = '';
-  var locationCountry = '';
-  var locationPostalCode = '';
-  var locationEmail = '';
-  var locationTel = '';
-
-  var customerId = 0;
-
+  
+  const [customerId, setCustomerId] = useState(0);
   const [companyId, setCompanyId] = useState(0);
   const [locationId, setLocationId] = useState(0);
   const [linePOSId, setLinePOSId] = useState('');
@@ -47,123 +35,25 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
   const [liffId, setLiffId] = useState('');
   const [pictureUrl, setPictureUrl] = useState('');
 
+  const [dataPath, setDataPath] = useState('');
+
+  const [customerEmail, setCustomerEmail] = useState('');
+  
+  const [catalogName,setCatalogName] = useState('');
+  const [companyLogo,setCompanyLogo] = useState('');
+  const [companyName,setCompanyName] = useState('');
+  const [locationName,setLocationName] = useState('');
+
+  const [locationAddress1,setLocationAddress1] = useState('');
+  const [locationAddress2,setLocationAddress2] = useState('');
+  const [locationCity,setLocationCity] = useState('');
+  const [locationStateOrProvince,setLocationStateOrProvince] = useState('');
+  const [locationCountry,setLocationCountry] = useState('');
+  const [locationPostalCode,setLocationPostalCode] = useState('');
+  const [locationEmail,setLocationEmail] = useState('');
+  const [locationTel,setLocationTel] = useState('');
   
   
-  var catalogName = '';
-  var customerEmail = '';
-  var dataPath = '';
-  if(sessionStorage.getItem('dataPath'))
-  {
-    dataPath = sessionStorage.getItem('dataPath'); 
-      
-  }
-
-  if(sessionStorage.getItem('customerEmail'))
-  {
-    customerEmail = sessionStorage.getItem('customerEmail'); 
-      
-  }
-
-  if(sessionStorage.getItem('catalogName'))
-  {
-    catalogName = sessionStorage.getItem('catalogName'); 
-    
-          
-  }
-  if(sessionStorage.getItem('companyLogo'))
-  {
-    companyLogo = sessionStorage.getItem('companyLogo'); 
-    
-  }
-  if(sessionStorage.getItem('companyName'))
-  {
-    
-    companyName = sessionStorage.getItem('companyName'); 
-    //alert(companyName);
-  }
-  if(sessionStorage.getItem('locationName'))
-  {
-    locationName = sessionStorage.getItem('locationName'); 
-    
-  }
-  if(sessionStorage.getItem('locationAddress1'))
-  {
-    locationAddress1 = sessionStorage.getItem('locationAddress1'); 
-    
-  }
-  if(sessionStorage.getItem('locationAddress2'))
-  {
-    locationAddress2 = sessionStorage.getItem('locationAddress2'); 
-    
-  }
-  if(sessionStorage.getItem('locationCity'))
-  {
-    locationCity = sessionStorage.getItem('locationCity'); 
-    
-  }
-  if(sessionStorage.getItem('locationStateOrProvince'))
-  {
-    locationStateOrProvince = sessionStorage.getItem('locationStateOrProvince'); 
-    
-  }
-  if(sessionStorage.getItem('locationCountry'))
-  {
-    locationCountry = sessionStorage.getItem('locationCountry'); 
-    
-  }
-  if(sessionStorage.getItem('locationPostalCode'))
-  {
-    locationPostalCode = sessionStorage.getItem('locationPostalCode'); 
-    
-  }
-  if(sessionStorage.getItem('locationEmail'))
-  {
-    locationEmail = sessionStorage.getItem('locationEmail'); 
-    
-  }
-  if(sessionStorage.getItem('locationTel'))
-  {
-    locationTel = sessionStorage.getItem('locationTel'); 
-    
-  }
-      if(sessionStorage.getItem('liffId'))
-      {
-        
-        liffId = sessionStorage.getItem('liffId'); 
-        //alert("Liff id = " + liffId)
-      }
-      if(sessionStorage.getItem('linePOSId'))
-      {
-        linePOSId = sessionStorage.getItem('linePOSId'); 
-        //alert("LinePOS id = " + linePOSId)
-      }
-      if(sessionStorage.getItem('lineUserId'))
-      {
-        lineUserId = sessionStorage.getItem('lineUserId'); 
-        
-      }
-      if(sessionStorage.getItem('companyId'))
-      {
-        companyId = sessionStorage.getItem('companyId'); 
-        
-      }
-      if(sessionStorage.getItem('locationId'))
-      {
-        locationId = sessionStorage.getItem('locationId'); 
-        
-      }
-      if(sessionStorage.getItem('groupId'))
-      {
-        groupId = sessionStorage.getItem('groupId'); 
-        
-      }
-
-      if(sessionStorage.getItem('customerId'))
-      {
-        customerId = sessionStorage.getItem('customerId'); 
-        //alert('customerId = ' + customerId);
-              
-      }
 
   const { data } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
     {
@@ -213,21 +103,131 @@ const Dashboard = ({ title, description, children, companyLogo }) => {
       }
     }
     
-    //alert("dataPath log out = " + dataPath);
+    alert("dataPath log out = " + dataPath);
     router.push('/' + dataPath);
   };
 
   useEffect(async() => {
     //alert('Login 0');
-    var companyId = 0;
+    if(sessionStorage.getItem('dataPath'))
+    {
+      var dataPathData = sessionStorage.getItem('dataPath'); 
+      alert('dataPathData = ' + dataPathData)
+      setDataPath(dataPathData);  
+    }
+    if(sessionStorage.getItem('customerEmail'))
+    {
+      
+      var customerEmailData = sessionStorage.getItem('customerEmail'); 
+      setCustomerEmail(customerEmailData);  
+    }
+
+    
     if(sessionStorage.getItem('companyId'))
     {
-      companyId = Number(sessionStorage.getItem('companyId'));
-      //alert(lineCompanyId); 
-      //companyId = lineCompanyId;
-      //handleCompanyId(lineCompanyId);
+      var companyIdData = Number(sessionStorage.getItem('companyId'));
+      setCompanyId(companyIdData);
     }
     
+
+    if(sessionStorage.getItem('catalogName'))
+    {
+      var catalogNameData = sessionStorage.getItem('catalogName'); 
+      setCatalogName(catalogNameData);
+            
+    }
+    if(sessionStorage.getItem('companyLogo'))
+    {
+      var companyLogoData = sessionStorage.getItem('companyLogo'); 
+      setCompanyLogo(companyLogoData);
+    }
+    if(sessionStorage.getItem('companyName'))
+    {
+      var companyNameData = sessionStorage.getItem('companyName'); 
+      setCompanyName(companyNameData);
+    }
+    if(sessionStorage.getItem('locationName'))
+    {
+      var locationNameData = sessionStorage.getItem('locationName'); 
+      setLocationName(locationNameData);
+    }
+
+    if(sessionStorage.getItem('locationAddress1'))
+    {
+      var locationAddress1Data = sessionStorage.getItem('locationAddress1'); 
+      setLocationAddress1(locationAddress1Data);
+    }
+    if(sessionStorage.getItem('locationAddress2'))
+    {
+      var locationAddress2Data = sessionStorage.getItem('locationAddress2'); 
+      setLocationAddress2(locationAddress2Data);
+    }
+    if(sessionStorage.getItem('locationCity'))
+    {
+      var locationCityData = sessionStorage.getItem('locationCity'); 
+      setLocationCity(locationCityData);
+    }
+    if(sessionStorage.getItem('locationStateOrProvince'))
+    {
+      var locationStateOrProvinceData = sessionStorage.getItem('locationStateOrProvince'); 
+      setLocationStateOrProvince(locationStateOrProvinceData);
+    }
+    if(sessionStorage.getItem('locationCountry'))
+    {
+      var locationCountryData = sessionStorage.getItem('locationCountry'); 
+      setLocationCountry(locationCountryData);
+    }
+    if(sessionStorage.getItem('locationPostalCode'))
+    {
+      var locationPostalCodeData = sessionStorage.getItem('locationPostalCode'); 
+      setLocationPostalCode(locationPostalCodeData);
+    }
+    if(sessionStorage.getItem('locationEmail'))
+    {
+      var locationEmailData = sessionStorage.getItem('locationEmail'); 
+      setLocationEmail(locationEmailData);
+    }
+    if(sessionStorage.getItem('locationTel'))
+    {
+      var locationTelData = sessionStorage.getItem('locationTel'); 
+      setLocationTel(locationTelData);
+    }
+
+    if(sessionStorage.getItem('liffId'))
+      {
+        
+        var liffIdData = sessionStorage.getItem('liffId'); 
+        setLiffId(liffIdData);
+      }
+      if(sessionStorage.getItem('linePOSId'))
+      {
+        var linePOSIdData = sessionStorage.getItem('linePOSId'); 
+        setLinePOSId(linePOSIdData);
+      }
+      if(sessionStorage.getItem('lineUserId'))
+      {
+        var lineUserIdData = sessionStorage.getItem('lineUserId'); 
+        setLineUserId(lineUserIdData);
+      }
+      
+      if(sessionStorage.getItem('locationId'))
+      {
+        var locationIdData = sessionStorage.getItem('locationId'); 
+        setLocationId(locationIdData);
+      }
+      if(sessionStorage.getItem('groupId'))
+      {
+        var groupIdData = sessionStorage.getItem('groupId'); 
+        setGroupId(groupIdData);
+      }
+
+      if(sessionStorage.getItem('customerId'))
+      {
+        var customerIdData = sessionStorage.getItem('customerId'); 
+        setCustomerId(customerIdData);
+              
+      }
+
     //alert('Login 1');
     if(Cookies.get('userInfo'))
       {

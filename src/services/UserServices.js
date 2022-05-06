@@ -241,7 +241,7 @@ const UserServices = {
   async fetchCoinposLineLogin(body) {
     try {
       //alert("Body = " + JSON.stringify(body));
-      const userJson = await findCoinPOSCustomerAccountByLineUserId(body.companyId,body.liffId,body.lineUserId, body.linePOSId, body.email, body.image);//findCoinPOSEmail(req.body.companyId,req.body.email);
+      const userJson = await findCoinPOSCustomerAccountByLineUserId(body.companyId,body.liffId,body.lineUserId, body.linePOSId,body.name, body.email, body.image);//findCoinPOSEmail(req.body.companyId,req.body.email);
   
       //alert('UserJson = ' + userJson )
       if(userJson)
@@ -644,7 +644,7 @@ const loginCoinPOSCustomerGoogleAccount = async(companyId, name, email, imageUrl
     
   }
 };
-const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUserId,linePOSId, email, image) => 
+const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUserId,linePOSId, name, email, image) => 
 {
   try
   {
@@ -654,7 +654,7 @@ const findCoinPOSCustomerAccountByLineUserId = async(companyId, liffId, lineUser
       method:'POST',
       //credentials:"include",
       headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-      body:`{"CompanyId":${companyId},"LiffId":"${liffId}", "LineUserId":"${lineUserId}","LinePOSId":"${linePOSId}","Email":"${email}","ImageUrl":"${image}"}`
+      body:`{"CompanyId":${companyId},"LiffId":"${liffId}", "LineUserId":"${lineUserId}","LinePOSId":"${linePOSId}","DisplayName":"${name}","Email":"${email}","ImageUrl":"${image}"}`
       }).then(function(response) {
         return response.text();
       }).then(function(data) {

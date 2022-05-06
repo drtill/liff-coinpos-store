@@ -510,6 +510,15 @@ const useLoginSubmit = (setModalOpen) => {
       liffData = sessionStorage.getItem('catalogLiffId');
     }
 
+    //return JSON.stringify(user);
+    var companyId = 0;
+    if(sessionStorage.getItem('companyId'))
+    {
+      companyId = sessionStorage.getItem('companyId'); 
+      //alert("Google CompanyId = " + companyId);
+            
+    }
+
     if(sessionStorage.getItem('fromPage') === 'liff')
     {
       //alert('from liff');
@@ -544,22 +553,78 @@ const useLoginSubmit = (setModalOpen) => {
         //alert("GetEmail = " + JSON.stringify(email));
         //alert("GetProfile = " + lineUsername + " " + lineLiffUserId + " " + lineProfileImage)
 
-        sessionStorage.setItem('lineUsername', lineUsername);
-        sessionStorage.setItem('lineUserId', lineLiffUserId);
-        sessionStorage.setItem('lineProfileImage', lineProfileImage);
+        await UserServices.fetchCoinposLineLogin(
+          {
+            companyId:companyId,
+            name: lineUsername,
+            email: email,
+            image: lineProfileImage,
+            liffId: liffData,
+            lineUserId: lineLiffUserId,
+            linePOSId:''
+
+          }).then((res) =>
+          {
+            setModalOpen(false);
+            //alert(JSON.stringify(res));
+
+            var userLogin = res;
+            sessionStorage.removeItem('targetPage');
+            
+            sessionStorage.setItem('customerId', userLogin.customerId);
+            sessionStorage.setItem('customerFirstName', userLogin.firstName);
+            sessionStorage.setItem('customerLastName', userLogin.lastName);
+            sessionStorage.setItem('customerEmail', userLogin.email);
+            sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
+
+            sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
+
+
+            sessionStorage.setItem('address1', userLogin.address1);
+            sessionStorage.setItem('country', userLogin.country);
+            sessionStorage.setItem('province', userLogin.province);
+            sessionStorage.setItem('city', userLogin.city);
+            sessionStorage.setItem('district', userLogin.district);
+
+            sessionStorage.setItem('countryId', userLogin.countryId);
+            sessionStorage.setItem('provinceId', userLogin.provinceId);
+            sessionStorage.setItem('cityId', userLogin.cityId);
+            sessionStorage.setItem('districtId', userLogin.districtId);
+            sessionStorage.setItem('postalcode', userLogin.postalcode);
+
+            sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
+            sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
+            sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
+            sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
+
+            notifySuccess('Login success!');
+            //router.push(redirect || '/');
+            
+            sessionStorage.setItem('lineUsername', lineUsername);
+            sessionStorage.setItem('lineUserId', lineLiffUserId);
+            sessionStorage.setItem('lineProfileImage', lineProfileImage);
+            
+            var dataUser = {};
+            dataUser['image'] = lineProfileImage;
+            dataUser['name'] = lineUsername;
+            dataUser['email'] = email;
+
+
+            Cookies.set('userInfo', JSON.stringify(dataUser));
+            sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
+            localStorage.setItem('userInfo', JSON.stringify(dataUser));
+            dispatch({ type: 'USER_LOGIN', payload: dataUser });
+          });
+
         
-        var dataUser = {};
-        dataUser['image'] = lineProfileImage;
-        dataUser['name'] = lineUsername;
-        dataUser['email'] = email;
 
         
                   //orderData['_id']
                   //Cookies.set('lineUserName', lineUsername);
-        Cookies.set('userInfo', JSON.stringify(dataUser));
-        sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
-        localStorage.setItem('userInfo', JSON.stringify(dataUser));
-        dispatch({ type: 'USER_LOGIN', payload: dataUser });
+        //Cookies.set('userInfo', JSON.stringify(dataUser));
+        //sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
+        //localStorage.setItem('userInfo', JSON.stringify(dataUser));
+        //dispatch({ type: 'USER_LOGIN', payload: dataUser });
         
                   
       }

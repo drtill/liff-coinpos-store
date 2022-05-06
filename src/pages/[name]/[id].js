@@ -802,8 +802,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
             productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
 
             productItem['tag'] = products.productVariantPresenters[i].ProductId;
-            productItem['originalPrice'] = products.productVariantPresenters[i].PriceDisplay;
-            productItem['price'] = products.productVariantPresenters[i].PriceDisplay;
+            productItem['originalPrice'] = products.productVariantPresenters[i].Price;
+            productItem['price'] = products.productVariantPresenters[i].Price;
             productItem['type'] = 'W';
             productItem['sku'] = products.productVariantPresenters[i].SKU;
             productItem['discount'] = 0;
