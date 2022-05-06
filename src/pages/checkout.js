@@ -671,8 +671,8 @@ const Checkout = () => {
       await submitHandler(data);
     }
     
-    setConfirmOrderLoading(false);
-    setCustomerInfoLoading(false);
+    //setConfirmOrderLoading(false);
+    //setCustomerInfoLoading(false);
   };
 
   //const ApplyPromotionCode = async(promotionCode,discountPercentage, isForAllProduct, minimumAmount, productIdList) =>

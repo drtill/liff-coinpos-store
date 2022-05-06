@@ -176,6 +176,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
 
             sessionStorage.setItem('catalogLiffId',catalogLiffId);
       
+            //alert('customerFirstName = ' + customerFirstName)
             sessionStorage.setItem('customerFirstName', customerFirstName);
             sessionStorage.setItem('customerLastName', customerLastName);
             sessionStorage.setItem('customerEmail', customerEmail);
@@ -349,6 +350,44 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               else
               {
                 //alert('Get To Product catalog mode')
+
+                var userLocalJson = localStorage.getItem('userInfo');
+                if(userLocalJson === null)
+                {
+                  dispatch({ type: 'USER_LOGOUT' });
+                  Cookies.remove('userInfo');
+                  Cookies.remove('couponInfo');
+                }
+                else
+                {
+                  Cookies.set('userInfo', userLocalJson);
+
+                  var userLocal = JSON.parse(userLocalJson)
+
+                  dispatch({ type: 'USER_LOGIN', payload: userLocal });
+
+                  //alert('userLocal = ' + JSON.stringify(userLocal));
+
+                  sessionStorage.setItem('customerId', userLocal.customerId); 
+                  sessionStorage.setItem('customerFirstName', userLocal.firstName);
+                  sessionStorage.setItem('customerLastName', userLocal.lastName);
+                  sessionStorage.setItem('customerEmail', userLocal.email);
+                  sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
+
+                  sessionStorage.setItem('address1', userLocal.address1);
+                  sessionStorage.setItem('countryId', userLocal.countryId);
+                  sessionStorage.setItem('provinceId', userLocal.provinceId);
+                  sessionStorage.setItem('cityId', userLocal.cityId);
+                  sessionStorage.setItem('districtId', userLocal.districtId);
+                  sessionStorage.setItem('postalcode', userLocal.postalcode);
+
+                  sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
+                  sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+                  
+                  sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
+                  sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+                }
+
                 var companyId = liffCompanyId;
                 var locationId = liffLocationId;
                 var companyName = '';

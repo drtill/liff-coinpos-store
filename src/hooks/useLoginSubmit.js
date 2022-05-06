@@ -44,7 +44,7 @@ const useLoginSubmit = (setModalOpen) => {
     setLoading(true);
     if(liffId && lineUserId && linePOSId)
     {
-      //alert("Liff Login");
+      alert("Liff Login");
       var userLogin = await UserServices.fetchCoinposLineLogin({
         companyId,
         liffId,
@@ -608,8 +608,24 @@ const useLoginSubmit = (setModalOpen) => {
             dataUser['image'] = lineProfileImage;
             dataUser['name'] = lineUsername;
             dataUser['email'] = email;
+            dataUser['firstName'] = userLogin.firstName;
+            dataUser['lastName'] = userLogin.lastName;
+            dataUser['email'] = userLogin.email;
+            dataUser['phone'] = userLogin.phone;
+            dataUser['customerId'] = userLogin.customerId;
 
+            dataUser['address1'] = userLogin.address1;
+            dataUser['countryId'] = userLogin.countryId;
+            dataUser['provinceId'] = userLogin.provinceId;
+            dataUser['cityId'] = userLogin.cityId;
+            dataUser['districtId'] = userLogin.districtId;
+            dataUser['postalcode'] = userLogin.postalcode;
 
+            dataUser['countrys'] = userLogin.countrys;
+            dataUser['provinces'] = userLogin.provinces;
+            dataUser['cities'] = userLogin.cities;
+            dataUser['districts'] = userLogin.districts;
+            
             Cookies.set('userInfo', JSON.stringify(dataUser));
             sessionStorage.setItem('userInfo', JSON.stringify(dataUser));
             localStorage.setItem('userInfo', JSON.stringify(dataUser));
