@@ -18,7 +18,7 @@ import UserServices from '@services/UserServices';
 import ProductServices from '@services/ProductServices';
 import RecentOrder from '@pages/user/recent-order';
 
-const Dashboard = ({ title, description, children, companyLogo }) => {
+const Dashboard = ({ title, description, children}) => {
   const router = useRouter();
   const {
     dispatch,
