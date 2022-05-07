@@ -115,7 +115,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
     
     useEffect(async () => {
 
-      alert("catalogName = " + catalogName)
+      //alert("catalogName = " + catalogName)
       setPromotionLoading(true);
       
       //alert(JSON.stringify(promotions))
@@ -124,21 +124,21 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
         Cookies.remove('userInfo');
       } 
       var userLocalJson = localStorage.getItem('userInfo');
-      alert("userLocalJson = " + userLocalJson);
+      //alert("userLocalJson = " + userLocalJson);
       if(userLocalJson === null)
       {
-        alert('Logout ????');
+        //alert('Logout ????');
         dispatch({ type: 'USER_LOGOUT' });
         Cookies.remove('userInfo');
         Cookies.remove('couponInfo');
       }
       else
       {
-        alert('Get userInfo')
+        //alert('Get userInfo')
         Cookies.set('userInfo', userLocalJson);
-        alert('Get cookie userInfo')
+        //alert('Get cookie userInfo')
         var userLocal = JSON.parse(userLocalJson)
-        alert('Get parse userInfo')
+        //alert('Get parse userInfo')
         try
         {
           const expiredDate = await UserServices.fetchCoinposCheckExpired(
@@ -146,12 +146,12 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
               email:userLocal.email,
               companyId:catalogCompanyId
             });
-            alert('Get expiredDate 0 = ' + expiredDate); 
+            //alert('Get expiredDate 0 = ' + expiredDate); 
           sessionStorage.setItem('expiredDate',expiredDate);
-          alert('Get expiredDate 1 = ' + expiredDate); 
+          //alert('Get expiredDate 1 = ' + expiredDate); 
           if(expiredDate === 'false')
           {
-            alert('Login ex');
+            //alert('Login ex');
             dispatch({ type: 'USER_LOGIN', payload: userLocal });
 
 
@@ -181,7 +181,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
           }
           else
           {
-            alert('Logout ex');
+            //alert('Logout ex');
             
             dispatch({ type: 'USER_LOGOUT' });
             Cookies.remove('userInfo');
