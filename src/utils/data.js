@@ -86,11 +86,11 @@ const userSidebar = [
     href: '/user/update-profile',
     icon: IoSettingsOutline,
   },
-  {
+  /* {
     title: 'เปลี่ยนรหัสผ่าน',
     href: '/user/change-password',
     icon: HiOutlineDocumentText,
-  },
+  }, */
 ];
 
 const sliderData = [

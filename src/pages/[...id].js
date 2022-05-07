@@ -131,7 +131,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             setPromotionLoading(true);
       
       
-            alert("companyCode = " + companyCode + " catalogName = " + catalogName + " catalogLiffId = " + catalogLiffId);
+            //alert("companyCode = " + companyCode + " catalogName = " + catalogName + " catalogLiffId = " + catalogLiffId);
             sessionStorage.setItem('fromPage','liff');
             
             

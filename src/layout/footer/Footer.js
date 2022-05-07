@@ -205,19 +205,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
                   ใบสั่งขายของฉัน
                   </a></div>
               </li>
-              <li className="flex items-baseline">
-                {/* <Link 
-                href={`${userInfo?.email ? '/user/dashboard' : '#'}`}
-                >
-                  <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
-                    Recent Orders
-                  </a>
-                </Link> */}
-                <div onClick={() => handleDashBoardClick()}>
-                  <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
-                  ใบสั่งขาย ล่าสุด
-                  </a></div>
-              </li>
+              
               <li className="flex items-baseline">
                 {/* <Link
                   //href={`${userInfo?.email ? '/user/update-profile' : '#'}`}
