@@ -59,21 +59,29 @@ const MyOrders = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  var catalogName = '';
-  var customerEmail = '';
+  const [catalogName, setCatalogName] = useState('');
+  const [companyCode, setCompanyCode] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
 
+  
   useEffect(() => 
   {
     if(sessionStorage.getItem('customerEmail'))
     {
-      customerEmail = sessionStorage.getItem('customerEmail'); 
-        
+      var customerEmailData = sessionStorage.getItem('customerEmail'); 
+      setCustomerEmail(customerEmailData);
     }
 
     if(sessionStorage.getItem('catalogName'))
     {
-      catalogName = sessionStorage.getItem('catalogName'); 
-      
+      var catalogNameData = sessionStorage.getItem('catalogName'); 
+      setCatalogName(catalogNameData);
+            
+    }
+    if(sessionStorage.getItem('companyCode'))
+    {
+      var companyCodeData = sessionStorage.getItem('companyCode'); 
+      setCompanyCode(companyCodeData);
             
     }
     if(sessionStorage.getItem('companyLogo'))
@@ -256,9 +264,31 @@ const MyOrders = () => {
       useEffect(async () => {
 
         setLoading(true);
+        var catalogNameData = '';
+        if(sessionStorage.getItem('catalogName'))
+        {
+          catalogNameData = sessionStorage.getItem('catalogName'); 
+          setCatalogName(catalogNameData);
+                
+        }
+        var companyCodeData = ''
+        if(sessionStorage.getItem('companyCode'))
+        {
+          companyCodeData = sessionStorage.getItem('companyCode'); 
+          //alert('companyCodeData = ' + companyCodeData);
+          setCompanyCode(companyCodeData);
+                
+        }
+        var customerEmailData = '';
+        if(sessionStorage.getItem('customerEmail'))
+        {
+          
+          customerEmailData = sessionStorage.getItem('customerEmail'); 
+          setCustomerEmail(customerEmailData);  
+        }
         try
         {
-          const data = await ProductServices.fetchGetOrderByUserId(
+          const orderDatas = await ProductServices.fetchGetOrderByUserId(
             {
               companyId,
               liffId,
@@ -266,11 +296,14 @@ const MyOrders = () => {
               linePOSId,
               page:1,
               rowPerPage:rowPerPage,
-              catalogName:catalogName,
-              email:customerEmail
+              catalogName:catalogNameData,
+              companyCode:companyCodeData,
+              email:customerEmailData
             })
-            pagingManager(data.allCount, data.currentPage)
-            setData(data);
+            var orders = JSON.parse(orderDatas);
+            //alert(JSON.stringify(orders));
+            pagingManager(orders.allCount, orders.currentPage)
+            setData(orders);
             setLoading(false);
   
     
@@ -287,6 +320,7 @@ const MyOrders = () => {
     const getOrderByUserIdByPaging = async(page,rowPerPage) =>
   {
     setLoading(true);
+    
       try
       {
         const data = await ProductServices.fetchGetOrderByUserId(
@@ -298,6 +332,8 @@ const MyOrders = () => {
             page:page,
             rowPerPage:rowPerPage,
             catalogName:catalogName,
+            companyCode:companyCode,
+
             email:customerEmail
           })
           pagingManager(data.allCount, data.currentPage)
@@ -359,38 +395,38 @@ const MyOrders = () => {
                           scope="col"
                           className="text-left text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          ID
+                          หมายเลขใบสั่งขาย
                         </th>
                         <th
                           scope="col"
                           className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          OrderTime
+                          เวลาที่สั่ง
                         </th>
 
                         <th
                           scope="col"
                           className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          Method
+                          รูปแบบชำระเงิน
                         </th>
                         <th
                           scope="col"
                           className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          Status
+                          สถานะ
                         </th>
                         <th
                           scope="col"
                           className="text-center text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          Total
+                          ยอดรวม
                         </th>
                         <th
                           scope="col"
                           className="text-right text-xs font-serif font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider"
                         >
-                          Action
+                          การดำเนินการ
                         </th>
                       </tr>
                     </thead>
@@ -401,7 +437,7 @@ const MyOrders = () => {
                           <td className="px-5 py-3 whitespace-nowrap text-right text-sm">
                             <Link href={`/order/${order.orderId}`}>
                               <a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full">
-                                Details
+                                รายละเอียด
                               </a>
                             </Link>
                           </td>

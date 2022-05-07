@@ -40,6 +40,7 @@ const Dashboard = ({ title, description, children}) => {
   const [customerEmail, setCustomerEmail] = useState('');
   
   const [catalogName,setCatalogName] = useState('');
+  const [companyCode,setCompanyCode] = useState('');
   const [companyLogo,setCompanyLogo] = useState('');
   const [companyName,setCompanyName] = useState('');
   const [locationName,setLocationName] = useState('');
@@ -53,18 +54,46 @@ const Dashboard = ({ title, description, children}) => {
   const [locationEmail,setLocationEmail] = useState('');
   const [locationTel,setLocationTel] = useState('');
   
-  
+  //const [data, setData] = useState({});
 
+  //const [allOrderCount, setAllOrderCount] = useState(0);
+  //const [pendingOrderCount, setPendingOrderCount] = useState(0);
+  //const [processingOrderCount, setProcessingOrderCount] = useState(0);
+  //const [deliveredOrderCount, setDeliveredOrderCount] = useState(0);
+
+  var companyCodeCatalog = '';
+  if(sessionStorage.getItem('companyCode'))
+  {
+    companyCodeCatalog = sessionStorage.getItem('companyCode'); 
+      //alert('companyCodeCatalog = ' + companyCodeCatalog);
+            
+  }
+  var catalogNameCatalog = '';
+  if(sessionStorage.getItem('catalogName'))
+  {
+    catalogNameCatalog = sessionStorage.getItem('catalogName'); 
+      //alert('companyCodeCatalog = ' + companyCodeCatalog);
+            
+  }
+  var customerEmailCatalog = '';
+  if(sessionStorage.getItem('customerEmail'))
+  {
+      
+    customerEmailCatalog = sessionStorage.getItem('customerEmail'); 
+      
+  }
   const { data } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
     {
       companyId,
       liffId,
       lineUserId,
       linePOSId,
-      catalogName:catalogName,
-      email:customerEmail
+      catalogName:catalogNameCatalog,
+      companyCode:companyCodeCatalog,
+      email:customerEmailCatalog
     }));
   //useAsync(OrderServices.getOrderByUser);
+  
   const { allOrderCount, pendingOrderCount, processingOrderCount, deliveredOrderCount } = useFilter(data);
 
 
@@ -103,7 +132,7 @@ const Dashboard = ({ title, description, children}) => {
       }
     }
     
-    alert("dataPath log out = " + dataPath);
+    //alert("dataPath log out = " + dataPath);
     router.push('/' + dataPath);
   };
 
@@ -112,7 +141,7 @@ const Dashboard = ({ title, description, children}) => {
     if(sessionStorage.getItem('dataPath'))
     {
       var dataPathData = sessionStorage.getItem('dataPath'); 
-      alert('dataPathData = ' + dataPathData)
+      //alert('dataPathData = ' + dataPathData)
       setDataPath(dataPathData);  
     }
     if(sessionStorage.getItem('customerEmail'))
@@ -134,6 +163,13 @@ const Dashboard = ({ title, description, children}) => {
     {
       var catalogNameData = sessionStorage.getItem('catalogName'); 
       setCatalogName(catalogNameData);
+            
+    }
+    if(sessionStorage.getItem('companyCode'))
+    {
+      var companyCodeData = sessionStorage.getItem('companyCode'); 
+      //alert('companyCodeData = ' + companyCodeData);
+      setCompanyCode(companyCodeData);
             
     }
     if(sessionStorage.getItem('companyLogo'))
@@ -288,7 +324,27 @@ const Dashboard = ({ title, description, children}) => {
       }
     /*if (!userInfo) {
       router.push('/');
+      
     }*/
+    /*var dashBoardData = ProductServices.fetchGetDashboardOrderByUserId(
+      {
+        companyId,
+        liffId,
+        lineUserId,
+        linePOSId,
+        catalogName:catalogName,
+        companyCode:companyCode,
+        email:customerEmail
+      });
+      setData(dashBoardData);*/
+
+      
+      //alert("allOrderCount, pendingOrderCount, processingOrderCount, deliveredOrderCount = " + allOrderCountData + ',' + pendingOrderCountData + ',' + processingOrderCountData + ',' + deliveredOrderCountData)
+      //setAllOrderCount(allOrderCountData);
+      //setPendingOrderCount(pendingOrderCountData);
+      //setProcessingOrderCount(processingOrderCountData);
+      //setDeliveredOrderCount(deliveredOrderCountData);
+
   }, []);
 
   return (

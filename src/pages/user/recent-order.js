@@ -31,23 +31,13 @@ const RecentOrder = () => {
 
   const [pagingIndent, setPaging] = useState([]);
 
-  var catalogName = '';
-  var customerEmail = '';
+  const [catalogName, setCatalogName] = useState('');
+  const [companyCode, setCompanyCode] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
 
   useEffect(() => 
   {
-    if(sessionStorage.getItem('customerEmail'))
-    {
-      customerEmail = sessionStorage.getItem('customerEmail'); 
-        
-    }
-
-    if(sessionStorage.getItem('catalogName'))
-    {
-      catalogName = sessionStorage.getItem('catalogName'); 
-      
-            
-    }
+    
     if(sessionStorage.getItem('liffId'))
         {
           
@@ -179,6 +169,30 @@ const RecentOrder = () => {
     useEffect(async () => {
 
       setLoading(true);
+
+      var customerEmailData = '';
+      var catalogNameData = '';
+      var companyCodeData = '';
+
+      if(sessionStorage.getItem('customerEmail'))
+      {
+        customerEmailData = sessionStorage.getItem('customerEmail'); 
+        setCustomerEmail(customerEmailData);
+      }
+
+      if(sessionStorage.getItem('catalogName'))
+      {
+        catalogNameData = sessionStorage.getItem('catalogName'); 
+        setCatalogName(catalogNameData)
+              
+      }
+      if(sessionStorage.getItem('companyCode'))
+      {
+        companyCodeData = sessionStorage.getItem('companyCode'); 
+        setCompanyCode(companyCodeData)
+              
+      }
+      
       try
       {
         const dataJson = await ProductServices.fetchGetOrderByUserId(
@@ -189,8 +203,9 @@ const RecentOrder = () => {
             linePOSId,
             page:1,
             rowPerPage:rowPerPage,
-            catalogName:catalogName,
-            email:customerEmail
+            catalogName:catalogNameData,
+            companyCode:companyCodeData,
+            email:customerEmailData
           })
           var data = JSON.parse(dataJson);
           
@@ -224,6 +239,7 @@ const RecentOrder = () => {
             page:page,
             rowPerPage:rowPerPage,
             catalogName:catalogName,
+            companyCode:companyCode,
             email:customerEmail
           })
           var data = JSON.parse(dataJson);
@@ -288,6 +304,7 @@ const RecentOrder = () => {
         page:1,
         rowPerPage:5,
         catalogName:catalogName,
+        companyCode:companyCode,
         email:customerEmail
       }).then((res) =>
       {

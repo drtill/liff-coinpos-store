@@ -309,7 +309,7 @@ const ProductServices = {
 
       var productList = null;
       console.log("Get Order = " + JSON.stringify(body));
-      //res.send("Get Order = " + JSON.stringify(req.body));
+      alert("Get Order by user = " + JSON.stringify(req.body));
       
       //return;
       await fetch(serviceUrl + 'GetOrderByUserId',//fetch('http://localhost:5002/simple-cors3', 
@@ -317,7 +317,7 @@ const ProductServices = {
         method:'POST',
         //credentials:"include",
         headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","Email":"${body.email}"}`
         }).then(function(response) {
           return response.text();
         }).then(function(data) {
@@ -347,7 +347,7 @@ const ProductServices = {
         method:'POST',
         //credentials:"include",
         headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":${body.page},"RowPerPage":${body.rowPerPage},"CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","Email":"${body.email}"}`
         }).then(function(response) {
           return response.text();
         }).then(function(data) {
@@ -370,7 +370,7 @@ const ProductServices = {
   {
     try {
       var productList = null;
-      console.log("Get Order = " + JSON.stringify(body));
+      //alert("Get Order = " + JSON.stringify(body));
       //res.send("Get Order = " + JSON.stringify(req.body));
       
       //return;
@@ -379,7 +379,7 @@ const ProductServices = {
         method:'POST',
         //credentials:"include",
         headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":0,"RowPerPage":0,"CatalogName":"${body.catalogName}","Email":"${body.email}"}`
+        body:`{"CompanyId":"${body.companyId}","LineUserId":"${body.lineUserId}","LinePOSId":"${body.linePOSId}","LiffId":"${body.liffId}","Page":0,"RowPerPage":0,"CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","Email":"${body.email}"}`
         }).then(function(response) {
           return response.text();
         }).then(function(data) {
