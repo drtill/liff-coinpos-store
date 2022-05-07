@@ -145,9 +145,9 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
             </h3>
             <ul className="text-sm flex flex-col space-y-3">
               <li className="flex items-baseline">
-                <Link href="/">
+                <Link href={"/" + dataPath}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
-                    ส่วนลด
+                    หน้าแรก
                   </a>
                 </Link>
               </li>
