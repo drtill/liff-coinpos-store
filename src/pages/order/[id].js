@@ -266,6 +266,11 @@ const Order = ({ params }) => {
       if(sessionStorage.getItem('dataPath'))
       {
         var dataPathData = sessionStorage.getItem('dataPath'); 
+        if(dataPathData.includes('?id='))
+        {
+          const parms = dataPathData.split('?id=');
+          dataPathData = parms[1];
+        }
         setDataPath(dataPathData);
               
       }

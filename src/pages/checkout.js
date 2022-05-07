@@ -1462,7 +1462,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                       customerAddressId === 0 ?
                         <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
                           <div className="col-span-6 sm:col-span-3">
-                            {'customerAddressId = ' + customerAddressId}
+                            {/* {'customerAddressId = ' + customerAddressId} */}
                           </div>
                           <div className="col-span-6 sm:col-span-3">
                             <button

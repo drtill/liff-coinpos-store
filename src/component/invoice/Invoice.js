@@ -10,6 +10,7 @@ import OrderTable from '@component/order/OrderTable';
 const Invoice = ({ data, printRef, companyName, locationName, currencySign, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode, dataPath}) => {
 
   const [companyLogo,setCompanyLogo] = useState('')
+  
   useEffect(() =>
   {
     if(sessionStorage.getItem('companyLogo'))

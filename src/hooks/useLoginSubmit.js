@@ -44,7 +44,7 @@ const useLoginSubmit = (setModalOpen) => {
     setLoading(true);
     if(liffId && lineUserId && linePOSId)
     {
-      alert("Liff Login");
+      //alert("Liff Login");
       var userLogin = await UserServices.fetchCoinposLineLogin({
         companyId,
         liffId,
@@ -104,7 +104,7 @@ const useLoginSubmit = (setModalOpen) => {
     }
     else if(liffId && lineUserId)
     {
-      alert("Liff catalog Login");
+      //alert("Liff catalog Login");
       var userLogin = await UserServices.fetchCoinposLineLogin({
         companyId,
         liffId,
