@@ -22,27 +22,17 @@ const EmailVerification = ({ params }) => {
     setLoading(true);
     UserServices.fetchCoinposUserRegister(params?.token)
       .then((res) => {
-        alert('res = ' + JSON.stringify(res));
-        if(res !== undefined)
-        {
-          //router.push('/');
-          //router.push('/catalog/2-MyCustomer');
-          router.push('/' + res.dataPath);
-          setLoading(false);
-          setSuccess(res.message);
-          notifySuccess('Register Success!');
-          dispatch({ type: 'USER_LOGIN', payload: res });
-          Cookies.set('userInfo', JSON.stringify(res));
-        }
-        else
-        {
-          alert('error res = ' + res);
-          setError(res.message);
-        }
-        
+        alert(JSON.stringify(res));
+        //router.push('/');
+        //router.push('/catalog/2-MyCustomer');
+        router.push('/' + res.dataPath);
+        setLoading(false);
+        setSuccess(res.message);
+        notifySuccess('Register Success!');
+        dispatch({ type: 'USER_LOGIN', payload: res });
+        Cookies.set('userInfo', JSON.stringify(res));
       })
       .catch((err) => {
-        alert('catch')
         setLoading(false);
         setError(err ? err.message : err.message);
       });

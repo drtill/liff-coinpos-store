@@ -70,10 +70,14 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       
           const [promotionLoading, setPromotionLoading] = useState(false);
           const [newOrderLoading, setNewOrderLoading] = useState(false);
+          const [recommentProductLoading, setRecommentProductLoading] = useState(true);
+          const [sliderImageLoading, setSliderImageLoading] = useState(true);
       
+          const [sliderImageList, setSliderImageList] = useState([]);
           //this.setState({liffId:liffData});
           const [productList, setProductList] = useState([]);
           const [newProductList, setNewProductList] = useState([]);
+          const [recommentProductList, setRecommentProductList] = useState([]);
           const [categoryList, setCategoryList] = useState([]);
           const [lineProfileImage, setProfileImage] = useState('');
           const [lineUserId, setLineUserId] = useState('');
@@ -116,7 +120,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           
           useEffect(async () => {
             
-            //alert('liffCompanyId = ' + liffCompanyId)
+            //alert('liffCompanyId = ' + liffCompanyId + " companyCode = " + companyCode);
             if(liffCompanyId === 0)
             {
                   //alert("Liff Data is not found.");
@@ -134,7 +138,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             //alert("companyCode = " + companyCode + " catalogName = " + catalogName + " catalogLiffId = " + catalogLiffId);
             sessionStorage.setItem('fromPage','liff');
             
-            
+            //alert('JSON.stringify(promotions) = ' + JSON.stringify(promotions))
+            sessionStorage.setItem('promotions',JSON.stringify(promotions));
             sessionStorage.setItem('dataPath',dataPath);
             sessionStorage.setItem('catalogName',catalogName);
             sessionStorage.setItem('companyCode',companyCode);
@@ -302,8 +307,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                     data["paramPath"] = paramPath;
         
                   
-                  
-        
+                    //alert('Company code = ' + companyCode);
+                    //alert('...Id submit')
                     submitHandler(data)
           
                   }
@@ -321,106 +326,240 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
         
 
             //alert("Liff Init = " + lineUserId);
-            //alert("companyCode = " + companyCode + " catalogName = " + catalogName);
-            if(companyCode && catalogName)
+            //alert("companyCode = " + companyCode + " catalogName = " + catalogName + " liffData = " + liffData);
+            if(liffData)
             {
-              //alert('Back To catalog')
-              router.push('/' + companyCode + '/' + catalogName);
-              return;
+              
+              //alert('To company and Liff')
+              
+                router.push('/' + companyCode + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId);
+                return;
+              /*var userLocalJson = localStorage.getItem('userInfo');
+                  if(userLocalJson === null)
+                  {
+                    dispatch({ type: 'USER_LOGOUT' });
+                    Cookies.remove('userInfo');
+                    Cookies.remove('couponInfo');
+                  }
+                  else
+                  {
+                    GetCoinPOSOrder(liffId,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,targetPage, userLocalJson)
+                    Cookies.set('userInfo', userLocalJson);
+
+                    var userLocal = JSON.parse(userLocalJson)
+
+                    dispatch({ type: 'USER_LOGIN', payload: userLocal });
+
+                    //alert('userLocal = ' + JSON.stringify(userLocal));
+
+                    sessionStorage.setItem('customerId', userLocal.customerId); 
+                    sessionStorage.setItem('customerFirstName', userLocal.firstName);
+                    sessionStorage.setItem('customerLastName', userLocal.lastName);
+                    sessionStorage.setItem('customerEmail', userLocal.email);
+                    sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
+
+                    sessionStorage.setItem('address1', userLocal.address1);
+                    sessionStorage.setItem('countryId', userLocal.countryId);
+                    sessionStorage.setItem('provinceId', userLocal.provinceId);
+                    sessionStorage.setItem('cityId', userLocal.cityId);
+                    sessionStorage.setItem('districtId', userLocal.districtId);
+                    sessionStorage.setItem('postalcode', userLocal.postalcode);
+
+                    sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
+                    sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+                    
+                    sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
+                    sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+                  }
+
+                  var companyId = liffCompanyId;
+                  var locationId = liffLocationId;
+                  var companyName = '';
+                  var locationName = '';
+                  
+                  if(targetPage.length > 0)
+                  {
+                    //alert('Go');
+                    RedirectPageManager(targetPage,userLocalJson,catalogName);
+            
+                  }
+                  else
+                  {
+                    await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
+                  }
+
+                  
+                
+                  setPromotionLoading(false);
+                  setCategoryLoading(false);
+                  setNewProductLoading(false);
+                  setLoading(false);*/
             }
-            else if(companyCode && !catalogName)
+            else
             {
-              //alert("Companycode only")
-              if(isGetProfile)
+              //alert('companyCode = ' + companyCode +  " catalogName = " + catalogName)
+              if(companyCode && catalogName)
               {
-                if(catalogName)
+                //alert('Back To catalog')
+                router.push('/' + companyCode + '/' + catalogName);
+                return;
+              }
+              else if(companyCode && !catalogName)
+              {
+                //alert("Companycode only")
+                if(isGetProfile)
                 {
-                  //alert('Back To catalog')
-                  router.push('/' + companyCode + '/' + catalogName);
-                  return;
+                  if(catalogName)
+                  {
+                    //alert('Back To catalog')
+                    router.push('/' + companyCode + '/' + catalogName);
+                    return;
+                  }
+                  else
+                  {
+                    //alert('Back To default catalog')
+                    router.push('/' + companyCode);
+                    return;
+                  }
+                  
                 }
                 else
                 {
-                  //alert('Back To default catalog')
-                  router.push('/' + companyCode);
-                  return;
+                  //alert('Get To Product catalog mode')
+
+                  var userLocalJson = localStorage.getItem('userInfo');
+                  if(userLocalJson === null)
+                  {
+                    dispatch({ type: 'USER_LOGOUT' });
+                    Cookies.remove('userInfo');
+                    Cookies.remove('couponInfo');
+                  }
+                  else
+                  {
+                    Cookies.set('userInfo', userLocalJson);
+
+                    var userLocal = JSON.parse(userLocalJson)
+
+                    dispatch({ type: 'USER_LOGIN', payload: userLocal });
+
+                    //alert('userLocal = ' + JSON.stringify(userLocal));
+
+                    sessionStorage.setItem('customerId', userLocal.customerId); 
+                    sessionStorage.setItem('customerFirstName', userLocal.firstName);
+                    sessionStorage.setItem('customerLastName', userLocal.lastName);
+                    sessionStorage.setItem('customerEmail', userLocal.email);
+                    sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
+
+                    sessionStorage.setItem('address1', userLocal.address1);
+                    sessionStorage.setItem('countryId', userLocal.countryId);
+                    sessionStorage.setItem('provinceId', userLocal.provinceId);
+                    sessionStorage.setItem('cityId', userLocal.cityId);
+                    sessionStorage.setItem('districtId', userLocal.districtId);
+                    sessionStorage.setItem('postalcode', userLocal.postalcode);
+
+                    sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
+                    sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+                    
+                    sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
+                    sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+                  }
+
+                  //alert('Redirect or Get Product')
+                  var companyId = liffCompanyId;
+                  var locationId = liffLocationId;
+                  var companyName = '';
+                  var locationName = '';
+                  
+                  if(targetPage.length > 0)
+                  {
+                    //alert('Redirect')
+                    RedirectPageManager(targetPage,userLocalJson,catalogName);
+            
+                  }
+                  else
+                  {
+                    //alert('Get Product')
+                    await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
+                  }
+
+                  
+                
+                  setPromotionLoading(false);
+                  setCategoryLoading(false);
+                  setNewProductLoading(false);
+                  setRecommentProductLoading(false);
+                  setSliderImageLoading(false);
+                  setLoading(false);
                 }
                 
               }
               else
               {
-                //alert('Get To Product catalog mode')
-
                 var userLocalJson = localStorage.getItem('userInfo');
-                if(userLocalJson === null)
-                {
-                  dispatch({ type: 'USER_LOGOUT' });
-                  Cookies.remove('userInfo');
-                  Cookies.remove('couponInfo');
-                }
-                else
-                {
-                  Cookies.set('userInfo', userLocalJson);
+                  if(userLocalJson === null)
+                  {
+                    dispatch({ type: 'USER_LOGOUT' });
+                    Cookies.remove('userInfo');
+                    Cookies.remove('couponInfo');
+                  }
+                  else
+                  {
 
-                  var userLocal = JSON.parse(userLocalJson)
+                    GetCoinPOSOrder(liffId,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,targetPage,userLocalJson)
 
-                  dispatch({ type: 'USER_LOGIN', payload: userLocal });
+                    Cookies.set('userInfo', userLocalJson);
 
-                  //alert('userLocal = ' + JSON.stringify(userLocal));
+                    var userLocal = JSON.parse(userLocalJson)
 
-                  sessionStorage.setItem('customerId', userLocal.customerId); 
-                  sessionStorage.setItem('customerFirstName', userLocal.firstName);
-                  sessionStorage.setItem('customerLastName', userLocal.lastName);
-                  sessionStorage.setItem('customerEmail', userLocal.email);
-                  sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
+                    dispatch({ type: 'USER_LOGIN', payload: userLocal });
 
-                  sessionStorage.setItem('address1', userLocal.address1);
-                  sessionStorage.setItem('countryId', userLocal.countryId);
-                  sessionStorage.setItem('provinceId', userLocal.provinceId);
-                  sessionStorage.setItem('cityId', userLocal.cityId);
-                  sessionStorage.setItem('districtId', userLocal.districtId);
-                  sessionStorage.setItem('postalcode', userLocal.postalcode);
+                    //alert('userLocal = ' + JSON.stringify(userLocal));
 
-                  sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
-                  sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
-                  
-                  sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
-                  sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
-                }
+                    sessionStorage.setItem('customerId', userLocal.customerId); 
+                    sessionStorage.setItem('customerFirstName', userLocal.firstName);
+                    sessionStorage.setItem('customerLastName', userLocal.lastName);
+                    sessionStorage.setItem('customerEmail', userLocal.email);
+                    sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
 
-                var companyId = liffCompanyId;
-                var locationId = liffLocationId;
-                var companyName = '';
-                var locationName = '';
+                    sessionStorage.setItem('address1', userLocal.address1);
+                    sessionStorage.setItem('countryId', userLocal.countryId);
+                    sessionStorage.setItem('provinceId', userLocal.provinceId);
+                    sessionStorage.setItem('cityId', userLocal.cityId);
+                    sessionStorage.setItem('districtId', userLocal.districtId);
+                    sessionStorage.setItem('postalcode', userLocal.postalcode);
+
+                    sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
+                    sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+                    
+                    sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
+                    sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+                  }
                 
-                if(targetPage.length > 0)
-                {
-                  //alert('Go');
-                  RedirectPageManager(targetPage,userLocalJson,catalogName);
-          
-                }
-                else
-                {
-                  await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
-                }
-
                 
-              
-                setPromotionLoading(false);
-                setCategoryLoading(false);
-                setNewProductLoading(false);
-                setLoading(false);
               }
-              
             }
-            else
-            {
+            
+            
+            
+      
+            
+          }, [])
+      
+          
+          const GetCoinPOSOrder = async(liffId,
+            lineUserId,
+            linePOSId,
+            groupId,
+            liffOrderId,
+            liffCompanyId,
+            liffLocationId,targetPage, userLocalJson) =>
+          {
               var orderId = liffOrderId;
               var companyId = liffCompanyId;
               var locationId = liffLocationId;
               var companyName = '';
               var locationName = '';
-              var lineUserId = lineLiffUserId;
+              
               try
               {
                 //alert("catalogData = " + catalogData)
@@ -436,8 +575,6 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                     locationName
                   });
             
-                  //alert("Get SaleOrder");
-                  //alert(JSON.stringify(salesOrder));
                   if(salesOrder.orderStatusId !== 1)
                   {
                     //alert("Goto Order")
@@ -457,33 +594,36 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                   const productDs = [];
                   const discountDetails = [];
         
-                  for(var i = 0;i<salesOrderDetails.length;i++)
+                  
+                  if(salesOrderDetails.length > 0)
                   {
-                    var detail = {
-                      id: Number(salesOrderDetails[i].productVariantId),
-                      slug:salesOrderDetails[i].productId,
-                      name: salesOrderDetails[i].upc,
-                      title:salesOrderDetails[i].productVariantName,
-                      sku: salesOrderDetails[i].sku,
-                      quantity:salesOrderDetails[i].quantity,
-                      price: salesOrderDetails[i].productVariantPrice,
-                      image:salesOrderDetails[i].imageUrl,
-                      //key.push(orderDetails[i].upc)
+                    for(var i = 0;i<salesOrderDetails.length;i++)
+                    {
+                      var detail = {
+                        id: Number(salesOrderDetails[i].productVariantId),
+                        slug:salesOrderDetails[i].productId,
+                        name: salesOrderDetails[i].upc,
+                        title:salesOrderDetails[i].productVariantName,
+                        sku: salesOrderDetails[i].sku,
+                        quantity:salesOrderDetails[i].quantity,
+                        price: salesOrderDetails[i].productVariantPrice,
+                        image:salesOrderDetails[i].imageUrl,
+                        //key.push(orderDetails[i].upc)
+                      }
+                      var discountDetail = {
+                        id: Number(salesOrderDetails[i].productVariantId),
+                        discount:Number(salesOrderDetails[i].discount),
+                        discountRate:Number(salesOrderDetails[i].discountRate)
+                      }
+                      //alert("add");
+                      productDs.push(detail);
+                      discountDetails.push(discountDetail);
                     }
-                    var discountDetail = {
-                      id: Number(salesOrderDetails[i].productVariantId),
-                      discount:Number(salesOrderDetails[i].discount),
-                      discountRate:Number(salesOrderDetails[i].discountRate)
-                    }
-                    //alert("add");
-                    productDs.push(detail);
-                    discountDetails.push(discountDetail);
                   }
-                  //alert("Set Cart")
+                  
                   setItems(productDs);
                   if(promotionCode !== undefined && promotionCode !== null)
                   {
-                    //alert("Set Promo")
                     sessionStorage.setItem('discountDetails', JSON.stringify(discountDetails));
                     sessionStorage.setItem('promotionCode', promotionCode);
                     SetPromotionData(promotionCode,'',0,discountDetails[0].discountRate, true);
@@ -491,7 +631,6 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                   }
                   
         
-                  //alert("Get Product")
                   if(targetPage.length > 0)
                   {
                     //alert('Go');
@@ -500,6 +639,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                   }
                   else
                   {
+                    
                     await GetProductData(liffId,lineUserId,linePOSId,groupId,orderId,companyId,locationId,companyName,locationName,'','',0,salesOrder.customerTypeId,1,itemPerPage,'','','');
                   }
                     
@@ -511,21 +651,15 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                   setPromotionLoading(false);
                   setCategoryLoading(false);
                   setNewProductLoading(false);
+                  setSliderImageLoading(false);
                   setLoading(false);
         
               }
               catch (err) 
               {
-                alert(err.message);
+                alert('...Id Error = ' + err.message);
               }
-            }
-            
-            
-      
-            
-          }, [])
-      
-          
+          }
       
           /*const GetProductData = async(liffId,
             lineUserId,
@@ -687,7 +821,6 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
 
       const RedirectPageManager = (target,userLocalJson,catalogName) =>
     {
-      alert("target = " + target);
       var userLocal = JSON.parse(userLocalJson)
       var fullTarget = ''
       if(target === 'update-profile' || target === 'dashboard' || target === 'my-orders' || target === 'recent-order')
@@ -709,7 +842,6 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
 
     const CreateNewOrder = async() =>
     {
-      alert("New Order");
       setNewOrderLoading(true);
         
       try
@@ -758,7 +890,6 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
     }
     const GotoOrder = () =>
     {
-      alert("Goto Order");
       setNewOrderLoading(true);
       try
       {
@@ -787,7 +918,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
         promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
       {
         //alert('locationId = ' + locationId);
-          const products = await ProductServices.fetchGetCoinPOSProductService({
+          const products = await ProductServices.fetchGetNewAndRecommentProductService({
             liffId,
             lineUserId,
             linePOSId,
@@ -830,37 +961,22 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           var productCategories = [];
     
           var newProductVariants = [];
+          var recommentProductVariants = [];
     
-          if(products.productVariantPresenters !== null)
-          {
-            for(var i = 0;i < products.productVariantPresenters.length; i++)
-            {
-              var productItem = {};
-              productItem['_id'] = Number(products.productVariantPresenters[i].ProductVariantId);
-              productItem['title'] = products.productVariantPresenters[i].Name;
-              productItem['quantity'] = products.productVariantPresenters[i].StockLevel;
-              productItem['image'] = products.productVariantPresenters[i].ImageUrl;
-              productItem['unit'] = products.productVariantPresenters[i].UPC;
-              productItem['slug'] = products.productVariantPresenters[i].UPC;
-              productItem['upc'] = products.productVariantPresenters[i].UPC;
-              productItem['productName'] = products.productVariantPresenters[i].ProductName;
-              productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+          var sliderImages = [];
 
-              productItem['tag'] = products.productVariantPresenters[i].ProductId;
-              productItem['originalPrice'] = products.productVariantPresenters[i].Price;
-              productItem['price'] = products.productVariantPresenters[i].Price;
-              productItem['type'] = 'W';
-              productItem['sku'] = products.productVariantPresenters[i].SKU;
-              productItem['discount'] = 0;
-              productItem['description'] = products.productVariantPresenters[i].Description;
-              productItem['currencySign'] = products.currencySign;
-            
-    
-    
-              productVariants.push(productItem);
+          //alert('slider = ' + products.sliderImages);
+          if(products.sliderImages !== undefined)
+          {
+            for(var i = 0;i < products.sliderImages.length; i++)
+            {
+              var sliderUrl = {};
+              sliderUrl['url'] = products.sliderImages[i];
+              sliderImages.push(sliderUrl)
             }
           }
       
+          //alert('new Product = ' + products.newProductVariantPresenters);
           if(products.newProductVariantPresenters !== null)
           {
             for(var i = 0;i < products.newProductVariantPresenters.length; i++)
@@ -872,9 +988,9 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               productItem['image'] = products.newProductVariantPresenters[i].ImageUrl;
               productItem['unit'] = products.newProductVariantPresenters[i].UPC;
               productItem['slug'] = products.newProductVariantPresenters[i].UPC;
-              productItem['upc'] = products.productVariantPresenters[i].UPC;
-              productItem['productName'] = products.productVariantPresenters[i].ProductName;
-              productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+              productItem['upc'] = products.newProductVariantPresenters[i].UPC;
+              productItem['productName'] = products.newProductVariantPresenters[i].ProductName;
+              productItem['categoryName'] = products.newProductVariantPresenters[i].CategoryName;
 
               productItem['tag'] = products.newProductVariantPresenters[i].ProductId;
               productItem['originalPrice'] = products.newProductVariantPresenters[i].Price;
@@ -888,6 +1004,36 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
     
     
               newProductVariants.push(productItem);
+            }
+          }
+          //alert('recomment Product = ' + products.recommentProductVariantPresenters);
+          if(products.recommentProductVariantPresenters !== null)
+          {
+            for(var i = 0;i < products.recommentProductVariantPresenters.length; i++)
+            {
+              var productItem = {};
+              productItem['_id'] = Number(products.recommentProductVariantPresenters[i].ProductVariantId);
+              productItem['title'] = products.recommentProductVariantPresenters[i].Name;
+              productItem['quantity'] = products.recommentProductVariantPresenters[i].StockLevel;
+              productItem['image'] = products.recommentProductVariantPresenters[i].ImageUrl;
+              productItem['unit'] = products.recommentProductVariantPresenters[i].UPC;
+              productItem['slug'] = products.recommentProductVariantPresenters[i].UPC;
+              productItem['upc'] = products.recommentProductVariantPresenters[i].UPC;
+              productItem['productName'] = products.recommentProductVariantPresenters[i].ProductName;
+              productItem['categoryName'] = products.recommentProductVariantPresenters[i].CategoryName;
+
+              productItem['tag'] = products.recommentProductVariantPresenters[i].ProductId;
+              productItem['originalPrice'] = products.recommentProductVariantPresenters[i].Price;
+              productItem['price'] = products.recommentProductVariantPresenters[i].Price;
+              productItem['type'] = 'W';
+              productItem['sku'] = products.recommentProductVariantPresenters[i].SKU;
+              productItem['discount'] = 0;
+              productItem['description'] = products.recommentProductVariantPresenters[i].Description;
+              productItem['currencySign'] = products.currencySign;
+            
+
+
+              recommentProductVariants.push(productItem);
             }
           }
     
@@ -953,6 +1099,11 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           setProductList(productVariants);
     
           setNewProductList(newProductVariants);
+          setRecommentProductList(recommentProductVariants)
+
+          //alert(JSON.stringify(sliderImages));
+          setSliderImageList(sliderImages);
+
     
         
     
@@ -997,10 +1148,12 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       
                 const productDs = [];
                 const discountDetails = [];
-                i(salesOrderDetails !== undefined)
+                
+                if(salesOrderDetails !== undefined)
                 {
                   for(var i = 0;i<salesOrderDetails.length;i++)
                   {
+                    
                     var detail = {
                       id: Number(salesOrderDetails[i].productVariantId),
                       slug:salesOrderDetails[i].productId,
@@ -1340,6 +1493,116 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       RefreshProductList={SearchProduct} FilterProduct={FilterProduct} page='product'>
         <div className="min-h-screen">
           <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>
+          
+          <div className="bg-white">
+            <div className="mx-auto max-w-screen-2xl">
+              <div className="flex w-full">
+                <div className="flex-shrink-0 lg:block w-full">
+                  {
+                    sliderImageLoading ? 
+                    (<Loading loading={sliderImageLoading} />)
+                    :
+                    (<MainCarousel sliderImages={sliderImageList} />)
+                  }
+                  
+                </div>
+                {/* <div className="w-full hidden lg:flex">
+                  <OfferCard />
+                </div> */}
+              </div>
+              
+            </div>
+          </div>
+
+
+          <div id="newProduct"
+            className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
+          >
+            <div className="mb-10 flex justify-center">
+              <div className="text-center w-full lg:w-2/5">
+                <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
+                  สินค้าใหม่ล่าสุด
+                </h2>
+                
+              </div>
+            </div>
+            {
+                newProductLoading ? (
+                  <Loading loading={newProductLoading} />
+                )
+                :
+                (
+                  <div className="flex">
+                    <div className="w-full">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                        {newProductList.map((product) => (
+                          <ProductCard key={product._id} product={product} liffId={liffData} lineUserId={lineUserId} companyCode={companyCode}
+                          linePOSId={linePOSId} groupId={groupId} orderId={liffOrderId} companyId={liffCompanyId} locationId={liffLocationId} pictureUrl={lineProfileImage} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            
+          </div>
+
+          <div id="recommentedProduct"
+            className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
+          >
+            <div className="mb-10 flex justify-center">
+              <div className="text-center w-full lg:w-2/5">
+                <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
+                  สินค้าแนะนำ
+                </h2>
+                
+              </div>
+            </div>
+            {
+                recommentProductLoading ? (
+                  <Loading loading={recommentProductLoading} />
+                )
+                :
+                (
+                  <div className="flex">
+                    <div className="w-full">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                        {recommentProductList.map((product) => (
+                          <ProductCard key={product._id} product={product} liffId={liffData} lineUserId={lineUserId} companyCode={companyCode}
+                          linePOSId={linePOSId} groupId={groupId} orderId={liffOrderId} companyId={liffCompanyId} locationId={liffLocationId} pictureUrl={lineProfileImage} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            
+          </div>
+          {/* feature category's */}
+          {/* <div className="bg-gray-100 lg:py-16 py-10">
+            <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
+              <div className="mb-10 flex justify-center">
+                <div className="text-center w-full lg:w-2/5">
+                  <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
+                    Featured Categories
+                  </h2>
+                  <p className="text-base font-sans text-gray-600 leading-6">
+                    เลือกหมวดหมู่สินค้า เพื่อค้นหาสินค้าที่ตรงใจคุณอย่างรวดเร็ว
+                  </p>
+                </div>
+              </div>
+              {
+                categoryLoading ? (
+                  <Loading loading={categoryLoading} />
+                )
+                :
+                (
+                  <FeatureCategory categories={categoryList} FilterCategory={FilterCategory} FilterProduct={FilterProduct}/>
+                )
+              }
+            </div>
+          </div> */}
+
           <div className="bg-white">
             <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
 
@@ -1373,67 +1636,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               
             </div>
           </div>
-
-
-
-          <div id="newProduct"
-            className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
-          >
-            <div className="mb-10 flex justify-center">
-              <div className="text-center w-full lg:w-2/5">
-                <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                  สินค้าใหม่ล่าสุด
-                </h2>
-                
-              </div>
-            </div>
-            {
-                newProductLoading ? (
-                  <Loading loading={newProductLoading} />
-                )
-                :
-                (
-                  <div className="flex">
-                    <div className="w-full">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                        {newProductList.map((product) => (
-                          <ProductCard key={product._id} product={product} liffId={liffData} lineUserId={lineUserId} 
-                          linePOSId={linePOSId} groupId={groupId} orderId={liffOrderId} companyId={liffCompanyId} locationId={liffLocationId} pictureUrl={lineProfileImage} />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-            
-          </div>
-          {/* feature category's */}
-          <div className="bg-gray-100 lg:py-16 py-10">
-            <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
-              <div className="mb-10 flex justify-center">
-                <div className="text-center w-full lg:w-2/5">
-                  <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
-                    Featured Categories
-                  </h2>
-                  <p className="text-base font-sans text-gray-600 leading-6">
-                    เลือกหมวดหมู่สินค้า เพื่อค้นหาสินค้าที่ตรงใจคุณอย่างรวดเร็ว
-                  </p>
-                </div>
-              </div>
-              {
-                categoryLoading ? (
-                  <Loading loading={categoryLoading} />
-                )
-                :
-                (
-                  <FeatureCategory categories={categoryList} FilterCategory={FilterCategory} FilterProduct={FilterProduct}/>
-                )
-              }
-            </div>
-          </div>
-
           {/* popular products */}
-          <div className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10">
+          {/* <div className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10">
             <div className="mb-10 flex justify-center">
               <div className="text-center w-full lg:w-2/5">
                 <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
@@ -1484,7 +1688,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               )    
             }
             
-          </div>
+          </div> */}
 
           {/* promotional banner card */}
           {/* <div className="block mx-auto max-w-screen-2xl">
@@ -1599,16 +1803,29 @@ export const getServerSideProps = async ({req, res,params }) => {
       const liffQuery = parms[0];
       var liffOrderQuery = parms[1];
 
-      //console.log('liffQuery = ' + liffQuery);
-      //console.log('liffOrderQuery = ' + liffOrderQuery);
-      var liffVar = liffQuery.split("=");
-      //console.log('liffVar count = ' + liffVar.length)
-      //console.log('liffVar[0] = ' + liffVar[0])
-      //console.log('liffVar[1] = ' + liffVar[1])
+      console.log('liffQuery = ' + liffQuery);
+      console.log('liffOrderQuery = ' + liffOrderQuery);
+      var liffVar = [];
+      if(liffQuery.includes("="))
+      {
+        liffVar = liffQuery.split("=");
+      }
+      else if(liffOrderQuery.includes("="))
+      {
+        liffVar = liffOrderQuery.split("=");
+      }
+      
+      console.log('liffVar count = ' + liffVar.length)
+      console.log('liffVar[0] = ' + liffVar[0])
+      console.log('liffVar[1] = ' + liffVar[1])
       if(liffVar[0] === 'liffId')
       {
         liffData = liffVar[1];
         
+      }
+      else (liffVar[0] === 'id')
+      {
+        liffData = liffVar[1];
       }
 
       var vars = liffOrderQuery.split("&");
@@ -1727,15 +1944,7 @@ export const getServerSideProps = async ({req, res,params }) => {
   var companyId = liffCompanyId === null ? 0 : liffCompanyId;
   var locationId = liffLocationId === null ? 0 : liffLocationId;
   var dataPath = '';
-  if(liffId.length > 0)
-  {
-
-    dataPath = 'liffId=' + liffId + '?linePOSId=' + linePOSId + '&groupId=' + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
-  }
-  else
-  {
-    dataPath = coinPOSLiffData;
-  }
+  
   
   
   var liffEndpoint = await  UserServices.fetchGetLiffURLTemplate();
@@ -1811,7 +2020,28 @@ export const getServerSideProps = async ({req, res,params }) => {
 
   companyName = products.companyName;
   locationName = products.locationName;
+  companyCode = products.companyCode;
 
+
+  console.log('compile completed liffId = ' + liffId);
+  if(liffId.length > 0)
+  {
+
+    if(linePOSId.length > 0 && groupId.length > 0 && liffCompanyId > 0 && liffLocationId > 0)
+    {
+      dataPath = '/' + companyCode + '/' + 'liffId=' + liffId + '?linePOSId=' + linePOSId + '&groupId=' + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+    }
+    else
+    {
+      liffData = '';
+      dataPath = '/' + companyCode;
+    }
+    
+  }
+  else
+  {
+    dataPath = coinPOSLiffData;
+  }
   return {
     props: {
         params: dataParam,

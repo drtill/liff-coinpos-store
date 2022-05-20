@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -19,6 +19,33 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
     state: { userInfo },
   } = useContext(UserContext);
 
+  const [companyFacebook,setCompanyFacebook] = useState('');
+  const [companyLine,setCompanyLine] = useState('');
+  const [companyCode,setCompanyCode] = useState('');
+  useEffect(() => 
+  {
+    if(sessionStorage.getItem('companyFacebook'))
+    {
+          
+      var companyFacebookData = sessionStorage.getItem('companyFacebook');
+      setCompanyFacebook(companyFacebookData);
+      //alert(companyFacebook)
+    }
+    if(sessionStorage.getItem('companyLine'))
+    {
+          
+      var companyLineData = sessionStorage.getItem('companyLine');
+      setCompanyLine(companyLineData); 
+    }
+    if(sessionStorage.getItem('companyCode'))
+    {
+          
+      var companyCodeData = sessionStorage.getItem('companyCode');
+      setCompanyCode(companyCodeData); 
+    }
+
+  },[])
+
   return (
     <>
       <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
@@ -35,7 +62,7 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
             <FiAlignLeft className="w-6 h-6 drop-shadow-xl" />
           </span>
         </button>
-        <Link href={"/" + dataPath}>
+        <Link href={"/" + companyCode + "/" + dataPath}>
           <a className="text-xl text-white" rel="noreferrer" aria-label="Home">
             {' '} 
             <FiHome className="w-6 h-6 drop-shadow-xl" />
@@ -57,7 +84,7 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
           className="text-xl text-white indicator justify-center"
         >
           {userInfo?.image ? (
-            <Link href="/user/dashboard">
+            <Link href={"/" + companyCode + "/user/dashboard"}>
               <a className="relative top-1 w-6 h-6">
                 <Image
                   width={29}
@@ -69,7 +96,7 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
               </a>
             </Link>
           ) : userInfo?.name ? (
-            <Link href="/user/dashboard">
+            <Link href={"/" + companyCode + "/user/dashboard"}>
               <a className="leading-none font-bold font-serif block">
                 <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
                       

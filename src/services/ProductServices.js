@@ -668,6 +668,39 @@ const ProductServices = {
         return "Error: " + err.message
     }
   },
+  async fetchGetNewAndRecommentProductService(body){
+    try
+    {
+      //alert("Fetch")
+      var productList = null;
+      const products = await fetch(serviceUrl + 'GetNewAndRecommentProductList',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{"LiffId": "${body.liffId}","LineUserId":"${body.lineUserId}", "LinePOSId":"${body.linePOSId}", "GroupId":"${body.groupId}","OrderId":${body.orderId},"CompanyId":${body.companyId},
+          "CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}","PromotionId":${body.promotionId},"CustomerTypeId":${body.customerTypeId},"LocationId":${body.locationId},"CompanyName":"${body.companyName}","LocationName":"${body.locationName}","Page":${body.page},"RowPerPage":${body.itemPerPage},"Query":"${body.query}","Category":"${body.category}","Product":"${body.product}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          console.log("GetData = " + data)
+          var obj = JSON.parse(data);
+          //alert('data = ' + data);
+          var pvJson = obj.ProductVariantListJson
+          productList = JSON.parse(pvJson)
+          
+          
+        });
+      
+
+        return productList;
+    }
+    catch(err) {
+        return "Error: " + err.message
+    }
+  },
   async fetchCancelPromotionCode(body) {
     try
     {

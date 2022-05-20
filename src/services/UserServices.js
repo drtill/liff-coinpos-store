@@ -30,11 +30,12 @@ const UserServices = {
     var deco = jwt.decode(token);
     alert(JSON.stringify(deco));
     console.log(JSON.stringify(deco));
-    console.log("name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId + " dataPath = " + dataPath); 
+    alert("name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId + " dataPath = " + dataPath); 
     
     const isAdded = await findCoinPOSEmail(companyId,email);
     
     if (isAdded) {
+      alert('isAdded');
       return ({
         token,
         name: isAdded.name,
@@ -45,10 +46,16 @@ const UserServices = {
     }
 
     if (token) {
+      alert('verify');
       jwt.verify(token, JWT_SECRET_FOR_VERIFY, (err, decoded) => {
         if (err) {
+          alert('reeor = ' + err.message);
           return ({
-            message: 'Error: Token Expired, Please try again!',
+            token,
+            name: 'newUser.name',
+            email: 'newUser.email',
+            dataPath:'dataPath',
+            message: 'Email Verified, Please Login Now!',
           });
         } else {
           /*const newUser = new User({
@@ -58,9 +65,9 @@ const UserServices = {
           });
           newUser.save();*/
           const newUser = RegisterCoinPOSCustomerAccount(companyId,email,password,name);
-          
+          alert('istoken');
           return({
-            _id: newUser._id,
+            token,
             name: newUser.name,
             email: newUser.email,
             dataPath:dataPath,
@@ -723,9 +730,7 @@ const RegisterCoinPOSCustomerAccount = async(companyId, email, password, name) =
       //res.send(productList);
   }
   catch (err) {
-    res.status(500).send({
-      message: err.message,
-    });
+    return "message:" + err.message;
   }
 }
 

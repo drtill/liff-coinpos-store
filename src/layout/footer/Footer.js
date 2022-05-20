@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 import Image from 'next/image';
@@ -29,20 +29,35 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
 
   const router = useRouter();
 
-  var companyFacebook = '';
-  var companyLine = '';
-  if(sessionStorage.getItem('companyFacebook'))
+
+  const [companyFacebook,setCompanyFacebook] = useState('');
+  const [companyLine,setCompanyLine] = useState('');
+  const [companyCode,setCompanyCode] = useState('');
+
+
+  useEffect(() => 
   {
-        
-    companyFacebook = sessionStorage.getItem('companyFacebook');
-    
-    //alert(companyFacebook)
-  }
-  if(sessionStorage.getItem('companyLine'))
-  {
-        
-    companyLine = sessionStorage.getItem('companyLine'); 
-  }
+    if(sessionStorage.getItem('companyFacebook'))
+    {
+          
+      var companyFacebookData = sessionStorage.getItem('companyFacebook');
+      setCompanyFacebook(companyFacebookData);
+      //alert(companyFacebook)
+    }
+    if(sessionStorage.getItem('companyLine'))
+    {
+          
+      var companyLineData = sessionStorage.getItem('companyLine');
+      setCompanyLine(companyLineData); 
+    }
+    if(sessionStorage.getItem('companyCode'))
+    {
+          
+      var companyCodeData = sessionStorage.getItem('companyCode');
+      setCompanyCode(companyCodeData); 
+    }
+
+  },[])
 
   const handleDashBoardClick = () =>
     {
@@ -62,11 +77,11 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
       if (userLocal?.email) 
       {
         sessionStorage.setItem('catalogName',catalogName);
-        router.push('/user/' + target);
+        router.push('/' +companyCode + '/user/' + target);
       } 
       else 
       {
-        sessionStorage.setItem('targetPage','/user/' + target);
+        sessionStorage.setItem('targetPage','/' +companyCode + '/user/' + target);
         sessionStorage.setItem('catalogName',catalogName);
         setModalOpen(!modalOpen);
         //router.push('/user/' + targetPage);
@@ -91,11 +106,11 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
       if (userLocal?.email) 
       {
         sessionStorage.setItem('catalogName',catalogName);
-        router.push('/user/' + target);
+        router.push('/' +companyCode + '/user/' + target);
       } 
       else 
       {
-        sessionStorage.setItem('targetPage','/user/' + target);
+        sessionStorage.setItem('targetPage','/' +companyCode + '/user/' + target);
         sessionStorage.setItem('catalogName',catalogName);
         setModalOpen(!modalOpen);
         //router.push('/user/' + targetPage);
@@ -119,11 +134,11 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
       if (userLocal?.email) 
       {
         sessionStorage.setItem('catalogName',catalogName);
-        router.push('/user/' + target);
+        router.push('/' +companyCode + '/user/' + target);
       } 
       else 
       {
-        sessionStorage.setItem('targetPage','/user/' + target);
+        sessionStorage.setItem('targetPage','/' +companyCode + '/user/' + target);
         sessionStorage.setItem('catalogName',catalogName);
         setModalOpen(!modalOpen);
         //router.push('/user/' + targetPage);
@@ -145,7 +160,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
             </h3>
             <ul className="text-sm flex flex-col space-y-3">
               <li className="flex items-baseline">
-                <Link href={"/" + dataPath}>
+                <Link href={'/' +companyCode + "/" + dataPath}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
                     หน้าแรก
                   </a>
@@ -267,7 +282,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
               <>
               </>
               :
-               <Link href={"/" + dataPath}>
+               <Link href={"/" + companyCode + "/" + dataPath}>
                 <a className="mr-3 lg:mr-12 xl:mr-12" rel="noreferrer">
                   <Image
                     width={70}

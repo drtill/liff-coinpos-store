@@ -115,7 +115,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
 
       
 
-      //alert("Handle")
+      //alert("Regis.js Handle")
       submitHandler(data)
 
 

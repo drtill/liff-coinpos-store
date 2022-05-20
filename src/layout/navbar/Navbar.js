@@ -14,13 +14,17 @@ import { UserContext } from '@context/UserContext';
 import LoginModal from '@component/modal/LoginModal';
 import CartDrawer from '@component/drawer/CartDrawer';
 import { SidebarContext } from '@context/SidebarContext';
+import UserModal from '@component/modal/UserModal';
 
 const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct, page}) => {
   const [imageUrl, setImageUrl] = useState('');
   const [searchText, setSearchText] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [userModalOpen, setUserModalOpen] = useState(false);
   const [currentPage, setPage] = useState(page);
-  const { toggleCartDrawer } = useContext(SidebarContext);
+  const [companyCode, setCompanyCode] = useState('');
+  const { toggleCartDrawer,toggleUserModal } = useContext(SidebarContext);
+  
   const { totalItems } = useCart();
   const router = useRouter();
   
@@ -43,9 +47,16 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
     }
   };
 
+
   useEffect(() => 
     {
-      
+      if(sessionStorage.getItem('companyCode'))
+      {
+        
+        var companyCodeData = sessionStorage.getItem('companyCode'); 
+        //alert('catalogName = ' + catalogName)
+        setCompanyCode(companyCodeData);        
+      }
       setPage(page);
 
     },[])
@@ -84,6 +95,11 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
       {modalOpen && (
         <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
+      {userModalOpen && (
+        <UserModal userModalOpen={userModalOpen} setUserModalOpen={setUserModalOpen}/> 
+      )
+
+      }
 
       <div className="bg-sky-500 sticky top-0 z-20">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
@@ -115,7 +131,7 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
           <div className="w-full transition-all duration-200 ease-in-out lg:flex lg:max-w-[410px] xl:max-w-[500px] 2xl:max-w-[790px] md:mx-12 lg:mx-4 xl:mx-0">
               <div className="w-full flex flex-col justify-center flex-shrink-0 relative z-30">
                 <div className="flex flex-col mx-auto w-full">
-                  {page !== 'product'
+                  {page !== 'product' && page !== 'allproduct'
                   ?
                     <></>
                   :
@@ -163,7 +179,11 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
                 aria-label="Login"
               >
                 {imageUrl || userInfo?.image ? (
-                  <Link href="/user/dashboard">
+                  <button
+                    aria-label="Total"
+                    onClick={() => setUserModalOpen(!userModalOpen)}
+                    className="relative px-5 text-white text-2xl font-bold"
+                  >
                     <a className="relative top-1 w-6 h-6">
                       <Image
                         width={29}
@@ -173,15 +193,35 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
                         className="bg-white rounded-full"
                       />
                     </a>
-                  </Link>
+                  </button>
+                  /* <Link href={"/" + companyCode + "/user/dashboard"}>
+                    <a className="relative top-1 w-6 h-6">
+                      <Image
+                        width={29}
+                        height={29}
+                        src={imageUrl || userInfo?.image}
+                        alt="user"
+                        className="bg-white rounded-full"
+                      />
+                    </a>
+                  </Link> */
                 ) : userInfo?.name ? (
-                  <Link href="/user/dashboard">
+                    <button
+                      aria-label="Total"
+                      onClick={() => setUserModalOpen(!userModalOpen)}
+                      className="relative px-5 text-white text-2xl font-bold"
+                    >
+                      <a className="relative top-1 w-6 h-6">
+                        <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
+                      </a>
+                    </button>
+                  /*<Link href={"/" + companyCode + "/user/dashboard"}>
                     <a className="leading-none font-bold font-serif block">
                       <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
                       
                     </a>
                     
-                  </Link>
+                  </Link>*/
                   
                 ) : (
                   <span onClick={() => setModalOpen(!modalOpen)}>

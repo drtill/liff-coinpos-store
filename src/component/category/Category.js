@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { IoClose } from 'react-icons/io5';
@@ -11,39 +11,50 @@ import { SidebarContext } from '@context/SidebarContext';
 import CategoryServices from '@services/CategoryServices';
 import CategoryCard from '@component/category/CategoryCard';
 
-const Category = ({companyLogo, companyName, dataPath,FilterProduct}) => {
+const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
   const { categoryDrawerOpen, closeCategoryDrawer } =
     useContext(SidebarContext);
   //  const { data, loading, error } = useAsync(() =>
   //   CategoryServices.getShowingCategory()
   // ); 
 
+  const [categories,setCategoryList] = useState([]);
+  const [loading,setLoading] = useState(true); 
   
-  var loading = true;
   var error = '';
-  var categories = [];
+  
+  
+
+  useEffect(() => 
+  {
+    //alert("Page = " + page);
     if(sessionStorage.getItem('categories'))
     {
       //alert("Get Category");
       var categoriesJson = sessionStorage.getItem('categories'); 
       //alert("Get Category = " + categoriesJson);
       //console.log(categories);
-      if(categoriesJson !== undefined)
+      if(categoriesJson !== undefined && categoriesJson !== 'undefined')
       {
         try
         {
-          categories = JSON.parse(categoriesJson);
+          var categoriesData = JSON.parse(categoriesJson);
+          setCategoryList(categoriesData);
           //alert(JSON.stringify(categories));
-          loading = false;
+          setLoading(false);
         }
         catch(ex)
         {
-          //alert("Catagory error : " + ex.message)
+          alert("Catagory error : " + ex.message)
+          
         }
         
       }
       
     }
+
+  },[]);
+    
 
   return (
     <div className="flex flex-col w-full h-full bg-white cursor-pointer scrollbar-hide">
@@ -122,6 +133,7 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct}) => {
                 icon={category.icon}
                 nested={category.children}
                 FilterProduct={FilterProduct}
+                page={page}
               />
             ))}
           </div>

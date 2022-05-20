@@ -562,7 +562,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                   </li>
                   <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-cyan-600 font-semibold ">
                     <Link
-                      href={`/search?category=${product.category
+                      href={`/${companyCode}/allproduct?category=${product.category
                         .toLowerCase()
                         .replace('&', '')
                         .split(' ')
@@ -788,7 +788,7 @@ const ProductScreen = ({params}) => {//({ product, relatedProduct }) => {
                   <div className="w-full">
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
                        {relatedProduct.map((product, i) => (
-                        <ProductCard key={i + 1} product={product} />
+                        <ProductCard key={i + 1} product={product} companyCode={companyCode} />
                       ))
                       //JSON.stringify(relatedProduct)
                       }

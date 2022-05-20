@@ -59,7 +59,7 @@ const ResetPassword = ({ setShowResetPassword, setModalOpen }) => {
       
       
 
-      //alert("Login Handle")
+      //alert("Reset Pass Handle")
       submitHandler(data)
       }
     }

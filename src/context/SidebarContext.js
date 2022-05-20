@@ -7,6 +7,7 @@ export const SidebarProvider = ({ children }) => {
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [categoryDrawerOpen, setCategoryDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUserModalOpen, setUserModalOpen] = useState(false);
 
   const toggleCartDrawer = () => setCartDrawerOpen(!cartDrawerOpen);
   const closeCartDrawer = () => setCartDrawerOpen(false);
@@ -14,6 +15,9 @@ export const SidebarProvider = ({ children }) => {
   const toggleCategoryDrawer = () => setCategoryDrawerOpen(!categoryDrawerOpen);
   const closeCategoryDrawer = () => setCategoryDrawerOpen(false);
 
+  const toggleUserModal = () => setUserModalOpen(!isUserModalOpen);
+  const closeUserModal = () => setUserModalOpen(false);
+  
   const toggleModal = () => setIsModalOpen(!isModalOpen);
   const closeModal = () => setIsModalOpen(false);
 
@@ -29,6 +33,9 @@ export const SidebarProvider = ({ children }) => {
       isModalOpen,
       toggleModal,
       closeModal,
+      isUserModalOpen,
+      toggleUserModal,
+      closeUserModal
     }),
 
     [cartDrawerOpen, categoryDrawerOpen, isModalOpen]

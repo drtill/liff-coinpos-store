@@ -2,7 +2,9 @@ import React from 'react';
 
 import Coupon from '@component/coupon/Coupon';
 
-const OfferCard = ({promotions,companyId,catalogName, selectedPromotion, ApplyPromotionCode, CancelPromotionCode}) => {
+const OfferCard = ({promotions,companyId,catalogName, selectedPromotion, ApplyPromotionCode, CancelPromotionCode}) => 
+{
+  
   return (
     <div className="w-full group">
       <div className="bg-gray-50 h-full border-2 border-orange-500 transition duration-150 ease-linear transform group-hover:border-cyan-600 rounded shadow">

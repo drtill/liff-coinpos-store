@@ -10,15 +10,42 @@ import {
 //internal import
 import { SidebarContext } from '@context/SidebarContext';
 
-const CategoryCard = ({ parentId, title, icon, nested, FilterProduct }) => {
+const CategoryCard = ({ parentId, title, icon, nested, FilterProduct, page }) => {
   const [show, setShow] = useState(false);
   const showCategory = () => setShow(!show);
   const router = useRouter();
   const { closeCategoryDrawer } = useContext(SidebarContext);
 
+
+
   const handleSubCategory = (proId) => {
-    //alert("parentId = " + parentId + " children._id = " + proId)
-    FilterProduct(parentId,proId)
+
+
+    var companyCodeData = '';
+    if(sessionStorage.getItem('companyCode'))
+    {
+      companyCodeData = sessionStorage.getItem('companyCode');
+      //alert("CompanyCode = " + companyCodeData); 
+      
+            
+    }
+    //alert("parentId = " + parentId + " children._id = " + proId + " page = " + page)
+    if(page === "allproduct")
+    {
+      //closeCategoryDrawer();
+      setShow(false);
+      closeCategoryDrawer();
+      FilterProduct(parentId,proId);
+      
+    }
+    else
+    {
+      router.push(
+        `/${companyCodeData}/allproduct?p=${proId}`
+      );
+    }
+    
+    //FilterProduct(parentId,proId)
     //FilterProduct(children);
     /*router.push(
       `/search?category=${children
@@ -28,6 +55,8 @@ const CategoryCard = ({ parentId, title, icon, nested, FilterProduct }) => {
         .join('-')}`
     );*/
     closeCategoryDrawer();
+
+    return;
   };
 
   return (

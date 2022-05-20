@@ -418,7 +418,7 @@ const useCheckoutSubmit = () => {
           setIsCheckoutSubmit(false);
 
           //alert(`/order/${res.orderId}`);
-          router.push(`/order/${res.orderId}`);
+          router.push("/" + companyCode + `/order/${res.orderId}`);
           notifySuccess('Your Order Confirmed!');
 
           //alert(JSON.stringify(res))

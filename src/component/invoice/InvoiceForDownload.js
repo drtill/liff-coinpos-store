@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Font,
 } from '@react-pdf/renderer';
+
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 96,
+    height: 96,
     bottom: 5,
   },
   title: {
@@ -116,6 +117,13 @@ const styles = StyleSheet.create({
     color: '#374151',
     fontFamily: 'Kanit',
     
+  },
+  companyNameInfo: {
+    fontSize: 16,
+    color: '#374151',
+    fontFamily: 'Kanit',
+    fontWeight: 'bold',
+    paddingBottom:10
   },
   amount: {
     fontSize: 10,
@@ -161,9 +169,29 @@ const InvoiceForDownload = ({ data, currencySign,companyName, locationName, loca
         <Page size="A4" style={styles.page}>
           <View style={styles.invoiceFirst}>
             <View>
-              <Text style={{ fontFamily: 'Kanit', fontWeight: 'bold' }}>
+              <Text style={styles.companyNameInfo}>
+                {companyName}
+              </Text>
+              <Text style={styles.info}>
+                สาขา: {locationName}
+              </Text>
+              <Text style={styles.info}>
+                เลขประจำตัวผู้เสียภาษีอากร: {locationName}
+              </Text>
+              <Text style={styles.info}>
+                {locationAddress1} {locationAddress2} {locationCity} {locationStateOrProvince}
+              </Text>
+
+              <Text style={styles.info}> {locationCountry} {locationPostalCode}</Text>
+              <Text style={styles.info}> Phone: {locationTel}</Text>
+              <Text style={styles.info}> e-mail: {locationEmail}</Text>
+              <Text style={styles.info}> Website: {locationEmail}</Text>
+
+
+              {/* <Text style={{ fontFamily: 'Kanit', fontWeight: 'bold' }}>
                 ใบเรียกเก็บเงิน
               </Text>
+
               <Text style={styles.info}>
                 สถานะ :{' '}
                 {data.orderStatus === 'Draft' && (
@@ -181,23 +209,23 @@ const InvoiceForDownload = ({ data, currencySign,companyName, locationName, loca
                 {data.orderStatus === 'Canceled' && (
                   <span style={{ color: '#f43f5e' }}>{data.orderStatus}</span>
                 )}
-              </Text>
+              </Text> */}
             </View>
             <View>
               <Image style={styles.logo} src={companyLogo} />
 
-              <Text style={styles.info}>
+              {/* <Text style={styles.info}>
                 {companyName}
-              </Text>
-              <Text style={styles.info}>
+              </Text> */}
+              {/* <Text style={styles.info}>
                 สาขา: {locationName}
-              </Text>
-              <Text style={styles.info}>
+              </Text> */}
+              {/* <Text style={styles.info}>
                 {locationAddress1} {locationAddress2} {locationCity} {locationStateOrProvince}
               </Text>
 
               <Text style={styles.info}> {locationCountry} {locationPostalCode}</Text>
-              <Text style={styles.info}> {locationEmail} {locationTel}</Text>
+              <Text style={styles.info}> {locationEmail} {locationTel}</Text> */}
             </View>
           </View>
 

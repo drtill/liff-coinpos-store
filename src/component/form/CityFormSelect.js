@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Label from '@component/form/Label';
 import {Form} from 'react-bootstrap';
 
@@ -20,31 +20,39 @@ const CityFormSelect = ({
   var cityId = 0;
   cityId = selectedId;
   cityList = dataList;
-  var cityOptionIndent = [];
+  const [cityOptionIndent, setCityOptionIndent] = useState([]);
+  
   var cityIndent = [];
 
-  if(selectedId === 0)
+  useEffect(() => 
   {
-    //alert("Select == 0")
-    cityOptionIndent.push(<option selected>Select City</option>)
-  }
-  else
-  {
-    cityOptionIndent.push(<option>Select City</option>)
-  }
-  for(var i=0;i<dataList.length;i++)
-  {
-    if(cityList[i].Id === cityId)
+    var cityOptionIndentData = []
+    if(selectedId === 0)
     {
-      //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-      cityOptionIndent.push(<option selected value={cityList[i].Id}>{cityList[i].Name_th}</option>)
+      //alert("Select == 0")
+      cityOptionIndentData.push(<option selected>Select City</option>)
     }
     else
     {
-        cityOptionIndent.push(<option value={cityList[i].Id}>{cityList[i].Name_th}</option>)
+      cityOptionIndentData.push(<option>Select City</option>)
     }
-    
-  }
+    for(var i=0;i<dataList.length;i++)
+    {
+      if(cityList[i].Id === cityId)
+      {
+        //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+        cityOptionIndentData.push(<option selected value={cityList[i].Id}>{cityList[i].Name_th}</option>)
+      }
+      else
+      {
+          cityOptionIndentData.push(<option value={cityList[i].Id}>{cityList[i].Name_th}</option>)
+      }
+      
+    }
+    setCityOptionIndent(cityOptionIndentData);
+
+  },[])
+  
   
   //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);
   

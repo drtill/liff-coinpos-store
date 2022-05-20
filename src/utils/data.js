@@ -73,17 +73,17 @@ const pages = [
 const userSidebar = [
   {
     title: 'แดชบอร์ด',
-    href: '/user/dashboard',
+    href: '/{companyCode}/user/dashboard',
     icon: IoGridOutline,
   },
   {
     title: 'ใบสั่งขายของฉัน',
-    href: '/user/my-orders',
+    href: '/{companyCode}/user/my-orders',
     icon: IoListOutline,
   },
   {
     title: 'แก้ไข โปรไฟล์',
-    href: '/user/update-profile',
+    href: '/{companyCode}/user/update-profile',
     icon: IoSettingsOutline,
   },
   /* {
@@ -99,21 +99,21 @@ const sliderData = [
     title: 'The Best Quality Products Guaranteed!',
     info: 'Dramatically facilitate effective total linkage for go forward processes...',
     url: '/search?Category=biscuits--cakes',
-    image: '/slider/slider-1.jpg',
+    image: 'https://coinpos-uat.azurewebsites.net/images/slider/2_female-friends-out-shopping-together-1.jpg',//'/slider/slider-1.jpg',
   },
   {
     id: 2,
     title: 'Best Different Type of Grocery Store',
     info: 'Quickly aggregate empowered networks after emerging products...',
     url: '/search?Category=fish--meat',
-    image: '/slider/slider-2.jpg',
+    image: 'https://coinpos-uat.azurewebsites.net/images/slider/2_happy-shoppers-laughing-carefree-shopping-mall-1.jpg',//'/slider/slider-2.jpg',
   },
   {
     id: 3,
     title: 'Quality Freshness Guaranteed!',
     info: 'Intrinsicly fashion performance based products rather than accurate benefits...',
     url: '/search?category=fresh-vegetable',
-    image: '/slider/slider-3.jpg',
+    image: 'https://coinpos-uat.azurewebsites.net/images/slider/2_two-beautiful-women-shopping-town-1.jpg',//'/slider/slider-3.jpg',
   },
 ];
 

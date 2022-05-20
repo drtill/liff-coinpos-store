@@ -10,7 +10,7 @@ import Discount from '@component/common/Discount';
 import ProductModal from '@component/modal/ProductModal';
 //import { order } from 'tailwindcss/defaulttheme';
 
-const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId, companyId, locationId, pictureUrl }) => {
+const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId, companyId, companyCode, locationId, pictureUrl }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { items, addItem, updateItemQuantity, inCart } = useCart();
 
@@ -314,6 +314,7 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
                 handleUpdateItem={handleUpdateItem}
                 handleAddItem={handleAddItem}
                 item={item}
+                companyCode={companyCode}
               />
             )
         )
@@ -324,6 +325,7 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
         product={product}
         handleUpdateItem={handleUpdateItem}
         handleAddItem={handleAddItem}
+        companyCode={companyCode}
         
       />
       }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Label from '@component/form/Label';
 import {Form} from 'react-bootstrap';
 
@@ -16,36 +16,43 @@ const ProvinceFormSelect = ({
   handleItemChange
 }) => {
 
-  var provinceList = [];
-  var provinceId = 0;
-  provinceId = selectedId;
-  provinceList = dataList;
-  var provinceOptionIndent = [];
-  var provinceIndent = [];
+  
+  const [provinceId,setProvinceId] = useState(0);
+  const [provinceList,setProvinceList] = useState(dataList);
+  const [provinceOptionIndent,setProvinceOptionIndent] = useState([]);
+  useState(() => 
+  {
+    
+    setProvinceList(dataList);
 
-  if(selectedId === 0)
-  {
-    //alert("Select == 0")
-    provinceOptionIndent.push(<option selected>Select Province</option>)
-  }
-  else
-  {
-    provinceOptionIndent.push(<option>Select Province</option>)
-  }
-  for(var i=0;i<dataList.length;i++)
-  {
-    if(provinceList[i].Id === provinceId)
+    var provinceOptionIndentData = [];
+    if(selectedId === 0)
     {
-      //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-      provinceOptionIndent.push(<option selected value={provinceList[i].Id}>{provinceList[i].Name_th}</option>)
+      //alert("Select == 0")
+      provinceOptionIndentData.push(<option selected>Select Province</option>)
     }
     else
     {
-        provinceOptionIndent.push(<option value={provinceList[i].Id}>{provinceList[i].Name_th}</option>)
+      provinceOptionIndentData.push(<option>Select Province</option>)
     }
-    
-  }
-  
+
+    for(var i=0;i<dataList.length;i++)
+    {
+      if(dataList[i].Id === provinceId)
+      {
+        //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+        provinceOptionIndentData.push(<option selected value={provinceList[i].Id}>{provinceList[i].Name_th}</option>)
+      }
+      else
+      {
+          provinceOptionIndentData.push(<option value={provinceList[i].Id}>{provinceList[i].Name_th}</option>)
+      }
+      
+    }
+    setProvinceOptionIndent(provinceOptionIndentData);
+    setProvinceList(dataList);
+    setProvinceId(selectedId);
+  },[])
   //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);
   
   //alert("Selected = " + json);

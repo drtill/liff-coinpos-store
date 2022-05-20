@@ -13,6 +13,8 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
   const [copiedCode, setCopiedCode] = useState('');
   const [copied, setCopied] = useState(false);
 
+  const [coupons,setPromotions] = useState([]);
+
   useEffect(() => 
   {
     //alert("selectedPromotion = " + selectedPromotion);
@@ -36,8 +38,26 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
       setCopiedCode("");
       setCopied(false);
     }
+    /*if(sessionStorage.getItem('promotions'))
+    {
+      setPromotions(sessionStorage.getItem('promotions'));
+    }*/
   });
   
+  useEffect(() => 
+  {
+    
+    if(sessionStorage.getItem('promotions'))
+    {
+      var promotionsData = sessionStorage.getItem('promotions');
+      var couponData = JSON.parse(promotionsData);
+
+      //alert("couponData = " + couponData?.slice(0, 2))
+      //alert("Cou promotions = " + promotionsData)
+      setPromotions(couponData);
+    }
+
+  },[])
   //alert("promotions = " + JSON.stringify(promotions));
   //const { data, error } = useAsync(() => ProductServices.getAllCoinPOSCoupons({companyId}))//useAsync(ProductServices.getAllCoinPOSCoupons({companyId}));
   //const { data, error } = useAsync(CouponServices.getAllCoupons)
@@ -88,286 +108,297 @@ const Coupon = ({ couponInHome, companyId, promotions, catalogName, ApplyPromoti
   const error = '';
 
   return (
-    <>
-      {error 
-      ? 
-      (
-        <p className="flex justify-center align-middle items-center m-auto text-xl text-red-500">
-          <span> {error}</span>
-        </p>
-      ) 
-      : 
-      couponInHome 
-      ? 
-      (
-        
-        promotions?.slice(0, 2).map((coupon) => (
-          <div
-            key={coupon._id}
-            className="coupon coupon-home mx-4 my-5 block md:flex lg:flex md:justify-between lg:justify-between items-center bg-white rounded-md shadow"
-          >
-            <div className="tengah py-2 px-3 flex items-center justify-items-start">
-              {/* <figure>
-                <Image
-                  src={coupon.logo}
-                  alt={coupon.title}
-                  width={100}
-                  height={100}
-                  className="rounded-lg"
-                />
-              </figure> */}
-              <div className="ml-3">
-                <div className="flex items-center font-serif">
-                  <h6 className="pl-1 text-base font-medium text-gray-600">
-                    <span className="text-lg md:text-xl lg:text-xl text-red-500 font-bold">
-                      {coupon.discountPercentage}%
-                    </span>{' '}
-                    Off
-                  </h6>
-                  <div className="ml-2">
-                    {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                      <span className="text-red-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-red-100">
-                        Inactive
-                      </span>
-                    ) : (
-                      <span className="text-white inline-block px-4 py-1 rounded-full font-medium text-xs bg-coinpos">
-                        Active
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <h2 className="pl-1 font-serif text-base text-gray-700 leading-6 font-semibold mb-2">
-                  {coupon.title}
-                </h2>
-                
-                {
-                coupon.endTime === null ?
-                  <></>
-                :
-                dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                    </div>
-                  </span>
-                ) : (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <OfferTimer
-                        expiryTimestamp={new Date(coupon.endTime)}
-                        darkGreen
-                      />
-                    </div>
-                  </span>
-                )
-                  
-                }
-              </div>
-            </div>
-            <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-4">
-              <div className="info flex items-center">
-                <div className="w-full">
-                  <div className="block">
-                    <div className="font-serif border border-dashed bg-cyan-50 py-1 border-cyan-300 rounded-lg text-center block">
-                      <CopyToClipboard
-                        text={coupon.couponCode}
-                        onCopy={() => handleCopied(coupon.couponCode,coupon.discountPercentage,coupon.isForAllProduct,coupon.minimumAmount,coupon.productPromotion)}
-                      >
-                        <button className="block w-full">
-                          {copied && coupon.couponCode === copiedCode ? (
-                            <span className="text-cyan-600 text-sm leading-7 font-semibold">
-                              ยกเลิก ส่วนลด!
-                            </span>
-                          ) : (
-                            <span className="uppercase font-serif font-semibold text-sm leading-7 text-cyan-600">
-                              {coupon.couponCode}{' '}
-                            </span>
-                          )}
-                        </button>
-                      </CopyToClipboard>
-                    </div>
-                  </div>
-                  
-                  <p className="text-xs leading-4 text-gray-500 mt-2">
-                    กดรหัสด้านบน เพื่อใช้ส่วนลด
-                  </p>
-                  
-                  {
-                    coupon.productType !== null ?
-                      <>
-                        <p className="text-xs leading-5 text-gray-500 mt-2">
-                          * คูปองนี้ใช้ได้กับ{' '}
-                          <span className="font-bold text-gray-700">
-                            สินค้า ประเภท {coupon.productType}
-                          </span>{' '}
-                          {Number(coupon.minimumAmount) <= 0
-                            ?
-                            <>
-                              และ ไม่มียอดขั้นต่ำ{' '}
-                            </>
-                            :
-                            <>
-                              และ เมื่อยอดมากกว่า{' '}
-                              <span className="font-bold text-gray-700">
-                                {coupon.currencySign}{coupon.minimumAmount}
-                              </span>{' '}
-                            </>
-                          }
-                          
-                        </p>
-                      </>
-                    :
-                      <>
-                        <p className="text-xs leading-4 text-gray-500 mt-2">
-                          {Number(coupon.minimumAmount) <= 0
-                            ?
-                            <>
-                              * คูปองนี้ไม่มียอดขั้นต่ำ{' '}
-                            </>
-                            :
-                            <>
-                              * คูปองนี้ใช้ได้เมื่อยอดมากกว่า{' '}
-                              <span className="font-bold"> {coupon.currencySign}{coupon.minimumAmount}</span>{' '}
-                            </>
-                          }
-                        
-                      </p>
-                      </>
-                  }
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
-      )
-      : 
-      (
-        promotions?.map((coupon) => (
-          <div
-            key={coupon._id}
-            className="coupon block md:flex lg:flex md:justify-between lg:justify-between items-center bg-white rounded-md shadow-sm"
-          >
-            <div className="tengah p-6 flex items-center justify-items-start">
-              <figure>
-                <Image
-                  src={coupon.logo}
-                  alt={coupon.title}
-                  width={120}
-                  height={120}
-                  className="rounded-lg"
-                />
-              </figure>
-              <div className="ml-5">
-                {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
-                        00
-                      </span>
-                    </div>
-                  </span>
-                ) : (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <OfferTimer expiryTimestamp={new Date(coupon.endTime)} />
-                    </div>
-                  </span>
-                )}
 
-                <h2 className="font-serif text-lg leading-6 font-medium mb-3">
-                  {coupon.title}
-                </h2>
-                <p className="font-serif font-bold text-xl text-gray-600">
-                  <span className="text-lg md:text-xl lg:text-2xl leading-12 text-red-500 font-extrabold">
-                    {coupon.discountPercentage}%
-                  </span>{' '}
-                  Off
-                </p>
-              </div>
-            </div>
-            <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-6">
-              <div className="info flex lg:my-6 md:my-5 mb-6 items-center">
-                <div className="w-full">
-                  <div className="block">
-                    <div className="font-serif font-medium flex items-center mb-1">
-                      <span>Coupon</span>
+    coupons !== undefined
+    ?
+      coupons.length > 0 
+      ?
+        <>
+          {error 
+          ? 
+          (
+            <p className="flex justify-center align-middle items-center m-auto text-xl text-red-500">
+              <span> {error}</span>
+            </p>
+          ) 
+          : 
+          couponInHome 
+          ? 
+          (
+            
+            coupons.map((coupon) => (
+              <div
+                key={coupon._id}
+                className="coupon coupon-home mx-4 my-5 block md:flex lg:flex md:justify-between lg:justify-between items-center bg-white rounded-md shadow"
+              >
+                <div className="tengah py-2 px-3 flex items-center justify-items-start">
+                  {/* <figure>
+                    <Image
+                      src={coupon.logo}
+                      alt={coupon.title}
+                      width={100}
+                      height={100}
+                      className="rounded-lg"
+                    />
+                  </figure> */}
+                  <div className="ml-3">
+                    <div className="flex items-center font-serif">
+                      <h6 className="pl-1 text-base font-medium text-gray-600">
+                        <span className="text-lg md:text-xl lg:text-xl text-red-500 font-bold">
+                          {coupon.discountPercentage}%
+                        </span>{' '}
+                        Off
+                      </h6>
                       <div className="ml-2">
                         {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                          <span className="text-red-600 inline-block">
+                          <span className="text-red-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-red-100">
                             Inactive
                           </span>
                         ) : (
-                          <span className="text-cyan-600 inline-block">
+                          <span className="text-white inline-block px-4 py-1 rounded-full font-medium text-xs bg-coinpos">
                             Active
                           </span>
                         )}
                       </div>
                     </div>
-
-                    <div className="font-serif border border-dashed bg-cyan-50 py-2 border-cyan-300 rounded-lg text-center block">
-                      <CopyToClipboard
-                        text={coupon.couponCode}
-                        onCopy={() => handleCopied(coupon.couponCode)}
-                      >
-                        <button className="block w-full">
-                          {copied && coupon.couponCode === copiedCode ? (
-                            <span className="text-cyan-600 text-base leading-7 font-semibold">
-                              คูปอง กำลังถูกใช้!
-                            </span>
-                          ) : (
-                            <span className="uppercase font-serif font-semibold text-base leading-7 text-cyan-600">
-                              {coupon.couponCode}{' '}
-                            </span>
-                          )}
-                        </button>
-                      </CopyToClipboard>
+                    <h2 className="pl-1 font-serif text-base text-gray-700 leading-6 font-semibold mb-2">
+                      {coupon.title}
+                    </h2>
+                    
+                    {
+                    coupon.endTime === null ?
+                      <></>
+                    :
+                    dayjs().isAfter(dayjs(coupon.endTime)) ? (
+                      <span className="inline-block mb-2">
+                        <div className="flex items-center font-semibold">
+                          <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
+                            00
+                          </span>
+                        </div>
+                      </span>
+                    ) : (
+                      <span className="inline-block mb-2">
+                        <div className="flex items-center font-semibold">
+                          <OfferTimer
+                            expiryTimestamp={new Date(coupon.endTime)}
+                            darkGreen
+                          />
+                        </div>
+                      </span>
+                    )
+                      
+                    }
+                  </div>
+                </div>
+                <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-4">
+                  <div className="info flex items-center">
+                    <div className="w-full">
+                      <div className="block">
+                        <div className="font-serif border border-dashed bg-cyan-50 py-1 border-cyan-300 rounded-lg text-center block">
+                          <CopyToClipboard
+                            text={coupon.couponCode}
+                            onCopy={() => handleCopied(coupon.couponCode,coupon.discountPercentage,coupon.isForAllProduct,coupon.minimumAmount,coupon.productPromotion)}
+                          >
+                            <button className="block w-full">
+                              {copied && coupon.couponCode === copiedCode ? (
+                                <span className="text-cyan-600 text-sm leading-7 font-semibold">
+                                  ยกเลิก ส่วนลด!
+                                </span>
+                              ) : (
+                                <span className="uppercase font-serif font-semibold text-sm leading-7 text-cyan-600">
+                                  {coupon.couponCode}{' '}
+                                </span>
+                              )}
+                            </button>
+                          </CopyToClipboard>
+                        </div>
+                      </div>
+                      
+                      <p className="text-xs leading-4 text-gray-500 mt-2">
+                        กดรหัสด้านบน เพื่อใช้ส่วนลด
+                      </p>
+                      
+                      {
+                        coupon.productType !== null ?
+                          <>
+                            <p className="text-xs leading-5 text-gray-500 mt-2">
+                              * คูปองนี้ใช้ได้กับ{' '}
+                              <span className="font-bold text-gray-700">
+                                สินค้า ประเภท {coupon.productType}
+                              </span>{' '}
+                              {Number(coupon.minimumAmount) <= 0
+                                ?
+                                <>
+                                  และ ไม่มียอดขั้นต่ำ{' '}
+                                </>
+                                :
+                                <>
+                                  และ เมื่อยอดมากกว่า{' '}
+                                  <span className="font-bold text-gray-700">
+                                    {coupon.currencySign}{coupon.minimumAmount}
+                                  </span>{' '}
+                                </>
+                              }
+                              
+                            </p>
+                          </>
+                        :
+                          <>
+                            <p className="text-xs leading-4 text-gray-500 mt-2">
+                              {Number(coupon.minimumAmount) <= 0
+                                ?
+                                <>
+                                  * คูปองนี้ไม่มียอดขั้นต่ำ{' '}
+                                </>
+                                :
+                                <>
+                                  * คูปองนี้ใช้ได้เมื่อยอดมากกว่า{' '}
+                                  <span className="font-bold"> {coupon.currencySign}{coupon.minimumAmount}</span>{' '}
+                                </>
+                              }
+                            
+                          </p>
+                          </>
+                      }
+                      
                     </div>
                   </div>
-                  <p className="text-xs leading-5 text-gray-500 mt-2">
-                    * This coupon code will apply on{' '}
-                    <span className="font-bold text-gray-700">
-                      {coupon.productType} type products
-                    </span>{' '}
-                    and when you shopping more then{' '}
-                    <span className="font-bold text-gray-700">
-                      {coupon.currencySign}{coupon.minimumAmount}
-                    </span>{' '}
-                  </p>
                 </div>
               </div>
-            </div>
-          </div>
-        ))
-      )
-      }
-    </>
+            ))
+          )
+          : 
+          (
+            coupons?.map((coupon) => (
+              <div
+                key={coupon._id}
+                className="coupon block md:flex lg:flex md:justify-between lg:justify-between items-center bg-white rounded-md shadow-sm"
+              >
+                <div className="tengah p-6 flex items-center justify-items-start">
+                  <figure>
+                    <Image
+                      src={coupon.logo}
+                      alt={coupon.title}
+                      width={120}
+                      height={120}
+                      className="rounded-lg"
+                    />
+                  </figure>
+                  <div className="ml-5">
+                    {dayjs().isAfter(dayjs(coupon.endTime)) ? (
+                      <span className="inline-block mb-2">
+                        <div className="flex items-center font-semibold">
+                          <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
+                            00
+                          </span>
+                          :
+                          <span className="flex items-center justify-center bg-red-100 text-sm font-serif font-semibold px-2 py-1 rounded mx-1">
+                            00
+                          </span>
+                        </div>
+                      </span>
+                    ) : (
+                      <span className="inline-block mb-2">
+                        <div className="flex items-center font-semibold">
+                          <OfferTimer expiryTimestamp={new Date(coupon.endTime)} />
+                        </div>
+                      </span>
+                    )}
+
+                    <h2 className="font-serif text-lg leading-6 font-medium mb-3">
+                      {coupon.title}
+                    </h2>
+                    <p className="font-serif font-bold text-xl text-gray-600">
+                      <span className="text-lg md:text-xl lg:text-2xl leading-12 text-red-500 font-extrabold">
+                        {coupon.discountPercentage}%
+                      </span>{' '}
+                      Off
+                    </p>
+                  </div>
+                </div>
+                <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-6">
+                  <div className="info flex lg:my-6 md:my-5 mb-6 items-center">
+                    <div className="w-full">
+                      <div className="block">
+                        <div className="font-serif font-medium flex items-center mb-1">
+                          <span>Coupon</span>
+                          <div className="ml-2">
+                            {dayjs().isAfter(dayjs(coupon.endTime)) ? (
+                              <span className="text-red-600 inline-block">
+                                Inactive
+                              </span>
+                            ) : (
+                              <span className="text-cyan-600 inline-block">
+                                Active
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="font-serif border border-dashed bg-cyan-50 py-2 border-cyan-300 rounded-lg text-center block">
+                          <CopyToClipboard
+                            text={coupon.couponCode}
+                            onCopy={() => handleCopied(coupon.couponCode)}
+                          >
+                            <button className="block w-full">
+                              {copied && coupon.couponCode === copiedCode ? (
+                                <span className="text-cyan-600 text-base leading-7 font-semibold">
+                                  คูปอง กำลังถูกใช้!
+                                </span>
+                              ) : (
+                                <span className="uppercase font-serif font-semibold text-base leading-7 text-cyan-600">
+                                  {coupon.couponCode}{' '}
+                                </span>
+                              )}
+                            </button>
+                          </CopyToClipboard>
+                        </div>
+                      </div>
+                      <p className="text-xs leading-5 text-gray-500 mt-2">
+                        * This coupon code will apply on{' '}
+                        <span className="font-bold text-gray-700">
+                          {coupon.productType} type products
+                        </span>{' '}
+                        and when you shopping more then{' '}
+                        <span className="font-bold text-gray-700">
+                          {coupon.currencySign}{coupon.minimumAmount}
+                        </span>{' '}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )
+          }
+        </>
+      :
+        <></>
+    :
+      <></>
+
+    
   );
 };
 

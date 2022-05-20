@@ -10,7 +10,7 @@ import 'swiper/css/navigation';
 //internal import
 import { sliderData } from '@utils/data';
 
-const MainCarousel = () => {
+const MainCarousel = ({sliderImages}) => {
   return (
     <>
       <Swiper
@@ -27,7 +27,31 @@ const MainCarousel = () => {
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper"
       >
-        {sliderData.map((item, i) => (
+        {
+          sliderImages.map((item, i) => (
+            <SwiperSlide
+              className="h-full relative rounded-lg overflow-hidden"
+              key={i + 1}
+            >
+              <div className="text-sm text-gray-600 hover:text-emerald-dark">
+                <Image
+                  layout="responsive"
+                  width={950}
+                  height={400}
+                  src={item.url}
+                  alt={item.url}
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute top-0 left-0 z-10 p-r-16 flex-col flex w-full h-full place-items-start justify-center">
+                <div className="pl-4 pr-12 sm:pl-10 sm:pr-16 w-10/12 lg:w-8/12 xl:w-7/12">
+                  
+                </div>
+              </div>
+            </SwiperSlide>
+          ))
+        }
+        {/* {sliderData.map((item, i) => (
           <SwiperSlide
             className="h-full relative rounded-lg overflow-hidden"
             key={i + 1}
@@ -58,7 +82,7 @@ const MainCarousel = () => {
               </div>
             </div>
           </SwiperSlide>
-        ))}
+        ))} */}
       </Swiper>
     </>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import Label from '@component/form/Label';
 
 const InputArea = ({
@@ -10,7 +10,25 @@ const InputArea = ({
   type,
   placeholder,
   Icon,
+  handleDataChange
 }) => {
+
+  const [dataInput,setDataInput] = useState('');
+
+  useEffect(() => 
+  {
+    
+    setDataInput(dataValue);
+
+  },[]);
+
+  const handleTextChange = (e) =>
+  {
+    setDataInput(e.target.value)
+    handleDataChange(e)
+
+  }
+
   return (
     <>
       <Label label={label} />
@@ -27,7 +45,8 @@ const InputArea = ({
             required: `${label} is required!`,
           })}
           defaultValue={defaultValue}
-          value={dataValue}
+          value={dataInput}
+          onChange={(e) => handleTextChange(e)}
           type={type}
           placeholder={placeholder}
           name={name}

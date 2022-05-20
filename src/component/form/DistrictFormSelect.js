@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Label from '@component/form/Label';
 import {Form} from 'react-bootstrap';
 
@@ -16,39 +16,44 @@ const DistrictFormSelect = ({
   handleItemChange
 }) => {
 
-  var districtList = [];
-  var districtId = 0;
-  districtId = selectedId;
-  districtList = dataList;
-  var districtOptionIndent = [];
-  var districtIndent = [];
+  
 
-  if(selectedId === 0)
+  const [districtId,setDistrictId] = useState(0);
+  const [districtList,setDistrictList] = useState(dataList);
+  const [districtOptionIndent,setDistrictOptionIndent] = useState([]);
+  useState(() => 
   {
-    //alert("Select == 0")
-    districtOptionIndent.push(<option selected>Select District</option>)
-  }
-  else
-  {
-    districtOptionIndent.push(<option>Select District</option>)
-  }
-  for(var i=0;i<dataList.length;i++)
-  {
-    if(districtList[i].Id === districtId)
+    
+    setDistrictList(dataList);
+
+    var districtOptionIndentData = [];
+    if(selectedId === 0)
     {
-      //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-      districtOptionIndent.push(<option selected value={districtList[i].Id}>{districtList[i].Name_th}</option>)
+      //alert("Select == 0")
+      districtOptionIndentData.push(<option selected>Select District</option>)
     }
     else
     {
-        districtOptionIndent.push(<option value={districtList[i].Id}>{districtList[i].Name_th}</option>)
+      districtOptionIndentData.push(<option>Select District</option>)
     }
-    
-  }
-  
-  //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);
-  
-  //alert("Selected = " + json);
+
+    for(var i=0;i<dataList.length;i++)
+    {
+      if(dataList[i].Id === districtId)
+      {
+        //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
+        districtOptionIndentData.push(<option selected value={districtList[i].Id}>{districtList[i].Name_th}</option>)
+      }
+      else
+      {
+        districtOptionIndentData.push(<option value={districtList[i].Id}>{districtList[i].Name_th}</option>)
+      }
+      
+    }
+    setDistrictOptionIndent(districtOptionIndentData);
+    setDistrictList(dataList);
+    setDistrictId(selectedId);
+  },[])
 
   return (
     <>

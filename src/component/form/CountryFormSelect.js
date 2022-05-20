@@ -23,7 +23,7 @@ const CountryFormSelect = ({
   const [countryOptionIndent,setCountryOptionIndent] = useState([]);
   
 
-  useState(() => 
+  useEffect(() => 
   {
     //alert('start dataList = ' + JSON.stringify(dataList));
     //alert('start countryList = ' + JSON.stringify(countryList));
@@ -59,46 +59,7 @@ const CountryFormSelect = ({
     setCountryId(selectedId);
   },[])
   
-  useEffect(() => 
-  {
-    //alert('dataList = ' + JSON.stringify(dataList));
-    //alert('countryList = ' + JSON.stringify(countryList));
-
-    setCountryList(dataList);
-
-    var countryOptionIndentData = [];
-    if(selectedId === 0)
-    {
-      //alert("Select == 0")
-      countryOptionIndentData.push(<option selected>Select Country</option>)
-    }
-    else
-    {
-      countryOptionIndentData.push(<option>Select Country</option>)
-    }
-
-    if(countryList.length > 0)
-    {
-      for(var i=0;i<dataList.length;i++)
-      {
-        if(countryList[i].countryId === countryId)
-        {
-          //alert("Select = " + countryId + " LocalName" + countryList[i].countryLocalName)
-          countryOptionIndentData.push(<option selected value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
-        }
-        else
-        {
-          countryOptionIndentData.push(<option value={countryList[i].countryId}>{countryList[i].countryLocalName}</option>)
-        }
-        
-      }
-    }
-    
-    setCountryOptionIndent(countryOptionIndentData);
-    
-    setCountryId(selectedId);
-
-  });
+  
   
   //alert(JSON.stringify(countryOptionIndent))
   //var json = countryOptionIndent.toString();//JSON.stringify(countryOptionIndent);

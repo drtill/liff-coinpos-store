@@ -26,6 +26,8 @@ const Cart = () => {
   
   const [currencySign, setCurrencySign] = useState('');
 
+  const [companyCode, setCompanyCode] = useState('');
+
   useEffect(() => 
   {
     //alert("open cart")
@@ -33,6 +35,14 @@ const Cart = () => {
     {
       var currencySignData = sessionStorage.getItem('currencySign'); 
       setCurrencySign(currencySignData);
+    }
+
+    if(sessionStorage.getItem('companyCode'))
+    {
+      var companyCodeData = sessionStorage.getItem('companyCode'); 
+      //alert('companyCodeData = ' + companyCodeData);
+      setCompanyCode(companyCodeData);
+            
     }
 
   },[])
@@ -191,7 +201,7 @@ const Cart = () => {
                 <div onClick={handleOpenLogin}>{checkoutClass}</div>
               ) : (
 
-                <Link href="/checkout" onClick={() => handleCheckout}>
+                <Link href={"/" + companyCode + "/checkout"} onClick={() => handleCheckout}>
                   <a>{checkoutClass}</a>
                   
                 </Link>

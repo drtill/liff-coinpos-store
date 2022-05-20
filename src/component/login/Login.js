@@ -67,7 +67,6 @@ const Login = ({ setShowResetPassword, setModalOpen,setLoginLoading }) => {
       
       
 
-      //alert("Login Handle")
       submitHandler(data)
 
       //setLoginLoading(false);

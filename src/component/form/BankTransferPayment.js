@@ -104,7 +104,8 @@ const BankTransferPayment = (
           companyId,
           accountName,
           accountNumber,
-          transferTimeValue
+          transferTimeValue,
+          pictureUrl:'',
 
 
         })
