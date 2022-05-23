@@ -539,6 +539,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               }
             }
             
+
+            sessionStorage.setItem('getCompanyData',true)
             
             
       

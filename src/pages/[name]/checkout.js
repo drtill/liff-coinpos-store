@@ -39,7 +39,9 @@ import QRPaymentPayment from '@component/form/QRPaymentPayment';
 import {Form} from 'react-bootstrap';
 import ProductServices from '@services/ProductServices';
 
-import EditableCustomerInput from '@component/form/EditableCustomerInput';
+//import EditableCustomerInput from '@component/form/EditableCustomerInput';
+
+import Select from 'react-select'
 /* import {
   Combobox,
   ComboboxInput,
@@ -80,6 +82,14 @@ const Checkout = () => {
     handleShippingName,
     setCouponData
   } = useCheckoutSubmit();
+
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
+  const [selectedOption,setSelectedOption]  = useState({});
 
   
   const [discountDetails, setDiscountDetail] = useState([]);
@@ -146,12 +156,17 @@ const Checkout = () => {
   const [countrys,setCountry] = useState([]);
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
+
+  const [districtIdAndPostalCodes, setDistrictIdAndPostalCodes] = useState([]);
+  
   const [postalcode, setPostalCode] = useState('');
   const [districtText, setDistrictText] = useState('');
   const [cityText, setCityText] = useState('');
   const [provinceText, setProvinceText] = useState('');
   const [changePostalcode, setChangePostalCode] = useState(false);
   const [shippingServices, setShippings] = useState([]);
+
+  const [countryLabel, setCountryLabel] = useState('Select Country');
 
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
@@ -237,6 +252,50 @@ const Checkout = () => {
     setCityLoading(true);
     setDistrictLoading(true);
     setPostalCodeLoading(true);
+    
+
+    if(sessionStorage.getItem('getCompanyData'))
+    {
+      InitialData();
+    }
+    else
+    {
+      LoadCompanyData();
+      sessionStorage.setItem('getCompanyData',true)
+    }
+
+    
+
+  setCustomerInfoLoading(false);
+
+  setPostalCodeLoading(false);
+  setDistrictLoading(false);
+  setCityLoading(false);
+  setProvinceLoading(false);
+  setCountryLoading(false);
+  },[]);
+
+
+  const LoadCompanyData = () =>
+  {
+    const defaultData = await ProductServices.fetchGetDefaultDataCompany({
+      //const products = await ProductServices.getCoinPOSProductService({
+        liffId,
+        lineUserId,
+        linePOSId,
+        groupId,
+        orderId:orderId ? 0 : orderId,
+        companyId,locationId,
+        companyName,
+        locationName,
+        catalogName,
+        companyCode,
+        promotionId,customerTypeId,page,itemPerPage,query,category,product
+      });
+  };
+
+  const InitialData = () =>
+  {
     if(sessionStorage.getItem('countryId'))
     {
       
@@ -246,6 +305,7 @@ const Checkout = () => {
       
         
     }
+    
     if(Number(countryIdData) !== 10 && Number(countryIdData) !== 0)//thai
     {
       //alert()
@@ -330,7 +390,19 @@ const Checkout = () => {
     }
     else
     {
-      setCountry(countryList);
+      var countryOptions = [];
+      
+      for(var i=0;i<countryList.length;i++)
+      {
+        var item = countryList[i];
+        if(item !== undefined)
+        {
+          var countryName = item.countryLocalName;
+          var countryId = item.countryId;
+          countryOptions.push({ value: countryId, label: countryName })
+        }
+      }
+      setCountry(countryOptions);
     }
     
   }
@@ -345,7 +417,20 @@ const Checkout = () => {
     }
     else
     {
-      setProvinces(provincesList);
+      var provincesOptions = [];
+      
+      for(var i=0;i<provincesList.length;i++)
+      {
+        var item = provincesList[i];
+        if(item !== undefined)
+        {
+          var provincesName = item.Name_th;
+          var provincesId = item.Id;
+          provincesOptions.push({ value: provincesId, label: provincesName })
+        }
+      }
+      
+      setProvinces(provincesOptions);
     }
   }
 
@@ -362,7 +447,20 @@ const Checkout = () => {
     }
     else
     {
-      setCities(citiesList);
+      var citiesOptions = [];
+      
+      for(var i=0;i<citiesList.length;i++)
+      {
+        var item = citiesList[i];
+        if(item !== undefined)
+        {
+          var citiesName = item.Name_th;
+          var citiesId = item.Id;
+          citiesOptions.push({ value: citiesId, label: citiesName })
+        }
+      }
+      
+      setCities(citiesOptions);
     }
   }
   if(sessionStorage.getItem('districts'))
@@ -375,7 +473,24 @@ const Checkout = () => {
     }
     else
     {
-      setDistricts(districtsList);
+      var districtsOptions = [];
+      var districtIdAndPostals = [];
+      
+      for(var i=0;i<districtsList.length;i++)
+      {
+        var item = districtsList[i];
+        if(item !== undefined)
+        {
+          var districtsName = item.Name_th;
+          var districtsId = item.Id;
+          var districtPostalCode = item.ZipCode;
+          districtsOptions.push({ value: districtsId, label: districtsName })
+          districtIdAndPostals.push({ value: districtsId, label: districtPostalCode })
+        }
+      }
+      
+      setDistricts(districtsOptions);
+      setDistrictIdAndPostalCodes(districtIdAndPostals);
     }
   }
 
@@ -552,14 +667,7 @@ const Checkout = () => {
     
   }
 
-  setCustomerInfoLoading(false);
-
-  setPostalCodeLoading(false);
-  setDistrictLoading(false);
-  setCityLoading(false);
-  setProvinceLoading(false);
-  setCountryLoading(false);
-  },[]);
+  };
 
   const UpdateTotal = (id,qty,discountRate) =>
   {
@@ -923,20 +1031,24 @@ const updateSocialPOSShipping = async(shippingId, shippingLabel, shippingCost) =
 
     })
 }
-const handleCountryChange = async(event) => {
-    setProvinceLoading(true);
+const handleCountryChange = async(selectedOption) => {
+  //alert('handleCountryChange');  
+  setProvinceLoading(true);
     setCityLoading(true);
     setDistrictLoading(true);
     setPostalCodeLoading(true);
-    //alert("aaaa" + event.target.value);
-    var countryId = parseInt(event.target.value)
+    //alert("aaaa = " + JSON.stringify(selectedOption));
+    var countryId = parseInt(selectedOption.value)
+    
     setCountryId(countryId);
     if(countryId === 10)//thai
     {
+      //alert('thai');
       setIsInputAddress(false);
     }
     else
     {
+      //alert('no thai');
       setIsInputAddress(true);
     }
     //alert('country Id = ' + countryId);
@@ -950,18 +1062,33 @@ const handleCountryChange = async(event) => {
     setDistrictLoading(false);
     setPostalCodeLoading(false);
 }
-const handleProvinceChange = async(event) => {
+const handleProvinceChange = async(selectedOption) => {
   setCityLoading(true);
   setDistrictLoading(true);
   setPostalCodeLoading(true);
-    console.log(event.target.value);
-    var stateId = parseInt(event.target.value)
+    console.log(selectedOption.value);
+    var stateId = parseInt(selectedOption.value)
     //alert('state Id = ' + stateId);
     var citysData = await ProductServices.fetchGetCity({stateId});
     //alert(JSON.stringify(citysData));
     setProvinceId(stateId);
-    setCities(citysData);
-    setDistricts([]);
+
+    var citysOptions = [];
+      
+      for(var i=0;i<citysData.length;i++)
+      {
+        var item = citysData[i];
+        if(item !== undefined)
+        {
+          var citysName = item.Name_th;
+          var citysId = item.Id;
+          citysOptions.push({ value: citysId, label: citysName })
+        }
+      }
+      
+      
+    setCities(citysOptions);
+    //setDistricts([]);
     setPostalCode('');
     //var citys = await GetCity(stateId)
     //PopulateCity(citys)
@@ -969,26 +1096,47 @@ const handleProvinceChange = async(event) => {
     setDistrictLoading(false);
     setPostalCodeLoading(false);
 }
-const handleCityChange = async(event) => {
+const handleCityChange = async(selectedOption) => {
   setDistrictLoading(true);
   setPostalCodeLoading(true);
-    console.log(event.target.value);
-    var cityId = parseInt(event.target.value)        
+    console.log(selectedOption.value);
+    var cityId = parseInt(selectedOption.value)        
     //alert('city Id = ' + cityId);
     var districtsData = await ProductServices.fetchGetDistrict({cityId});
     setCityId(cityId);
     //alert(JSON.stringify(districtsData));
-    setDistricts(districtsData);
+    var districtsOptions = [];
+    var districtIdAndPostals = [];
+      
+      for(var i=0;i<districtsData.length;i++)
+      {
+        var item = districtsData[i];
+        if(item !== undefined)
+        {
+          var districtsName = item.Name_th;
+          var districtsId = item.Id;
+          var districtPostalCode = item.ZipCode;
+          districtsOptions.push({ value: districtsId, label: districtsName })
+          districtIdAndPostals.push({ value: districtsId, label: districtPostalCode })
+        }
+      }
+    
+    setDistricts(districtsOptions);
+    setDistrictIdAndPostalCodes(districtIdAndPostals);
     setPostalCode('');
     //PopulateDistrict(districts)
     setDistrictLoading(false);
     setPostalCodeLoading(false);
+
+      
+      setDistricts(districtsOptions);
+      setDistrictIdAndPostalCodes(districtIdAndPostals);
     
 }
-const handleDistrictChange = async(event) => {
-    console.log(event.target.value);
+const handleDistrictChange = async(selectedOption) => {
+    console.log(selectedOption.value);
     setPostalCodeLoading(true);
-    var districtId = parseInt(event.target.value)     
+    var districtId = parseInt(selectedOption.value)     
     setDistrictId(districtId);   
     //alert('district Id = ' + districtId);
     //setPostalCode(districtId);
@@ -1003,20 +1151,22 @@ const handleDistrictChange = async(event) => {
 const PopulatePostalCode = (id) =>
 {
   //setData(id);
-  for(var i=0;i<districts.length;i++)
+  for(var i=0;i<districtIdAndPostalCodes.length;i++)
   {
-    var item = districts[i];
+    var item = districtIdAndPostalCodes[i];
+    
     if(item !== null)
     {
-      if(item.Id === id)
+      //alert("has item = " + JSON.stringify(item))
+      if(item.value === id)
       {
-        //alert(districts[i].ZipCode);
+        //alert('post = ' + districtIdAndPostalCodes[i])
         //alert(document.getElementById("postalCode").value);
         //alert(document.getElementById("postalCode").defaultValue);
         //document.getElementById("postalCode").value = districts[i].ZipCode;
         //document.getElementById("postalCode").defaultValue = districts[i].ZipCode;
         setChangePostalCode(true);
-        setPostalCode(districts[i].ZipCode);
+        setPostalCode(districtIdAndPostalCodes[i].label);
       }
     }
   }
@@ -1380,14 +1530,18 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               
                             :
                               <>
-                                <CountryFormSelect register={register}
+                              <Select options={countrys} 
+                              defaultValue={{ label: countryLabel, value: countryId }} 
+                              onChange={handleCountryChange}/>
+                              {/* <Select options={options} value={selectedOption} onChange={handleCountryChange}/> */}
+                                {/* <CountryFormSelect register={register}
                                 label="ประเทศ"
                                 name="province1"
                                 type="text"
                                 isDisable={IsDisableCustomerInfo}
                                 handleItemChange={handleCountryChange}
                                 dataList={countrys} selectedId={countryId}
-                                />
+                                /> */}
                               
                               <Error errorName={countryError} />
                               </>
@@ -1418,14 +1572,15 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   
                                 :
                                 
-                                  <ProvinceFormSelect register={register}
+                                  <Select options={provinces} onChange={handleProvinceChange}/>
+                                  /* <ProvinceFormSelect register={register}
                                   label="จังหวัด"
                                   name="province"
                                   type="text"
                                   isDisable={IsDisableCustomerInfo}
                                   handleItemChange={handleProvinceChange}
                                   dataList={provinces} selectedId={provinceId}
-                                  />
+                                  /> */
                             }
                             
                             <Error errorName={provinceError} />
@@ -1451,14 +1606,15 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 />
                                   
                                 :
-                                <CityFormSelect register={register}
+                                <Select options={cities} onChange={handleCityChange}/>
+                                /*<CityFormSelect register={register}
                                 label="เขต/อำเภอ"
                                 name="province2"
                                 type="text"
                                 isDisable={IsDisableCustomerInfo}
                                 handleItemChange={handleCityChange}
                                 dataList={cities} selectedId={cityId}
-                                />
+                                />*/
                             }
                             
                             <Error errorName={cityError} />
@@ -1484,14 +1640,15 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   />
                                   
                                 :
-                                  <DistrictFormSelect register={register}
+                                <Select options={districts} onChange={handleDistrictChange}/>
+                                  /*<DistrictFormSelect register={register}
                                     label="แขวง/ตำบล"
                                     name="district"
                                     type="text"
                                     isDisable={IsDisableCustomerInfo}
                                     handleItemChange={handleDistrictChange}
                                     dataList={districts} selectedId={districtId}
-                                    />
+                                    />*/
                             }
                             
                             <Error errorName={districtError} />
