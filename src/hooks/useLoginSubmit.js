@@ -200,7 +200,7 @@ const useLoginSubmit = (setModalOpen) => {
             //router.push(redirect);
 
             //alert('customerId = ' + userLogin.customerId)
-            alert('3 = ' + userLogin.customerAddressId)
+            
         sessionStorage.removeItem('targetPage');
         
         sessionStorage.setItem('customerId', userLogin.customerId);

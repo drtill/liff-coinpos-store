@@ -52,20 +52,17 @@ const MyOrders = () => {
   const [pagingIndent, setPaging] = useState([]);
 
 
-  useEffect(() => {
-    if (!userInfo) {
-      router.push('/');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  
 
   const [catalogName, setCatalogName] = useState('');
   const [companyCode, setCompanyCode] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
 
-  
-  useEffect(() => 
-  {
+  useEffect(() => {
+    if (!userInfo) {
+      router.push('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     if(sessionStorage.getItem('customerEmail'))
     {
       var customerEmailData = sessionStorage.getItem('customerEmail'); 
@@ -171,8 +168,8 @@ const MyOrders = () => {
           groupId = sessionStorage.getItem('groupId'); 
           
         }
-
-  });
+  }, []);
+  
   
 
       const pagingManager = (countPage,currentPage) =>
@@ -435,7 +432,7 @@ const MyOrders = () => {
                         <tr key={order.orderId}>
                           <OrderHistory order={order} />
                           <td className="px-5 py-3 whitespace-nowrap text-right text-sm">
-                            <Link href={`/order/${order.orderId}`}>
+                            <Link href={`/${companyCode}/order/${order.orderId}`}>
                               <a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full">
                                 รายละเอียด
                               </a>

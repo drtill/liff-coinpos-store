@@ -1,8 +1,8 @@
 import requests from './httpServices';
 
 //const serviceUrl = 'https://coinpos-prod.azurewebsites.net/lineliff/';
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
   getShowingProducts() {
     return requests.get('/products/show');
@@ -555,6 +555,34 @@ const ProductServices = {
       });
       
         return provinceData;
+    }
+    catch (err) 
+    {
+      return "Error: " + err.message;
+      
+    }
+  },
+  async fetchGetAddressSelectorInfo()
+  {
+    try
+    {
+      var addressSelectorData = null;
+      await fetch(serviceUrl + 'GetAddressSelectorInfo',
+      { 
+        method:'POST',
+        //credentials:"include",
+        headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+        body:``  
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+        //var obj = JSON.parse(data);
+        //alert('address Selector = ' + data);
+        var obj = JSON.parse(data)
+        addressSelectorData = obj;
+      });
+      return addressSelectorData;
     }
     catch (err) 
     {

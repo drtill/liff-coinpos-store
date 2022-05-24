@@ -152,9 +152,14 @@ const Checkout = () => {
 
   const [address1,setCustomerAddress] = useState('');
 
+  const [allProvinces, setAllProvinces] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [countrys,setCountry] = useState([]);
+
+  const [allCitys, setAllCitys] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const [allDistricts, setAllDistricts] = useState([]);
   const [districts, setDistricts] = useState([]);
 
   const [districtIdAndPostalCodes, setDistrictIdAndPostalCodes] = useState([]);
@@ -244,8 +249,76 @@ const Checkout = () => {
     districts = JSON.parse(districtsJson);
   } */
 
-  useEffect(() => 
+  useEffect(async() => 
   {
+    var allAddressSelector = await ProductServices.fetchGetAddressSelectorInfo();
+    
+    var countryOptions = [];
+      
+    
+    for(var i=0;i<allAddressSelector.countrys.length;i++)
+    {
+      var item = allAddressSelector.countrys[i];
+      if(item !== undefined)
+      {
+        var countryName = item.countryLocalName;
+        var countryId = item.countryId;
+        countryOptions.push({ value: countryId, label: countryName })
+      }
+    }
+    //alert("country = " + JSON.stringify(countryOptions));
+    setCountry(countryOptions);
+
+    var provinceOptions = [];
+      
+    for(var i=0;i<allAddressSelector.provinces.length;i++)
+    {
+      var item = allAddressSelector.provinces[i];
+      if(item !== undefined)
+      {
+        var provinceName = item.Name_th;
+        var id = item.Id;
+        provinceOptions.push({ value: id, label: provinceName})
+      }
+    }
+    //alert("provinceOptions = " + JSON.stringify(provinceOptions));
+    setAllProvinces(provinceOptions);
+
+    var cityOptions = [];
+      
+    for(var i=0;i<allAddressSelector.cities.length;i++)
+    {
+      var item = allAddressSelector.cities[i];
+      if(item !== undefined)
+      {
+        var cityName = item.Name_th;
+        var id = item.Id;
+        var provinceId = item.ProvinceId
+        cityOptions.push({ value: id, label: cityName, provinceId: provinceId})
+      }
+    }
+    //alert("cityOptions = " + JSON.stringify(cityOptions));
+    setAllCitys(cityOptions);
+
+    var districtOptions = [];
+      
+    for(var i=0;i<allAddressSelector.districts.length;i++)
+    {
+      var item = allAddressSelector.districts[i];
+      if(item !== undefined)
+      {
+        var districtName = item.Name_th;
+        var id = item.Id;
+        var cityId = item.CityId
+        var zipCode = item.ZipCode
+        districtOptions.push({ value: id, label: districtName, cityId: cityId, zipCode: zipCode})
+      }
+    }
+    //alert("districtOptions = " + JSON.stringify(districtOptions));
+    setAllDistricts(districtOptions);
+
+
+
     setCustomerInfoLoading(true);
     setCountryLoading(true);
     setProvinceLoading(true);
@@ -276,7 +349,7 @@ const Checkout = () => {
   },[]);
 
 
-  const LoadCompanyData = () =>
+  const LoadCompanyData = async() =>
   {
     const defaultData = await ProductServices.fetchGetDefaultDataCompany({
       //const products = await ProductServices.getCoinPOSProductService({
@@ -379,7 +452,7 @@ const Checkout = () => {
     setDisableCustomerInfo(false);
   }
 
-  if(sessionStorage.getItem('countrysJSON'))
+  /* if(sessionStorage.getItem('countrysJSON'))
   {
     var countrysJson = sessionStorage.getItem('countrysJSON'); 
     //alert(countrysJson);
@@ -432,7 +505,7 @@ const Checkout = () => {
       
       setProvinces(provincesOptions);
     }
-  }
+  } */
 
   
   if(sessionStorage.getItem('cities'))
@@ -725,9 +798,9 @@ const Checkout = () => {
     data["email"] = email;
 
 
-    var countryItem = countrys.find(x => x.countryId === countryId);
+    var countryItem = countrys.find(x => x.value === countryId);
   //alert(JSON.stringify(countryItem));
-    var countryString = countryItem === null ? "" : countryItem.countryLocalName;
+    var countryString = countryItem === null ? "" : countryItem.label;
 
     
     var cityString = '';
@@ -741,14 +814,14 @@ const Checkout = () => {
     }
     else
     {
-      var cityItem = cities.find(x => x.Id === cityId);
-      cityString = cityItem === null ? "" : cityItem.Name_th;
+      var cityItem = cities.find(x => x.value === cityId);
+      cityString = cityItem === null ? "" : cityItem.label;
 
-      var provinceItem = provinces.find(x => x.Id === provinceId);
-      provinceString = provinceItem === null ? "" : provinceItem.Name_th;
+      var provinceItem = provinces.find(x => x.value === provinceId);
+      provinceString = provinceItem === null ? "" : provinceItem.label;
 
-      var districtItem = districts.find(x => x.Id === districtId);
-      districtString = districtItem === null ? "" : districtItem.Name_th;
+      var districtItem = districts.find(x => x.value === districtId);
+      districtString = districtItem === null ? "" : districtItem.label;
     }
 
     var postalCodeString = postalcode;
@@ -923,7 +996,7 @@ const Checkout = () => {
     }
 
   const handlePostalCodeChange = (event) => {  
-    alert("aaaa" + event.target.value);
+    //alert("aaaa" + event.target.value);
     setPostalCode(event.target.value)
   }
   const handleDistrictTextChange = (event) => {  
@@ -1045,11 +1118,13 @@ const handleCountryChange = async(selectedOption) => {
     {
       //alert('thai');
       setIsInputAddress(false);
+      setProvinces(allProvinces);
     }
     else
     {
       //alert('no thai');
       setIsInputAddress(true);
+      setProvinces([]);
     }
     //alert('country Id = ' + countryId);
     //var provincesData = await ProductServices.fetchGetStateProvince();
@@ -1069,7 +1144,8 @@ const handleProvinceChange = async(selectedOption) => {
     console.log(selectedOption.value);
     var stateId = parseInt(selectedOption.value)
     //alert('state Id = ' + stateId);
-    var citysData = await ProductServices.fetchGetCity({stateId});
+
+    var citysData = allCitys.filter((item) => item.provinceId === stateId); //await ProductServices.fetchGetCity({stateId});
     //alert(JSON.stringify(citysData));
     setProvinceId(stateId);
 
@@ -1080,8 +1156,8 @@ const handleProvinceChange = async(selectedOption) => {
         var item = citysData[i];
         if(item !== undefined)
         {
-          var citysName = item.Name_th;
-          var citysId = item.Id;
+          var citysName = item.label;
+          var citysId = item.value;
           citysOptions.push({ value: citysId, label: citysName })
         }
       }
@@ -1102,7 +1178,7 @@ const handleCityChange = async(selectedOption) => {
     console.log(selectedOption.value);
     var cityId = parseInt(selectedOption.value)        
     //alert('city Id = ' + cityId);
-    var districtsData = await ProductServices.fetchGetDistrict({cityId});
+    var districtsData = allDistricts.filter((item) => item.cityId === cityId); //await ProductServices.fetchGetDistrict({cityId});
     setCityId(cityId);
     //alert(JSON.stringify(districtsData));
     var districtsOptions = [];
@@ -1113,9 +1189,9 @@ const handleCityChange = async(selectedOption) => {
         var item = districtsData[i];
         if(item !== undefined)
         {
-          var districtsName = item.Name_th;
-          var districtsId = item.Id;
-          var districtPostalCode = item.ZipCode;
+          var districtsName = item.label;
+          var districtsId = item.value;
+          var districtPostalCode = item.zipCode;
           districtsOptions.push({ value: districtsId, label: districtsName })
           districtIdAndPostals.push({ value: districtsId, label: districtPostalCode })
         }
@@ -1199,9 +1275,9 @@ const SaveCustomerInfo = async (companyId) =>
 {
   //alert(countryId);
   setCustomerInfoLoading(true);
-  var countryItem = countrys.find(x => x.countryId === countryId);
+  var countryItem = countrys.find(x => x.value === countryId);
   //alert(JSON.stringify(countryItem));
-    var countryString = countryItem === null ? "" : countryItem.countryLocalName;
+    var countryString = countryItem === null ? "" : countryItem.label;
 
     //alert("cityId = " + cityId);
 
@@ -1216,14 +1292,16 @@ const SaveCustomerInfo = async (companyId) =>
     }
     else
     {
-      var cityItem = cities.find(x => x.Id === cityId);
-      cityString = cityItem === null ? "" : cityItem.Name_th;
+      var cityItem = cities.find(x => x.value === cityId);
+      //alert('cityItem = ' + JSON.stringify(cityItem))
+      cityString = cityItem === null ? "" : cityItem.label;
 
-      var provinceItem = provinces.find(x => x.Id === provinceId);
-      provinceString = provinceItem === null ? "" : provinceItem.Name_th;
+      var provinceItem = provinces.find(x => x.value === provinceId);
+      //alert('provinceItem = ' + JSON.stringify(provinceItem))
+      provinceString = provinceItem === null ? "" : provinceItem.label;
 
-      var districtItem = districts.find(x => x.Id === districtId);
-      districtString = districtItem === null ? "" : districtItem.Name_th;
+      var districtItem = districts.find(x => x.value === districtId);
+      districtString = districtItem === null ? "" : districtItem.label;
     }
     //alert(JSON.stringify(cityItem));
     
@@ -1285,7 +1363,7 @@ const SaveCustomerInfo1 = async () =>
   setCustomerInfoLoading(true);
   var countryItem = countrys.find(x => x.countryId === countryId);
   //alert(JSON.stringify(countryItem));
-    var countryString = countryItem === null ? "" : countryItem.countryLocalName;
+    var countryString = countryItem === null ? "" : countryItem.label;
 
     //alert("cityId = " + cityId);
 
@@ -1300,14 +1378,14 @@ const SaveCustomerInfo1 = async () =>
     }
     else
     {
-      var cityItem = cities.find(x => x.Id === cityId);
-      cityString = cityItem === null ? "" : cityItem.Name_th;
+      var cityItem = cities.find(x => x.value === cityId);
+      cityString = cityItem === null ? "" : cityItem.label;
 
-      var provinceItem = provinces.find(x => x.Id === provinceId);
-      provinceString = provinceItem === null ? "" : provinceItem.Name_th;
+      var provinceItem = provinces.find(x => x.value === provinceId);
+      provinceString = provinceItem === null ? "" : provinceItem.label;
 
-      var districtItem = districts.find(x => x.Id === districtId);
-      districtString = districtItem === null ? "" : districtItem.Name_th;
+      var districtItem = districts.find(x => x.value === districtId);
+      districtString = districtItem === null ? "" : districtItem.label;
     }
     //alert(JSON.stringify(cityItem));
     
@@ -1530,9 +1608,16 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               
                             :
                               <>
-                              <Select options={countrys} 
-                              defaultValue={{ label: countryLabel, value: countryId }} 
-                              onChange={handleCountryChange}/>
+                              <Label label={"ประเทศ"} />
+                              <div className="relative">
+                                
+                                  <Select options={countrys} 
+                                    defaultValue={{ label: countryLabel, value: countryId }} 
+                                    onChange={handleCountryChange}/>
+
+                              </div>
+
+                              
                               {/* <Select options={options} value={selectedOption} onChange={handleCountryChange}/> */}
                                 {/* <CountryFormSelect register={register}
                                 label="ประเทศ"
@@ -1571,8 +1656,12 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 />
                                   
                                 :
-                                
-                                  <Select options={provinces} onChange={handleProvinceChange}/>
+                                <>
+                                  <Label label={"จังหวัด"} />
+                                  <div className="relative">
+                                    <Select options={provinces} onChange={handleProvinceChange}/>
+                                  </div>
+                                </>
                                   /* <ProvinceFormSelect register={register}
                                   label="จังหวัด"
                                   name="province"
@@ -1606,7 +1695,13 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 />
                                   
                                 :
-                                <Select options={cities} onChange={handleCityChange}/>
+                                <>
+                                  <Label label={"เขต/อำเภอ"} />
+                                  <div className="relative">
+                                    <Select options={cities} onChange={handleCityChange}/>
+                                  </div>
+                                </>
+                                
                                 /*<CityFormSelect register={register}
                                 label="เขต/อำเภอ"
                                 name="province2"
@@ -1640,7 +1735,13 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   />
                                   
                                 :
-                                <Select options={districts} onChange={handleDistrictChange}/>
+                                <>
+                                  <Label label={"แขวง/ตำบล"} />
+                                  <div className="relative">
+                                    <Select options={districts} onChange={handleDistrictChange}/>
+                                  </div>
+                                </>
+                                
                                   /*<DistrictFormSelect register={register}
                                     label="แขวง/ตำบล"
                                     name="district"
@@ -1685,6 +1786,161 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                         
                         
                       </div>
+                      {
+                      customerAddressId === 0 ?
+                        <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                          <div className="col-span-6 sm:col-span-3">
+                            
+                          </div>
+                          <div className="col-span-6 sm:col-span-3">
+                            <button
+                              type="button"
+                              disabled={isEmpty || isCheckoutSubmit}
+                              onClick={() => SaveCustomerInfo(lineCompanyId)}
+                              className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                            >
+                              บันทึกข้อมูลลูกค้า{' '}
+                              <span className="text-xl ml-2">
+                                {' '}
+                                <IoSaveOutline />
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      :
+                        
+                          IsEditCustomerInfo === true ?
+                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                            
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => CancelCustomerInfo()}
+                                  className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
+                                >
+                                  ยกเลิก{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCloseCircleOutline />
+                                  </span>
+                                </button>
+                              </div>
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => SaveCustomerInfo(lineCompanyId)}
+                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  บันทึกข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoSaveOutline />
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          :
+                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                              
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => AcceptCustomerInfo()}
+                                  className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  อนุมัติข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCheckboxOutline />
+                                  </span>
+                                </button>
+                              </div>
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => EditCustomerInfo()}
+                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  แก้ไขข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCreateOutline />
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                        
+                        
+                    }
+                    {
+                      customerAddressId === 0 ? 
+                        <>
+                          <br/>
+                          <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
+                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                          </h2>
+                        </> 
+                      : 
+                        IsApproveCustomerInfo === false ?
+                          <>
+                            <br/>
+                            <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
+                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                            </h2>
+                          </>
+                        :
+                        <>
+                          <div className="form-group mt-12">
+                                <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
+                                  03. รูปแบบขนส่ง
+                                </h2>
+                                <div className="grid grid-cols-6 gap-6">
+                                  <div className="col-span-6 sm:col-span-3">
+                                  <ShippingFormSelect register={register}
+                                    label="Shipping"
+                                    name="shippingOption"
+                                    type="text"
+                                    handleItemChange={handleShippingChange} 
+                                    dataList={shippingServices} selectedId={shippingId}/>
+                                  </div>
+                                  
+                                  
+                                </div>
+                                
+                              </div>
+          
+                              <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                                <div className="col-span-6 sm:col-span-3">
+                                  <Link href={dataPath}>
+                                    <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
+                                      <span className="text-xl mr-2">
+                                        <IoReturnUpBackOutline />
+                                      </span>
+                                      ช็อบต่อ
+                                    </a>
+                                  </Link>
+                                </div>
+                                <div className="col-span-6 sm:col-span-3">
+                                  <button
+                                    type="button"
+                                    onClick={()=> submitContact()}
+                                    disabled={isEmpty || isCheckoutSubmit}
+                                    className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                  >
+                                    อนุมัติ คำสั่งขาย{' '}
+                                    <span className="text-xl ml-2">
+                                      {' '}
+                                      <IoArrowForward />
+                                    </span>
+                                  </button>
+                                </div>
+                              </div>
+                        </>
+                      }
                     </>
                   /* <>
                     <div className="form-group">

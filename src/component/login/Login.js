@@ -74,6 +74,15 @@ const Login = ({ setShowResetPassword, setModalOpen,setLoginLoading }) => {
       setLoginLoading(false);
     }
 
+    const emailChange = () =>
+    {
+
+    }
+    const passwordChange = () =>
+    {
+
+    }
+
   return (
     <>
       <div className="text-center mb-6">
@@ -103,6 +112,7 @@ const Login = ({ setShowResetPassword, setModalOpen,setLoginLoading }) => {
                     type="email"
                     placeholder="Email"
                     Icon={FiMail}
+                    handleDataChange={emailChange}
                   />
                   <Error errorName={errors.registerEmail} />
                 </div>
@@ -115,6 +125,7 @@ const Login = ({ setShowResetPassword, setModalOpen,setLoginLoading }) => {
                     type="password"
                     placeholder="รหัสผ่าน"
                     Icon={FiLock}
+                    handleDataChange={passwordChange}
                   />
 
                   <Error errorName={errors.password} />
