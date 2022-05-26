@@ -18,6 +18,7 @@ import UserModal from '@component/modal/UserModal';
 
 const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterProduct, page}) => {
   const [imageUrl, setImageUrl] = useState('');
+  const [userinfoName, setUserinfoName] = useState('');
   const [searchText, setSearchText] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
@@ -50,6 +51,7 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
 
   useEffect(() => 
     {
+      //alert("first User");
       if(sessionStorage.getItem('companyCode'))
       {
         
@@ -59,12 +61,52 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
       }
       setPage(page);
 
-    },[])
-  
-  useEffect(() => {
-      //alert("Check UserInfo")
       if(Cookies.get('userInfo'))
       {
+        //alert("get userInfo");
+        Cookies.remove('userInfo');
+      } 
+      var userLocalJson = localStorage.getItem('userInfo');
+      if(userLocalJson === null)
+      {
+        //alert("userLocalJson = null");
+      }
+      else
+      {
+        //alert("userLocalJson = " + userLocalJson);
+        Cookies.set('userInfo', userLocalJson);
+        var userLocal = JSON.parse(userLocalJson)
+        //alert("User Info " + userInfo);
+        if(userInfo === null)
+        {
+          userInfo = JSON.parse(userLocalJson);
+          setImageUrl(userInfo.image);
+          //alert('1 user.name = ' + userInfo.name);
+          setUserinfoName(userInfo.name);
+        }
+        else
+        {
+          setImageUrl(userInfo.image);
+          //alert('user.name = ' + userInfo.name);
+          setUserinfoName(userInfo.name);
+        }
+        if (Cookies.get('userInfo')) {
+          //alert(JSON.stringify(Cookies.get('userInfo')));
+          const user = JSON.parse(userLocalJson)//JSON.parse(Cookies.get('userInfo'));
+          //alert("Cookie = " + JSON.stringify(user));
+          setImageUrl(user.image);
+          //alert('user.name = ' + user.name);
+          setUserinfoName(user.name);
+        }
+      }
+
+    },[])
+  
+  /*useEffect(() => {
+      //alert("2 Check UserInfo")
+      if(Cookies.get('userInfo'))
+      {
+        //alert("2 get UserInfo")
         Cookies.remove('userInfo');
       } 
       var userLocalJson = localStorage.getItem('userInfo');
@@ -76,16 +118,18 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
       {
         Cookies.set('userInfo', userLocalJson);
         var userLocal = JSON.parse(userLocalJson)
-        //alert("User Info " + JSON.stringify(userInfo));
+        //alert("2 User Info " + JSON.stringify(userInfo));
         if (Cookies.get('userInfo')) {
           //alert(JSON.stringify(Cookies.get('userInfo')));
           const user = JSON.parse(Cookies.get('userInfo'));
           //alert("Cookie = " + JSON.stringify(user));
           setImageUrl(user.image);
+          //alert('user.name = ' + user.name);
+          setUserinfoName(user.name);
         }
       }
       
-  });
+  });*/
 
   
 
@@ -178,34 +222,86 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
                 className="pl-5 text-white text-2xl font-bold"
                 aria-label="Login"
               >
-                {imageUrl || userInfo?.image ? (
-                  <button
-                    aria-label="Total"
-                    onClick={() => setUserModalOpen(!userModalOpen)}
-                    className="relative px-5 text-white text-2xl font-bold"
-                  >
-                    <a className="relative top-1 w-6 h-6">
-                      <Image
-                        width={29}
-                        height={29}
-                        src={imageUrl || userInfo?.image}
-                        alt="user"
-                        className="bg-white rounded-full"
-                      />
-                    </a>
-                  </button>
-                  /* <Link href={"/" + companyCode + "/user/dashboard"}>
-                    <a className="relative top-1 w-6 h-6">
-                      <Image
-                        width={29}
-                        height={29}
-                        src={imageUrl || userInfo?.image}
-                        alt="user"
-                        className="bg-white rounded-full"
-                      />
-                    </a>
-                  </Link> */
-                ) : userInfo?.name ? (
+                {
+                  userInfo
+                  ?
+                    userInfo?.image
+                    ?
+                      <button
+                        aria-label="Total"
+                        onClick={() => setUserModalOpen(!userModalOpen)}
+                        className="relative px-5 text-white text-2xl font-bold"
+                      >
+                        <a className="relative top-1 w-6 h-6">
+                          <Image
+                            width={29}
+                            height={29}
+                            src={userInfo?.image}
+                            alt="user"
+                            className="bg-white rounded-full"
+                          />
+                        </a>
+                      </button>
+                    :
+                      <button
+                        aria-label="Total"
+                        onClick={() => setUserModalOpen(!userModalOpen)}
+                        className="relative px-5 text-white text-2xl font-bold"
+                      >
+                        <a className="relative top-1 w-6 h-6">
+                          <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
+                        </a>
+                      </button>
+
+                  :
+                    userinfoName 
+                    ? 
+                    (
+                      <button
+                        aria-label="Total"
+                        onClick={() => setUserModalOpen(!userModalOpen)}
+                        className="relative px-5 text-white text-2xl font-bold"
+                      >
+                        <a className="relative top-1 w-6 h-6">
+                          <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
+                        </a>
+                      </button>
+                    
+                    
+                    ) 
+                    : 
+                    (
+                      <span onClick={() => setModalOpen(!modalOpen)}>
+                        <FiUser className="w-6 h-6 drop-shadow-xl" />
+                      </span>
+                    )}
+
+                
+              </button>
+
+              {/* <>
+              {
+                userInfo 
+                ?
+                  
+                  userInfo?.image
+                  ?
+                    <button
+                      aria-label="Total"
+                      onClick={() => setUserModalOpen(!userModalOpen)}
+                      className="relative px-5 text-white text-2xl font-bold"
+                    >
+                      <a className="relative top-1 w-6 h-6">
+                        <Image
+                          width={29}
+                          height={29}
+                          src={userInfo?.image}
+                          alt="user"
+                          className="bg-white rounded-full"
+                        />
+                      </a>
+                    </button>
+                  :
                     <button
                       aria-label="Total"
                       onClick={() => setUserModalOpen(!userModalOpen)}
@@ -215,20 +311,13 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
                         <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
                       </a>
                     </button>
-                  /*<Link href={"/" + companyCode + "/user/dashboard"}>
-                    <a className="leading-none font-bold font-serif block">
-                      <BsPersonCircle className="w-6 h-6 drop-shadow-xl" />
-                      
-                    </a>
-                    
-                  </Link>*/
-                  
-                ) : (
+                :
                   <span onClick={() => setModalOpen(!modalOpen)}>
                     <FiUser className="w-6 h-6 drop-shadow-xl" />
                   </span>
-                )}
-              </button>
+                //JSON.stringify(userInfo)
+              }
+              </> */}
             </div>
             {/* {
               (companyLogo === undefined || companyLogo === null || companyLogo.length === 0)

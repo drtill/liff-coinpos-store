@@ -273,11 +273,7 @@ const NavbarPromo = ({FilterProduct, page, dataPath}) => {
                 ข้อกำหนดและเงื่อนไข
               </a>
             </Link>
-            <Link href="/contact-us">
-                        <a className="font-serif mx-4 py-2 text-sm font-medium hover:text-cyan-600">
-                          {currentPage}
-                        </a>
-                      </Link>
+            
 
           </div>
         </div>

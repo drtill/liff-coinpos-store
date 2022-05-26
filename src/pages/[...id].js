@@ -663,164 +663,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
               }
           }
       
-          /*const GetProductData = async(liffId,
-            lineUserId,
-            linePOSId,
-            groupId,
-            orderId,
-            companyId,
-            locationId,
-            companyName,
-            locationName,
-            companyCode,
-            catalogName,
-            promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
-          {
-            //alert('locationId = ' + locationId);
-            const products = await ProductServices.fetchGetCoinPOSProductService({
-              liffId,
-              lineUserId,
-              linePOSId,
-              groupId,
-              orderId,
-              companyId,
-              locationId,
-              companyName,
-              locationName,
-              companyCode,
-              catalogName,
-              promotionId,customerTypeId,page,itemPerPage,query,category,product
-            });
-      
-            currentPage = products.currentPage;
-            countPage = products.countPage;
-      
-            var productVariants = [];//products.productVariantPresenters;
-            var productCategories = [];
-      
-            var newProductVariants = [];
-      
-            if(products.productVariantPresenters !== null)
-            {
-              for(var i = 0;i < products.productVariantPresenters.length; i++)
-              {
-                var productItem = {};
-                productItem['_id'] = Number(products.productVariantPresenters[i].ProductVariantId);
-                productItem['title'] = products.productVariantPresenters[i].Name;
-                productItem['quantity'] = products.productVariantPresenters[i].StockLevel;
-                productItem['image'] = products.productVariantPresenters[i].ImageUrl;
-                productItem['unit'] = products.productVariantPresenters[i].UPC;
-                productItem['slug'] = products.productVariantPresenters[i].UPC;
-                productItem['tag'] = products.productVariantPresenters[i].ProductId;
-                productItem['originalPrice'] = products.productVariantPresenters[i].Price;
-                productItem['price'] = products.productVariantPresenters[i].Price;
-                productItem['type'] = 'W';
-                productItem['sku'] = products.productVariantPresenters[i].SKU;
-                productItem['discount'] = 0;
-                productItem['description'] = products.productVariantPresenters[i].Description;
-                productItem['currencySign'] = products.currencySign;
-              
-      
-      
-                productVariants.push(productItem);
-              }
-            }
-      
-            if(products.newProductVariantPresenters !== null)
-            {
-              for(var i = 0;i < products.newProductVariantPresenters.length; i++)
-              {
-                var productItem = {};
-                productItem['_id'] = Number(products.newProductVariantPresenters[i].ProductVariantId);
-                productItem['title'] = products.newProductVariantPresenters[i].Name;
-                productItem['quantity'] = products.newProductVariantPresenters[i].StockLevel;
-                productItem['image'] = products.newProductVariantPresenters[i].ImageUrl;
-                productItem['unit'] = products.newProductVariantPresenters[i].UPC;
-                productItem['slug'] = products.newProductVariantPresenters[i].UPC;
-                productItem['tag'] = products.newProductVariantPresenters[i].ProductId;
-                productItem['originalPrice'] = products.newProductVariantPresenters[i].Price;
-                productItem['price'] = products.newProductVariantPresenters[i].Price;
-                productItem['type'] = 'W';
-                productItem['sku'] = products.newProductVariantPresenters[i].SKU;
-                productItem['discount'] = 0;
-                productItem['description'] = products.newProductVariantPresenters[i].Description;
-                productItem['currencySign'] = products.currencySign;
-              
-      
-      
-                newProductVariants.push(productItem);
-              }
-            }
-        
-      
-            if(products.productCategoryPresenters !== null)
-            {
-              for(var j = 0;j < products.productCategoryPresenters.length; j++)
-              {
-      
-              
-                var nests = [];
-                for(var k = 0;k < products.productCategoryPresenters[j].Products.length; k++)
-                {
-                  var children = {};
-                  children['_id'] = Number(products.productCategoryPresenters[j].Products[k].ProductId);
-                  children['title'] = products.productCategoryPresenters[j].Products[k].Name;
-                  nests.push(children);
-                }
-                
-      
-                
-                var productCategory = {};
-                productCategory['_id'] = Number(products.productCategoryPresenters[j].CategoryId);
-                productCategory['parent'] = products.productCategoryPresenters[j].Name;
-                productCategory['icon'] = products.productCategoryPresenters[j].ImageUrl;
-                productCategory['children'] = nests;
-      
-                productCategories.push(productCategory);
-      
-      
-              }
-            }
-            var orderData = {};
-            var orderDetailDatas = [];
-            if(products.orderDetails !== null)
-            {
-              for(var i = 0;i < products.orderDetails.length; i++)
-              {
-                var orderDetailItem = {};
-                orderDetailItem['_id'] = products.orderDetails[i].orderDetailId;
-                orderDetailItem['upc'] = products.orderDetails[i].upc;
-                orderDetailItem['orderId'] = products.orderDetails[i].orderId;
-                orderDetailItem['productVariantId'] = products.orderDetails[i].productVariantId;
-                orderDetailItem['productVariantName'] = products.orderDetails[i].productVariantName;
-                orderDetailItem['sku'] = products.orderDetails[i].sku;
-                orderDetailItem['productVariantPrice'] = products.orderDetails[i].productVariantPrice;
-                orderDetailItem['locationId'] = products.orderDetails[i].locationId;
-                orderDetailItem['discount'] = products.orderDetails[i].discount;
-                orderDetailItem['quantity'] = products.orderDetails[i].quantity;
-                orderDetailItem['imageUrl'] = products.orderDetails[i].imageUrl;
-                orderDetailItem['lineOrder'] = products.orderDetails[i].lineOrder;
-      
-                orderDetailDatas.push(orderDetailItem);
-      
-              }
-            }
-      
-            //alert(JSON.stringify("category Data = " + productCategories))
-            sessionStorage.setItem('categories', JSON.stringify(productCategories));
-      
-            //alert("pagingManager")
-            pagingManager();
-            //alert("setCategoryList")
-            setCategoryList(productCategories);
-            //alert("setProductList")
-            setProductList(productVariants);
-            setNewProductList(newProductVariants);
-            //alert("End")
           
-      
-      }*/
-
       const RedirectPageManager = (target,userLocalJson,catalogName) =>
     {
       var userLocal = JSON.parse(userLocalJson)
@@ -979,7 +822,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           }
       
           //alert('new Product = ' + products.newProductVariantPresenters);
-          if(products.newProductVariantPresenters !== null)
+          if(products.newProductVariantPresenters !== undefined)
           {
             for(var i = 0;i < products.newProductVariantPresenters.length; i++)
             {
@@ -1009,7 +852,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             }
           }
           //alert('recomment Product = ' + products.recommentProductVariantPresenters);
-          if(products.recommentProductVariantPresenters !== null)
+          if(products.recommentProductVariantPresenters !== undefined)
           {
             for(var i = 0;i < products.recommentProductVariantPresenters.length; i++)
             {
@@ -1040,7 +883,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           }
     
           //alert(JSON.stringify(products.productCategoryPresenters));
-          if(products.productCategoryPresenters !== null)
+          if(products.productCategoryPresenters !== undefined)
           {
             for(var j = 0;j < products.productCategoryPresenters.length; j++)
             {

@@ -30,7 +30,7 @@ const MainCarousel = ({sliderImages}) => {
         {
           sliderImages.map((item, i) => (
             <SwiperSlide
-              className="h-full relative rounded-lg overflow-hidden"
+              className="h-full relative overflow-hidden"
               key={i + 1}
             >
               <div className="text-sm text-gray-600 hover:text-emerald-dark">

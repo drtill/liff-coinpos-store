@@ -115,6 +115,10 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
     
     const [productListHeader, setProductListHeader] = useState('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
 
+    const [sliderImageLoading, setSliderImageLoading] = useState(true);
+      
+    const [sliderImageList, setSliderImageList] = useState([]);
+
 
     const { setItems,clearCartMetadata,emptyCart, addItem, items } = useCart();
     
@@ -538,6 +542,9 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
         setNewProductLoading(false);
         //alert('RecommentProductLoading = false')
         setRecommentProductLoading(false);
+
+        setSliderImageLoading(false);
+
         setLoading(false);
       }
       catch (err) 
@@ -637,37 +644,19 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       var newProductVariants = [];
       var recommentProductVariants = [];
 
-      /* if(products.productVariantPresenters !== null)
-      {
-        for(var i = 0;i < products.productVariantPresenters.length; i++)
-        {
-          var productItem = {};
-          productItem['_id'] = Number(products.productVariantPresenters[i].ProductVariantId);
-          productItem['title'] = products.productVariantPresenters[i].Name;
-          productItem['quantity'] = products.productVariantPresenters[i].StockLevel;
-          productItem['image'] = products.productVariantPresenters[i].ImageUrl;
-          productItem['unit'] = products.productVariantPresenters[i].UPC;
-          productItem['slug'] = products.productVariantPresenters[i].UPC;
-          productItem['upc'] = products.productVariantPresenters[i].UPC;
-          productItem['productName'] = products.productVariantPresenters[i].ProductName;
-          productItem['categoryName'] = products.productVariantPresenters[i].CategoryName;
+      var sliderImages = [];
 
-          productItem['tag'] = products.productVariantPresenters[i].ProductId;
-          productItem['originalPrice'] = products.productVariantPresenters[i].Price;
-          productItem['price'] = products.productVariantPresenters[i].Price;
-          productItem['type'] = 'W';
-          productItem['sku'] = products.productVariantPresenters[i].SKU;
-          productItem['discount'] = 0;
-          productItem['description'] = products.productVariantPresenters[i].Description;
-          productItem['currencySign'] = products.currencySign;
-        
+          //alert('slider = ' + products.sliderImages);
+          if(products.sliderImages !== undefined)
+          {
+            for(var i = 0;i < products.sliderImages.length; i++)
+            {
+              var sliderUrl = {};
+              sliderUrl['url'] = products.sliderImages[i];
+              sliderImages.push(sliderUrl)
+            }
+          }
 
-
-          productVariants.push(productItem);
-        }
-      } */
-  
-      //alert("New Product = " + JSON.stringify(products.newProductVariantPresenters))
       if(products.newProductVariantPresenters !== null)
       {
         for(var i = 0;i < products.newProductVariantPresenters.length; i++)
@@ -793,6 +782,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       setNewProductList(newProductVariants);
       setRecommentProductList(recommentProductVariants)
 
+      setSliderImageList(sliderImages);
     
 
 }
@@ -1204,10 +1194,16 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
         <div className="min-h-screen">
           <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>
           <div className="bg-white">
-            <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
+            <div className="mx-auto max-w-screen-2xl">
               <div className="flex w-full">
-                <div className="flex-shrink-0 lg:block w-full">
-                  <MainCarousel />
+              <div className="flex-shrink-0 lg:block w-full">
+                  {
+                    sliderImageLoading ? 
+                    (<Loading loading={sliderImageLoading} />)
+                    :
+                    (<MainCarousel sliderImages={sliderImageList} />)
+                  }
+                  
                 </div>
                 {/* <div className="w-full hidden lg:flex">
                   <OfferCard />
