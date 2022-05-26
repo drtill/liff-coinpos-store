@@ -85,7 +85,7 @@ const Checkout = () => {
 
 
   const options = [
-    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'chocolate1111', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
   ]
