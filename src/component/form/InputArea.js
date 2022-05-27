@@ -10,6 +10,7 @@ const InputArea = ({
   type,
   placeholder,
   Icon,
+  disable,
   handleDataChange
 }) => {
 
@@ -45,6 +46,7 @@ const InputArea = ({
             required: `${label} is required!`,
           })}
           defaultValue={defaultValue}
+          disabled={disable}
           value={dataInput}
           onChange={(e) => handleTextChange(e)}
           type={type}

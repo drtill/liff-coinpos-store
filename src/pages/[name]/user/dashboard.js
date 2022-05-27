@@ -62,21 +62,7 @@ const Dashboard = ({ title, description, children}) => {
   //const [deliveredOrderCount, setDeliveredOrderCount] = useState(0);
 
   
-  var companyCodeCatalog = '';
-  if(sessionStorage.getItem('companyCode'))
-  {
-    companyCodeCatalog = sessionStorage.getItem('companyCode'); 
-  }
-  var catalogNameCatalog = '';
-  if(sessionStorage.getItem('catalogName'))
-  {
-    catalogNameCatalog = sessionStorage.getItem('catalogName'); 
-  }
-  var customerEmailCatalog = '';
-  if(sessionStorage.getItem('customerEmail'))
-  {
-    customerEmailCatalog = sessionStorage.getItem('customerEmail'); 
-  }
+  
   
   const { data } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
     {
@@ -134,10 +120,14 @@ const Dashboard = ({ title, description, children}) => {
 
   useEffect(async() => {
     //alert('Login 0');
+
+    
+  
+  
+
     if(sessionStorage.getItem('dataPath'))
     {
       var dataPathData = sessionStorage.getItem('dataPath'); 
-      //alert('dataPathData = ' + dataPathData)
       setDataPath(dataPathData);  
     }
     if(sessionStorage.getItem('customerEmail'))

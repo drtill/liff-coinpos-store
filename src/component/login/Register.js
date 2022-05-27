@@ -120,6 +120,19 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
 
 
     }
+
+    const handleFirstNameChange = (event) => {  
+      
+    }
+    const handleEmailChange = (event) => {  
+      
+    }
+    const handlePasswordChange = (event) => {  
+      
+    }
+    const handleRetryPasswordChange = (event) => {  
+      
+    }
   return (
     <>
       <div className="text-center mb-6">
@@ -148,6 +161,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                 type="text"
                 placeholder="ชื่อ-สกุล"
                 Icon={FiUser}
+                handleDataChange={handleFirstNameChange}
               />
 
               <Error errorName={errors.name} />
@@ -161,6 +175,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                 type="email"
                 placeholder="Email"
                 Icon={FiMail}
+                handleDataChange={handleEmailChange}
               />
               <Error errorName={errors.email} />
             </div>
@@ -172,6 +187,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                 type="password"
                 placeholder="รหัสผ่าน"
                 Icon={FiLock}
+                handleDataChange={handlePasswordChange}
               />
 
               {/* <Error errorName={errors.password} /> */}
@@ -185,6 +201,7 @@ const Register = ({ setShowResetPassword, setModalOpen }) => {
                 type="password"
                 placeholder="รหัสยืนยัน"
                 Icon={FiLock}
+                handleDataChange={handleRetryPasswordChange}
               />
 
               <Error errorName={errors_Password} />

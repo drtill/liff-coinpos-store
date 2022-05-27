@@ -37,6 +37,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
 
   useEffect(() => 
   {
+    //alert("dataPath = " + dataPath)
     if(sessionStorage.getItem('companyFacebook'))
     {
           
@@ -160,7 +161,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
             </h3>
             <ul className="text-sm flex flex-col space-y-3">
               <li className="flex items-baseline">
-                <Link href={'/' +companyCode + "/" + dataPath}>
+                <Link href={"/" + dataPath}>
                   <a className="text-gray-600 inline-block w-full hover:text-cyan-500">
                     หน้าแรก
                   </a>
@@ -282,7 +283,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
               <>
               </>
               :
-               <Link href={"/" + companyCode + "/" + dataPath}>
+               <Link href={"/" + dataPath}>
                 <a className="mr-3 lg:mr-12 xl:mr-12" rel="noreferrer">
                   <Image
                     width={70}

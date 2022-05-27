@@ -28,7 +28,7 @@ const MainCarousel = ({sliderImages}) => {
         className="mySwiper"
       >
         {
-          sliderImages.map((item, i) => (
+          sliderImages?.map((item, i) => (
             <SwiperSlide
               className="h-full relative overflow-hidden"
               key={i + 1}

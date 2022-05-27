@@ -28,14 +28,14 @@ const UserServices = {
     const { name, email, password, companyId, dataPath } = jwt.decode(token);
     
     var deco = jwt.decode(token);
-    alert(JSON.stringify(deco));
+    //alert(JSON.stringify(deco));
     console.log(JSON.stringify(deco));
-    alert("name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId + " dataPath = " + dataPath); 
+    //alert("name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId + " dataPath = " + dataPath); 
     
     const isAdded = await findCoinPOSEmail(companyId,email);
     
     if (isAdded) {
-      alert('isAdded');
+      //alert('isAdded');
       return ({
         token,
         name: isAdded.name,
@@ -46,10 +46,10 @@ const UserServices = {
     }
 
     if (token) {
-      alert('verify');
+      //alert('verify');
       jwt.verify(token, JWT_SECRET_FOR_VERIFY, (err, decoded) => {
         if (err) {
-          alert('reeor = ' + err.message);
+          //alert('reeor = ' + err.message);
           return ({
             token,
             name: 'newUser.name',
@@ -65,7 +65,7 @@ const UserServices = {
           });
           newUser.save();*/
           const newUser = RegisterCoinPOSCustomerAccount(companyId,email,password,name);
-          alert('istoken');
+          //alert('istoken');
           return({
             token,
             name: newUser.name,

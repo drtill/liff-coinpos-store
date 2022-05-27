@@ -31,6 +31,7 @@ import { UserContext } from '@context/UserContext';
 import Uploader from '@component/image-uploader/Uploader';
 import { notifySuccess, notifyError } from '@utils/toast';
 //import { set } from 'firebase/database';
+import Select from 'react-select'
 
 import Loading from '@component/preloader/Loading';
 
@@ -64,6 +65,7 @@ const UpdateProfile = () => {
 
   const [customerId, setCustomerId] = useState(0);
   const [companyId,setCompanyId] = useState(0);
+  const [companyCode,setCompanyCode] = useState('');
   const [companyLogo, setCompanyLogo] = useState('');
   const [companyName, setCompanyName] = useState('');
 
@@ -85,10 +87,17 @@ const UpdateProfile = () => {
   const [phoneNumber,setCustomerPhoneNumber] = useState('');
   const [address1,setCustomerAddress] = useState('');
 
+  const [allProvinces, setAllProvinces] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [countrys,setCountry] = useState([]);
+
+  const [allCitys, setAllCitys] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const [allDistricts, setAllDistricts] = useState([]);
   const [districts, setDistricts] = useState([]);
+
+  const [districtIdAndPostalCodes, setDistrictIdAndPostalCodes] = useState([]);
 
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
@@ -128,16 +137,42 @@ const UpdateProfile = () => {
 
   const [customerInfoLoading, setCustomerInfoLoading] = useState(false);
 
-  
+  const [postalCodeLoading, setPostalCodeLoading] = useState(true);
+  const [districtLoading, setDistrictLoading] = useState(true);
+  const [cityLoading, setCityLoading] = useState(true);
+  const [provinceLoading, setProvinceLoading] = useState(true);
+  const [countryLoading, setCountryLoading] = useState(true);
+
+  const [address1Loading, seAddress1Loading] = useState(true);
 
 
+  const [countryLabel, setCountryLabel] = useState('Select Country');
+  const [provinceLabel, setProvinceLabel] = useState('Select Province');
+  const [cityLabel, setCityLabel] = useState('Select City');
+  const [districtLabel, setDistrictLabel] = useState('Select District');
+
+  const [isCountryEnable, setCountrySelectorEnable] = useState(false);
+  const [isDistrictEnable, setDistrictSelectorEnable] = useState(false);
+  const [isProvinceEnable, setProvinceSelectorEnable] = useState(false);
+  const [isCityEnable, setCitySelectorEnable] = useState(false);
+  const [isPostalCodeEnable, setPostalCodeEnable] = useState(false);
+
+  const [countryError, setCountryError] = useState({});
+  const [provinceError, setProvinceError] = useState({});
+  const [cityError, setCityError] = useState({});
+  const [districtError, setDistrictError] = useState({});
+  const [address1Error, setAddress1Error] = useState({});
+  const [postalCodeError, setPostalCodeError] = useState({});
 
   useEffect(() => 
   {
+    setCustomerInfoLoading(true);
+
     initiateCompanyData();
     initiateCustomerInfoData();
     //alert('countryIdData = ' + countryIdData);
     
+    setCustomerInfoLoading(false);
   },[]);
   
 
@@ -151,9 +186,10 @@ const UpdateProfile = () => {
     if(sessionStorage.getItem('companyId'))
     {
       lineCompanyId = sessionStorage.getItem('companyId');
-      alert('lineCompanyId = ' + lineCompanyId);
+      //alert('lineCompanyId = ' + lineCompanyId);
       setCompanyId(lineCompanyId);
     }
+    
 
     if(sessionStorage.getItem('companyLogo'))
     {
@@ -178,7 +214,7 @@ const UpdateProfile = () => {
     {
       catalogNameData = sessionStorage.getItem('catalogName');
       setCatalogName(catalogNameData);
-      alert('catalogName =' + catalogName);
+      //alert('catalogName =' + catalogName);
             
     }
     //alert('lineCompanyId = ' + lineCompanyId);
@@ -248,9 +284,76 @@ const UpdateProfile = () => {
     }
   }
 
-  const initiateCustomerAddress = () =>
+  const initiateCustomerAddress = async() =>
   {
 
+    var allAddressSelector = await ProductServices.fetchGetAddressSelectorInfo();
+    
+    var countryOptions = [];
+      
+    
+    for(var i=0;i<allAddressSelector.countrys.length;i++)
+    {
+      var item = allAddressSelector.countrys[i];
+      if(item !== undefined)
+      {
+        var countryName = item.countryLocalName;
+        var countryId = item.countryId;
+        countryOptions.push({ value: countryId, label: countryName })
+      }
+    }
+    //alert("country = " + JSON.stringify(countryOptions));
+    setCountry(countryOptions);
+
+    var provinceOptions = [];
+      
+    for(var i=0;i<allAddressSelector.provinces.length;i++)
+    {
+      var item = allAddressSelector.provinces[i];
+      if(item !== undefined)
+      {
+        var provinceName = item.Name_th;
+        var id = item.Id;
+        provinceOptions.push({ value: id, label: provinceName})
+      }
+    }
+    //alert("provinceOptions = " + JSON.stringify(provinceOptions));
+    setAllProvinces(provinceOptions);
+
+    setProvinces(provinceOptions);
+
+    var cityOptions = [];
+      
+    for(var i=0;i<allAddressSelector.cities.length;i++)
+    {
+      var item = allAddressSelector.cities[i];
+      if(item !== undefined)
+      {
+        var cityName = item.Name_th;
+        var id = item.Id;
+        var provinceId = item.ProvinceId
+        cityOptions.push({ value: id, label: cityName, provinceId: provinceId})
+      }
+    }
+    //alert("cityOptions = " + JSON.stringify(cityOptions));
+    setAllCitys(cityOptions);
+
+    var districtOptions = [];
+      
+    for(var i=0;i<allAddressSelector.districts.length;i++)
+    {
+      var item = allAddressSelector.districts[i];
+      if(item !== undefined)
+      {
+        var districtName = item.Name_th;
+        var id = item.Id;
+        var cityId = item.CityId
+        var zipCode = item.ZipCode
+        districtOptions.push({ value: id, label: districtName, cityId: cityId, zipCode: zipCode})
+      }
+    }
+    //alert("districtOptions = " + JSON.stringify(districtOptions));
+    setAllDistricts(districtOptions);
     if(sessionStorage.getItem('customerAddressId'))
     {
       
@@ -267,14 +370,22 @@ const UpdateProfile = () => {
       }
     }
     
+    var countryIdData = 0;
     if(sessionStorage.getItem('countryId'))
     {      
-      var countryIdData = Number(sessionStorage.getItem('countryId')); 
+      countryIdData = Number(sessionStorage.getItem('countryId')); 
       setCountryId(countryIdData);
-      setDefaultCountryId(countryIdData);   
+      setDefaultCountryId(countryIdData);  
+      
+      var country = countryOptions.filter((item) => item.value === countryIdData);
+
+      if(country.length > 0)
+      {
+        setCountryLabel(country[0].label);
+      }
     }
 
-    if(sessionStorage.getItem('countrysJSON'))
+    /*if(sessionStorage.getItem('countrysJSON'))
     {
       var countrysJson = sessionStorage.getItem('countrysJSON'); 
       //alert(countrysJson);
@@ -290,8 +401,8 @@ const UpdateProfile = () => {
         setDefaultCountry(countryList);
       }
       
-    }
-    if(sessionStorage.getItem('provinces'))
+    }*/
+    /*if(sessionStorage.getItem('provinces'))
     {
       var provincesJson = sessionStorage.getItem('provinces'); 
       var provincesList = JSON.parse(provincesJson);
@@ -306,7 +417,7 @@ const UpdateProfile = () => {
         setProvinces(provincesList);
         setDefaultProvinces(provincesList);
       }
-    }
+    }*/
 
     
     if(sessionStorage.getItem('cities'))
@@ -318,12 +429,24 @@ const UpdateProfile = () => {
       if(citiesList === null)
       {
         setCities([]);
-        setDefaultCities([]);
+        //setDefaultCities([]);
       }
       else
       {
-        setCities(citiesList);
-        setDefaultCities(citiesList);
+        var citiesOptions = [];
+      
+        for(var i=0;i<citiesList.length;i++)
+        {
+          var item = citiesList[i];
+          if(item !== undefined)
+          {
+            var citiesName = item.Name_th;
+            var citiesId = item.Id;
+            citiesOptions.push({ value: citiesId, label: citiesName })
+          }
+        }
+        
+        setCities(citiesOptions);
       }
     }
     if(sessionStorage.getItem('districts'))
@@ -337,8 +460,24 @@ const UpdateProfile = () => {
       }
       else
       {
-        setDistricts(districtsList);
-        setDefaultDistricts(districtsList);
+        var districtsOptions = [];
+        var districtIdAndPostals = [];
+        
+        for(var i=0;i<districtsList.length;i++)
+        {
+          var item = districtsList[i];
+          if(item !== undefined)
+          {
+            var districtsName = item.Name_th;
+            var districtsId = item.Id;
+            var districtPostalCode = item.ZipCode;
+            districtsOptions.push({ value: districtsId, label: districtsName })
+            districtIdAndPostals.push({ value: districtsId, label: districtPostalCode })
+          }
+        }
+        
+        setDistricts(districtsOptions);
+        setDistrictIdAndPostalCodes(districtIdAndPostals);
       }
     }
     
@@ -355,18 +494,63 @@ const UpdateProfile = () => {
       var provinceIdData = Number(sessionStorage.getItem('provinceId')); 
       setProvinceId(provinceIdData);
       setDefaultProvinceId(provinceIdData);
+
+      var province = provinceOptions.filter((item) => item.value === provinceIdData);
+
+      if(province.length > 0)
+      {
+        setProvinceLabel(province[0].label);
+        if(IsEditCustomerInfo)
+        {
+          setProvinceSelectorEnable(true);
+        }
+        else
+        {
+          setProvinceSelectorEnable(false);
+        }
+        
+      }
     }
     if(sessionStorage.getItem('cityId'))
     {
       var cityIdData = Number(sessionStorage.getItem('cityId')); 
       setCityId(cityIdData);
       setDefaultCityId(cityIdData);
+
+      var city = cityOptions.filter((item) => item.value === cityIdData);
+
+     if(city.length > 0)
+     {
+       setCityLabel(city[0].label);
+       //setCitySelectorEnable(true);
+       if(IsEditCustomerInfo)
+        {
+          setCitySelectorEnable(true);
+        }
+        else
+        {
+          setCitySelectorEnable(false);
+        }
+     }
     }
     if(sessionStorage.getItem('districtId'))
     {
       var districtIdData = Number(sessionStorage.getItem('districtId')); 
       setDistrictId(districtIdData);
       setDefaultDistrictId(districtIdData);
+
+      var district = districtOptions.filter((item) => item.value === districtIdData);
+
+      //alert('district = ' + JSON.stringify(district))
+      if(district.length > 0)
+      {
+        //alert('district[0].label = ' + district[0].label)
+        setDistrictLabel(district[0].label);
+
+        setDistrictSelectorEnable(false);
+        
+      }
+      
     }
     if(sessionStorage.getItem('postalcode'))
     {
@@ -375,6 +559,7 @@ const UpdateProfile = () => {
       setDefaultPostalCode(postalCodeData);
     }
 
+    var countryId = countryIdData;
     if(Number(countryId) !== 10 && Number(countryId) !== 0)//thai
     {
       
@@ -411,6 +596,13 @@ const UpdateProfile = () => {
       setIsInputAddress(isInputAddressData);
       setDefaultIsInputAddress(isInputAddressData);
     }
+
+    seAddress1Loading(false);
+    setCountryLoading(false);
+    setProvinceLoading(false);
+    setCityLoading(false);
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
   }
 
   const handleEmailChange = (event) => {  
@@ -446,83 +638,204 @@ const UpdateProfile = () => {
   setDisableCustomerInfo(false);
   setApproveCustomerInfo(false);
 
-  alert('defaultFirstName = ' + defaultFirstName + ' firstName = ' + firstName);
+  setCountrySelectorEnable(true);
+  setDistrictSelectorEnable(true);
+  setCitySelectorEnable(true);
+  setProvinceSelectorEnable(true);
+  
+  //alert('defaultFirstName = ' + defaultFirstName + ' firstName = ' + firstName);
   setCustomerFirstName(defaultFirstName);
 }
-  const handleCountryChange = async(event) => {
-    console.log(event.target.value);
-    var countryId = parseInt(event.target.value)
+  const handleCountryChange = async(selectedOption) => {
+    setProvinceLoading(true);
+    setCityLoading(true);
+    setDistrictLoading(true);
+    setPostalCodeLoading(true);
+    var countryId = parseInt(selectedOption.value)
     setCountryId(countryId);
-    //var provincesDataJson = await ProductServices.fetchGetStateProvince();
-    //alert(provincesDataJson)
-
-    //var provincesData = JSON.parse(provincesDataJson)
-    //alert('provincesData = ' + provincesData)
-    //alert('provincesData Response = ' + provincesData.provinceResponses);
-    //setProvinces(JSON.parse(provincesData.provinceResponse))
-    
-
-    
-    setProvinceId(1);
-    setCityId(0);
-    setDistrictId(0);
-
-    //setProvinces(provincesData.provinceResponses)
-    setCities([]);
-    setDistricts([]);
-    
     if(countryId === 10)//thai
     {
+      //alert('thai');
       setIsInputAddress(false);
+      setProvinces(allProvinces);
+      setCities([]);
+      setDistricts([]);
+      setPostalCode('');
+      setProvinceSelectorEnable(true);
+
+      setCitySelectorEnable(false);
+      setDistrictSelectorEnable(false);
     }
     else
     {
+      //alert('no thai');
       setIsInputAddress(true);
+      setProvinces([]);
+      setPostalCode('');
+      setProvinceSelectorEnable(false);
+      setCitySelectorEnable(false);
+      setDistrictSelectorEnable(false);
+      setPostalCodeEnable(false);
     }
+    await delay(200)
+    //alert('country Id = ' + countryId);
+    //var provincesData = await ProductServices.fetchGetStateProvince();
+    //var provinces = await GetStateProvince()
+    //PopulateProvince(provinces)
+    setProvinceId(0);
+    setProvinceLabel('Select Province');
+
+    setCityId(0);
+    setCityLabel('Select City');
+
+    setDistrictId(0);
+    setDistrictLabel('Select District');
+
+
     setPostalCode('');
+
+    setProvinceLoading(false);
+    setCityLoading(false);
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
     
     
 }
-const handleProvinceChange = async(event) => {
-    console.log(event.target.value);
-    var stateId = parseInt(event.target.value)
-    var citysData = await ProductServices.fetchGetCity({stateId});
+const handleProvinceChange = async(selectedOption) => {
+  setCityLoading(true);
+  setDistrictLoading(true);
+  setPostalCodeLoading(true);
+    console.log(selectedOption.value);
+    var stateId = parseInt(selectedOption.value)
+    //alert('state Id = ' + stateId);
+
+    var citysData = allCitys.filter((item) => item.provinceId === stateId); //await ProductServices.fetchGetCity({stateId});
+    //alert(JSON.stringify(citysData));
     setProvinceId(stateId);
-    setCities(citysData);
+
+    var citysOptions = [];
+      
+      for(var i=0;i<citysData.length;i++)
+      {
+        var item = citysData[i];
+        if(item !== undefined)
+        {
+          var citysName = item.label;
+          var citysId = item.value;
+          citysOptions.push({ value: citysId, label: citysName })
+        }
+      }
+      
+      await delay(200)
+    setCities(citysOptions);
+    setCityLabel('Select City')
+    setCityId(0);
+    if(citysOptions.length > 0)
+    {
+      setCitySelectorEnable(true);
+    }
+    else
+    {
+      setCitySelectorEnable(false);
+    }
+    
     setDistricts([]);
+    setDistrictSelectorEnable(false);
+    setDistrictLabel('Select District')
+    setDistrictId(0);
+    //setDistricts([]);
     setPostalCode('');
+    setPostalCodeEnable(false);
+    //var citys = await GetCity(stateId)
+    //PopulateCity(citys)
+    setCityLoading(false);
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
     
 }
-const handleCityChange = async(event) => {
-    console.log(event.target.value);
-    var cityId = parseInt(event.target.value)        
-    var districtsData = await ProductServices.fetchGetDistrict({cityId});
+const handleCityChange = async(selectedOption) => {
+  setDistrictLoading(true);
+  setPostalCodeLoading(true);
+    console.log(selectedOption.value);
+    var cityId = parseInt(selectedOption.value)        
+    //alert('city Id = ' + cityId);
+    var districtsData = allDistricts.filter((item) => item.cityId === cityId); //await ProductServices.fetchGetDistrict({cityId});
     setCityId(cityId);
-    setDistricts(districtsData);
+    //alert(JSON.stringify(districtsData));
+    var districtsOptions = [];
+    var districtIdAndPostals = [];
+      
+      for(var i=0;i<districtsData.length;i++)
+      {
+        var item = districtsData[i];
+        if(item !== undefined)
+        {
+          var districtsName = item.label;
+          var districtsId = item.value;
+          var districtPostalCode = item.zipCode;
+          districtsOptions.push({ value: districtsId, label: districtsName })
+          districtIdAndPostals.push({ value: districtsId, label: districtPostalCode })
+        }
+      }
+    
+    await delay(200)
+    setDistricts(districtsOptions);
+    if(districtsOptions.length > 0)
+    {
+      setDistrictSelectorEnable(true);
+    }
+    else
+    {
+      setDistrictSelectorEnable(false);
+    }
+    setDistrictIdAndPostalCodes(districtIdAndPostals);
     setPostalCode('');
+    setPostalCodeEnable(false);
+    //PopulateDistrict(districts)
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
+
+      
+      setDistricts(districtsOptions);
+      setDistrictIdAndPostalCodes(districtIdAndPostals);
     
     
 }
-const handleDistrictChange = async(event) => {
-    console.log(event.target.value);
-    var districtId = parseInt(event.target.value)     
-    setDistrictId(districtId);   
-    PopulatePostalCode(districtId)
+const handleDistrictChange = async(selectedOption) => {
+  console.log(selectedOption.value);
+  setPostalCodeLoading(true);
+  var districtId = parseInt(selectedOption.value)     
+  setDistrictId(districtId);   
+  //alert('district Id = ' + districtId);
+  //setPostalCode(districtId);
+  //set
+  await delay(200)
+  PopulatePostalCode(districtId)
+  setPostalCodeEnable(true);
+  //setCustomerAddress(event.target.value)
+  
+  setPostalCodeLoading(false);
     
 }
 
 const PopulatePostalCode = (id) =>
 {
-  for(var i=0;i<districts.length;i++)
+  for(var i=0;i<districtIdAndPostalCodes.length;i++)
   {
-    var item = districts[i];
+    var item = districtIdAndPostalCodes[i];
+    
     if(item !== null)
     {
-      if(item.Id === id)
+      //alert("has item = " + JSON.stringify(item))
+      if(item.value === id)
       {
-        
+        //alert('post = ' + districtIdAndPostalCodes[i])
+        //alert(document.getElementById("postalCode").value);
+        //alert(document.getElementById("postalCode").defaultValue);
+        //document.getElementById("postalCode").value = districts[i].ZipCode;
+        //document.getElementById("postalCode").defaultValue = districts[i].ZipCode;
         setChangePostalCode(true);
-        setPostalCode(districts[i].ZipCode);
+        setPostalCode(districtIdAndPostalCodes[i].label);
       }
     }
   }
@@ -560,19 +873,19 @@ const handleAddress1Change = (event) => {
       alert('catalogName =' + catalogName);
             
     }
-  if (!imageUrl) {
+  /*if (!imageUrl) {
     notifyError('Image is required!');
     return;
-  }
+  }*/
   setLoading(true);
 
   //SaveCustomerInfo(companyId);
 
   setCustomerInfoLoading(true);
   //alert(countryId);
-  var countryItem = countrys.find(x => x.countryId === countryId);
+  var countryItem = countrys.find(x => x.value === countryId);
   //alert('Country = ' + JSON.stringify(countryItem));
-    var countryString = countryItem === null ? "" : countryItem.countryLocalName;
+    var countryString = countryItem === null ? "" : countryItem.label;
 
     var cityString = '';
     var provinceString = '';
@@ -585,17 +898,17 @@ const handleAddress1Change = (event) => {
     }
     else
     {
-      alert('cityId = ' + cityId);
-      var cityItem = cities.find(x => x.Id === cityId);
-      cityString = cityItem === null ? "" : cityItem.Name_th;
+      //alert('cityId = ' + cityId);
+      var cityItem = cities.find(x => x.value === cityId);
+      cityString = cityItem === null ? "" : cityItem.label;
 
-      alert('provinceId = ' + provinceId);
-      var provinceItem = provinces.find(x => x.Id === provinceId);
-      provinceString = provinceItem === null ? "" : provinceItem.Name_th;
+      //alert('provinceId = ' + provinceId);
+      var provinceItem = provinces.find(x => x.value === provinceId);
+      provinceString = provinceItem === null ? "" : provinceItem.label;
 
-      alert('districtId = ' + districtId);
-      var districtItem = districts.find(x => x.Id === districtId);
-      districtString = districtItem === null ? "" : districtItem.Name_th;
+      //alert('districtId = ' + districtId);
+      var districtItem = districts.find(x => x.value === districtId);
+      districtString = districtItem === null ? "" : districtItem.label;
     }
 
     var postalCodeString = postalcode;
@@ -629,7 +942,7 @@ const handleAddress1Change = (event) => {
           postalcode:postalCodeString,
           companyId:companyId,
           catalogName:catalogName,
-          imageUrl:imageUrl
+          //imageUrl:imageUrl
   
         });
 
@@ -655,39 +968,87 @@ const handleAddress1Change = (event) => {
           sessionStorage.setItem('district', customerData.District);
           sessionStorage.setItem('postalcode', customerData.postalcode);
 
-
+      
       dispatch({ type: 'USER_LOGIN', payload: customerData });
       Cookies.set('userInfo', JSON.stringify(customerData));
 
       localStorage.setItem('userInfo', JSON.stringify(customerData));
-
+        //alert('loading false')
+      //setLoading(false);
       setEditCustomerInfo(false);
       setDisableCustomerInfo(true);
       setApproveCustomerInfo(false);
+
+      setCountrySelectorEnable(false);
+      setProvinceSelectorEnable(false);
+      setCitySelectorEnable(false);
+      setDistrictSelectorEnable(false);
     }
     setLoading(false);
-
+    setCustomerInfoLoading(false);
       
       
 }
-  const CancelCustomerInfo = () =>
+  const CancelCustomerInfo = async() =>
   {
+    //alert('ProvinceId = ' + provinceId + ' default province id = ' + defaultProvinceId);
+
+    seAddress1Loading(true);
+    setCountryLoading(true);
+    setProvinceLoading(true);
+    setCityLoading(true);
+    setDistrictLoading(true);
+    setPostalCodeLoading(true);
+
     setCustomerFirstName(defaultFirstName);
     setCustomerLastName(defaultLastName);
     setCustomerEmail(defaultEmail);
     setCustomerPhoneNumber(defaultPhoneNumber);
     setCustomerAddress(defaultAddress1);
     setCountryId(defaultCountryId);
-    setCountry(defaultCountrys);
+    
 
+    await delay(200)
+    //setCountry(defaultCountrys);
+
+    var defaultProvince = allProvinces.filter(x => x.value === defaultProvinceId);
+
+    //alert('defaultProvince = ' + JSON.stringify(defaultProvince));
+    if(defaultProvince.length > 0)
+    {
+      setProvinceLabel(defaultProvince[0].label)
+    }
+    else
+    {
+      setProvinceLabel('');
+    }
+    
     setProvinceId(defaultProvinceId);
-    setProvinces(defaultProvinces);
+    //setProvinces(defaultProvinces);
 
+    var defaultCity = allCitys.filter(x => x.value === defaultCityId);
+    if(defaultCity.length > 0)
+    {
+      setCityLabel(defaultCity[0].label);
+    }
+    else
+    {
+      setCityLabel('');
+    }
     setCityId(defaultCityId);
-    setCities(defaultCities);
+    //setCities(defaultCities);
 
+    var defaultDistrict = allDistricts.filter(x => x.value === defaultDistrictId);
+    if(defaultDistrict.length > 0)
+    {
+      setDistrictLabel(defaultDistrict[0].label);
+    }
+    else
+    {
+      setDistrictLabel('');
+    }
     setDistrictId(defaultDistrictId);
-    setDistricts(defaultDistricts);
+    //setDistricts(defaultDistricts);
 
     setPostalCode(defaultPostalcode);
 
@@ -697,11 +1058,24 @@ const handleAddress1Change = (event) => {
 
     setIsInputAddress(defaultIsInputAddress);
 
-    alert('defaultFirstName = ' + defaultFirstName + ' firstName = ' + firstName);
+    //alert('defaultFirstName = ' + defaultFirstName + ' firstName = ' + firstName);
 
     setEditCustomerInfo(false);
     setDisableCustomerInfo(true);
     setApproveCustomerInfo(false);
+
+    setPostalCodeEnable(false);
+    setDistrictSelectorEnable(false);
+    setCitySelectorEnable(false);
+    setProvinceSelectorEnable(false);
+    setCountrySelectorEnable(false);
+
+    seAddress1Loading(false);
+    setCountryLoading(false);
+    setProvinceLoading(false);
+    setCityLoading(false);
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
   }
   
 
@@ -759,7 +1133,7 @@ const handleAddress1Change = (event) => {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <h2 className="text-xl font-serif font-semibold mb-5">
-                Update Profile
+                แก้ไข โปรไฟล์
               </h2>
             </div>
           </div>
@@ -772,79 +1146,88 @@ const handleAddress1Change = (event) => {
 
           <form onSubmit={onSubmit}>
             <div className="mt-5 md:mt-0 md:col-span-2">
-              <div className="bg-white space-y-6">
+              {/* <div className="bg-white space-y-6">
                 <div>
                   <Label label="Photo" />
                   <div className="mt-1 flex items-center">
                     <Uploader imageUrl={imageUrl} setImageUrl={setImageUrl} />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="mt-10 sm:mt-0">
                 <div className="md:grid-cols-6 md:gap-6">
                   <div className="mt-5 md:mt-0 md:col-span-2">
-                    <div className="lg:mt-6 mt-4 bg-white">
+
+                    {
+                    customerInfoLoading === true 
+                    ? 
+                      <Loading loading={customerInfoLoading} />
+                    
+                    :
+                      <div className="lg:mt-6 mt-4 bg-white">
+
                       <div className="form-group">
                         <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                          Personal Details
+                          ข้อมูลส่วนบุคคล
                         </h2>
                         <div className="grid grid-cols-6 gap-6">
                           <div className="col-span-6 sm:col-span-3">
-                            <EditableCustomerInput register={register}
-                            label="First Name" 
-                            name="firstName"
-                            type="text"
-                            placeholder="John"
-                            isDisable={IsDisableCustomerInfo}
+                            <InputArea
+                              register={register}
+                              label="ชื่อต้น"
+                              name="firstName"
+                              type="text"
+                              placeholder="ชื่อต้น"
                               dataValue={firstName}
-                              canAutoChange={true}
-                            handleDataChange={handleFirstNameChange}
+                              disable={!IsEditCustomerInfo}
+                              handleDataChange={handleFirstNameChange}
                             />
+                            
                             <Error errorName={errors.firstName} />
                           </div>
 
                           <div className="col-span-6 sm:col-span-3">
-                            <EditableCustomerInput register={register}
-                            label="Last Name" 
-                            name="lastName"
-                            type="text"
-                            placeholder="Doe"
-                            isDisable={IsDisableCustomerInfo}
-                              dataValue={lastName}
-                              canAutoChange={true}
-                            handleDataChange={handleLastNameChange}
-                            />
+                            <InputArea
+                                register={register}
+                                label="นามสกุล"
+                                name="lastName"
+                                type="text"
+                                placeholder="ชื่อสกุล"
+                                dataValue={lastName}
+                                disable={!IsEditCustomerInfo}
+                                handleDataChange={handleLastNameChange}
+                              />
+                            
                             <Error errorName={errors.lastName} />
                           </div>
 
                           <div className="col-span-6 sm:col-span-3">
                             
-                            <EditableCustomerInput register={register}
-                            label="Email address"
-                            name="email"
-                            type="email"
-                            placeholder="youremail@gmail.com"
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={email}
-
-                            canAutoChange={true}
-                            handleDataChange={handleEmailChange}
-                            />
+                          <InputArea
+                                register={register}
+                                label="Email address"
+                                name="email"
+                                type="email"
+                                placeholder="youremail@gmail.com"
+                                dataValue={email}
+                                disable={!IsEditCustomerInfo}
+                                handleDataChange={handleEmailChange}
+                              />
                             <Error errorName={errors.email} />
                           </div>
 
                           <div className="col-span-6 sm:col-span-3">
-                            <EditableCustomerInput register={register}
-                            label="Phone number"
-                            name="contact"
-                            type="tel"
-                            placeholder="+062-6532956"
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={phoneNumber}
-                            canAutoChange={true}
-                            handleDataChange={handleContactChange}
-                            />
+                            <InputArea
+                                  register={register}
+                                  label="เบอร์ติดต่อ"
+                                  name="contact"
+                                  type="tel"
+                                  placeholder="+062-6532956"
+                                  dataValue={phoneNumber}
+                                  disable={!IsEditCustomerInfo}
+                                  handleDataChange={handleContactChange}
+                                />
 
                             <Error errorName={errors.contact} />
                           </div>
@@ -853,12 +1236,28 @@ const handleAddress1Change = (event) => {
 
                       <div className="form-group mt-12">
                       <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                        Shipping Address
+                        ที่อยู่ขนส่ง
                       </h2>
 
                       <div className="grid grid-cols-6 gap-6 mb-8">
                         <div className="col-span-6">
-                          <EditableCustomerInput register={register}
+                          {countryLoading
+                            ?
+                              <Loading loading={countryLoading } />
+                            :
+                              <InputArea
+                                  register={register}
+                                  label="บ้านเลขที่ ซอย ถนน"
+                                  name="address"
+                                  type="text"
+                                  placeholder="บ้านเลขที่ ซอย ถนน"
+                                  dataValue={address1}
+                                  disable={!IsEditCustomerInfo}
+                                  handleDataChange={handleAddress1Change}
+                                />
+                          }
+                          
+                          {/* <EditableCustomerInput register={register}
                           label="Street address"
                           name="address"
                           type="text"
@@ -867,127 +1266,190 @@ const handleAddress1Change = (event) => {
                           dataValue={address1}
                           canAutoChange={true}
                           handleDataChange={handleAddress1Change}
-                          />
+                          /> */}
                           <Error errorName={errors.address} />
                         </div>
 
                         <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                          <CountryFormSelect register={register}
-                            label="Country"
-                            name="province1"
-                            type="text"
-                            isDisable={IsDisableCustomerInfo}
-                            handleItemChange={handleCountryChange}
-                            dataList={countrys} selectedId={countryId}
-                            />
-                          
-                          <Error errorName={errors.country} />
+                        {countryLoading 
+                            ?
+                            <Loading loading={countryLoading } />
+                              
+                            :
+                              <>
+                              <Label label={"ประเทศ"} />
+                              <div className="relative">
+                                
+                                  <Select options={countrys} 
+                                  isDisabled={!isCountryEnable}
+                                    defaultValue={{ label: countryLabel, value: countryId }} 
+                                    onChange={handleCountryChange}/>
+
+                              </div>
+
+                              
+                              {/* <Select options={options} value={selectedOption} onChange={handleCountryChange}/> */}
+                                {/* <CountryFormSelect register={register}
+                                label="ประเทศ"
+                                name="province1"
+                                type="text"
+                                isDisable={IsDisableCustomerInfo}
+                                handleItemChange={handleCountryChange}
+                                dataList={countrys} selectedId={countryId}
+                                /> */}
+                              
+                              <Error errorName={countryError} />
+                              </>
+
+                            }
                         </div>
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                           
-                        {
-                                isInputAddress === true 
+                          {
+                                provinceLoading
                                 ?
-                                  
-                                  <EditableCustomerInput register={register}
-                                      id="province"
-                                      label="จังหวัด"
-                                      name="province"
-                                      type="input"
-                                      placeholder="Please insert state/province."
-                                      isDisable={IsDisableCustomerInfo}
-                                      dataValue={provinceText}
-                                      changeData={changePostalcode}
-                                      canAutoChange={true}
-                                      handleDataChange={handleProvinceTextChange}
-                                      />
+                                  <Loading loading={provinceLoading} />
                                 :
-                                
-                                <ProvinceFormSelect register={register}
-                                label="จังหวัด"
-                                name="province"
-                                type="text"
-                                isDisable={IsDisableCustomerInfo}
-                                handleItemChange={handleProvinceChange}
-                                dataList={provinces} selectedId={provinceId}
-                                />
+
+                                  isInputAddress === true 
+                                  ?
+                                  <InputArea
+                                    register={register}
+                                    label="จังหวัด"
+                                    name="province"
+                                    type="input"
+                                    placeholder="Please insert state/province."
+                                    dataValue={provinceText}
+                                    handleDataChange={handleProvinceTextChange}
+                                  />
+                                    
+                                  :
+                                  <>
+                                    <Label label={"จังหวัด"} />
+                                    <div className="relative">
+                                      <Select options={provinces} 
+                                      isDisabled={!isProvinceEnable}
+                                      defaultValue={{ label: provinceLabel, value: provinceId }} 
+                                      onChange={handleProvinceChange}/>
+                                    </div>
+                                  </>
+                                    /* <ProvinceFormSelect register={register}
+                                    label="จังหวัด"
+                                    name="province"
+                                    type="text"
+                                    isDisable={IsDisableCustomerInfo}
+                                    handleItemChange={handleProvinceChange}
+                                    dataList={provinces} selectedId={provinceId}
+                                    /> */
                               }
                           <Error errorName={errors.province} />
                         </div>
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                          {
+                        {
+                              cityLoading
+                              ?
+                              <Loading loading={cityLoading} />
+                              :
                                 isInputAddress === true 
                                 ?
-                                  <EditableCustomerInput register={register}
-                                    id="city"
-                                    label="เขต/อำเภอ"
-                                    name="province2"
-                                    type="input"
-                                    placeholder="Please insert city."
-                                    isDisable={IsDisableCustomerInfo}
-                                    dataValue={cityText}
-                                    changeData={changePostalcode}
-                                    canAutoChange={true}
-                                    handleDataChange={handleCityTextChange}
-                                    />
+                                <InputArea
+                                  register={register}
+                                  label="เขต/อำเภอ"
+                                  name="province2"
+                                  type="input"
+                                  placeholder="Please insert city."
+                                  dataValue={cityText}
+                                  handleDataChange={handleCityTextChange}
+                                />
+                                  
                                 :
-                                <CityFormSelect register={register}
+                                <>
+                                  <Label label={"เขต/อำเภอ"} />
+                                  <div className="relative">
+                                    <Select options={cities} 
+                                    isDisabled={!isCityEnable}
+                                    defaultValue={{ label: cityLabel, value: cityId }} 
+                                    onChange={handleCityChange}/>
+                                  </div>
+                                </>
+                                
+                                /*<CityFormSelect register={register}
                                 label="เขต/อำเภอ"
                                 name="province2"
                                 type="text"
                                 isDisable={IsDisableCustomerInfo}
                                 handleItemChange={handleCityChange}
                                 dataList={cities} selectedId={cityId}
-                                />
-                              }
+                                />*/
+                            }
                           <Error errorName={errors.city} />
                         </div>
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                        {isInputAddress === true 
-                              ?
-                                
-                                <EditableCustomerInput register={register}
-                                id="district"
-                                label="แขวง/ตำบล"
-                                name="district"
-                                type="input"
-                                placeholder="Please insert district."
-                                isDisable={IsDisableCustomerInfo}
-                                dataValue={districtText}
-                                changeData={changePostalcode}
-                                canAutoChange={true}
-                                handleDataChange={handleDistrictTextChange}
-                                />
-                              :
-                                <DistrictFormSelect register={register}
-                                  label="แขวง/ตำบล"
-                                  name="district"
-                                  type="text"
-                                  isDisable={IsDisableCustomerInfo}
-                                  handleItemChange={handleDistrictChange}
-                                  dataList={districts} selectedId={districtId}
-                                  />
+                          {
+                                districtLoading
+                                ?
+                                  <Loading loading={districtLoading} />
+                                :
+                                  isInputAddress === true 
+                                  ?
+                                    <InputArea
+                                      register={register}
+                                      label="แขวง/ตำบล"
+                                      name="district"
+                                      type="input"
+                                      placeholder="Please insert district."
+                                      dataValue={districtText}
+                                      handleDataChange={handleDistrictTextChange}
+                                    />
+                                    
+                                  :
+                                  <>
+                                    <Label label={"แขวง/ตำบล"} />
+                                    <div className="relative">
+                                      <Select options={districts} 
+                                      isDisabled={!isDistrictEnable}
+                                      defaultValue={{ label: districtLabel, value: districtId }} 
+                                      onChange={handleDistrictChange}/>
+                                    </div>
+                                  </>
+                                  
+                                    /*<DistrictFormSelect register={register}
+                                      label="แขวง/ตำบล"
+                                      name="district"
+                                      type="text"
+                                      isDisable={IsDisableCustomerInfo}
+                                      handleItemChange={handleDistrictChange}
+                                      dataList={districts} selectedId={districtId}
+                                      />*/
                               }
                           <Error errorName={errors.district} />
                         </div>
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                           
-                          <EditableCustomerInput register={register}
-                          id="postalCode"
-                          label="ZIP / Postal"
-                          name="zipCode"
-                          type="input"
-                          placeholder="12345"
-                          isDisable={IsDisableCustomerInfo}
-                          dataValue={postalcode}
-                          changeData={changePostalcode}
-                          canAutoChange={true}
-                          handleDataChange={handlePostalCodeChange}
-                          />
-                          
-                          <Error errorName={errors.zipCode} />
+                        {
+                            postalCodeLoading
+                            ?
+                              <Loading loading={postalCodeLoading} />
+                            :
+                            <>
+                              <InputArea
+                              register={register}
+                              label="รหัสไปรษณีย์"
+                              name="zipCode"
+                              type="input"
+                              placeholder="รหัสไปรษณีย์"
+                              disabled={true}
+                              dataValue={postalcode}
+                              handleDataChange={handlePostalCodeChange}
+                              disable={!IsEditCustomerInfo}
+                              />
+                            
+                            
+                            <Error errorName={postalCodeError} />
+                            </>
+                          }
                         </div>
                       </div>
                     </div>
@@ -1112,6 +1574,8 @@ const handleAddress1Change = (event) => {
                         
                       </div>
                     </div>
+                    }
+                    
                   </div>
                 </div>
               </div>
@@ -1125,6 +1589,8 @@ const handleAddress1Change = (event) => {
 };
 
 
-
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 export default dynamic(() => Promise.resolve(UpdateProfile), { ssr: false });

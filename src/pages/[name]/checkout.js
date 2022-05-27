@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext,useEffect } from 'react';
 import { useState } from 'react'
 import dynamic from 'next/dynamic';
 //import { CardElement } from '@stripe/react-stripe-js';
@@ -35,6 +35,8 @@ import InputPayment from '@component/form/InputPayment';
 import useCheckoutSubmit from '@hooks/useCheckoutSubmit';
 import BankTransferPayment from '@component/form/BankTransferPayment';
 import QRPaymentPayment from '@component/form/QRPaymentPayment';
+
+import { UserContext } from '@context/UserContext';
 
 import {Form} from 'react-bootstrap';
 import ProductServices from '@services/ProductServices';
@@ -83,6 +85,7 @@ const Checkout = () => {
     setCouponData
   } = useCheckoutSubmit();
 
+  const {dispatch} = useContext(UserContext);
 
   const options = [
     { value: 'chocolate1111', label: 'Chocolate' },
@@ -172,6 +175,18 @@ const Checkout = () => {
   const [shippingServices, setShippings] = useState([]);
 
   const [countryLabel, setCountryLabel] = useState('Select Country');
+  const [provinceLabel, setProvinceLabel] = useState('Select Province');
+  const [cityLabel, setCityLabel] = useState('Select City');
+  const [districtLabel, setDistrictLabel] = useState('Select District');
+
+  const [isCountryEnable, setCountrySelectorEnable] = useState(false);
+  const [isDistrictEnable, setDistrictSelectorEnable] = useState(false);
+  const [isProvinceEnable, setProvinceSelectorEnable] = useState(false);
+  const [isCityEnable, setCitySelectorEnable] = useState(false);
+
+
+
+
 
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
@@ -251,6 +266,15 @@ const Checkout = () => {
 
   useEffect(async() => 
   {
+
+    var userLocalJson = localStorage.getItem('userInfo');
+    if(userLocalJson)
+    {
+      var userLocal = JSON.parse(userLocalJson)
+      dispatch({ type: 'USER_LOGIN', payload: userLocal });
+    }
+    
+
     var allAddressSelector = await ProductServices.fetchGetAddressSelectorInfo();
     
     var countryOptions = [];
@@ -283,6 +307,8 @@ const Checkout = () => {
     }
     //alert("provinceOptions = " + JSON.stringify(provinceOptions));
     setAllProvinces(provinceOptions);
+
+    setProvinces(provinceOptions);
 
     var cityOptions = [];
       
@@ -329,7 +355,7 @@ const Checkout = () => {
 
     if(sessionStorage.getItem('getCompanyData'))
     {
-      InitialData();
+      InitialData(countryOptions, provinceOptions, cityOptions, districtOptions);
     }
     else
     {
@@ -367,7 +393,7 @@ const Checkout = () => {
       });
   };
 
-  const InitialData = () =>
+  const InitialData = (countryLists, provinceLists, cityLists, districtLists) =>
   {
     if(sessionStorage.getItem('countryId'))
     {
@@ -376,6 +402,12 @@ const Checkout = () => {
       //alert('countryIdData = ' + countryIdData)
       setCountryId(countryIdData);
       
+      var country = countryLists.filter((item) => item.value === countryIdData);
+
+      if(country.length > 0)
+      {
+        setCountryLabel(country[0].label);
+      }
         
     }
     
@@ -692,6 +724,14 @@ const Checkout = () => {
   {
     var provinceIdData = Number(sessionStorage.getItem('provinceId')); 
     setProvinceId(provinceIdData);
+
+    var province = provinceLists.filter((item) => item.value === provinceIdData);
+
+      if(province.length > 0)
+      {
+        setProvinceLabel(province[0].label);
+        setProvinceSelectorEnable(true);
+      }
   }
   
   
@@ -700,12 +740,27 @@ const Checkout = () => {
   {
     var cityIdData = Number(sessionStorage.getItem('cityId')); 
      setCityId(cityIdData); 
+     var city = cityLists.filter((item) => item.value === cityIdData);
+
+     if(city.length > 0)
+     {
+       setCityLabel(city[0].label);
+       setCitySelectorEnable(true);
+     }
   }
   if(sessionStorage.getItem('districtId'))
   {
     var districtIdData = Number(sessionStorage.getItem('districtId')); 
     setDistrictId(districtIdData);
+    var district = districtLists.filter((item) => item.value === districtIdData);
+
+     if(district.length > 0)
+     {
+       setDistrictLabel(district[0].label);
+       setDistrictSelectorEnable(true);
+     }
   }
+  
   if(sessionStorage.getItem('postalcode'))
   {
     var postalCodeData = sessionStorage.getItem('postalcode'); 
@@ -1119,12 +1174,22 @@ const handleCountryChange = async(selectedOption) => {
       //alert('thai');
       setIsInputAddress(false);
       setProvinces(allProvinces);
+
+      setProvinceSelectorEnable(true);
+
+      setCitySelectorEnable(false);
+      setDistrictSelectorEnable(false);
+      
+      
     }
     else
     {
       //alert('no thai');
       setIsInputAddress(true);
       setProvinces([]);
+      setProvinceSelectorEnable(false);
+      setCitySelectorEnable(false);
+      setDistrictSelectorEnable(false);
     }
     //alert('country Id = ' + countryId);
     //var provincesData = await ProductServices.fetchGetStateProvince();
@@ -1162,8 +1227,23 @@ const handleProvinceChange = async(selectedOption) => {
         }
       }
       
-      
+      await delay(200)
     setCities(citysOptions);
+    setCityLabel('Select City')
+    setCityId(0);
+    if(citysOptions.length > 0)
+    {
+      setCitySelectorEnable(true);
+    }
+    else
+    {
+      setCitySelectorEnable(false);
+    }
+    
+    setDistricts([]);
+    setDistrictSelectorEnable(false);
+    setDistrictLabel('Select District')
+    setDistrictId(0);
     //setDistricts([]);
     setPostalCode('');
     //var citys = await GetCity(stateId)
@@ -1197,7 +1277,16 @@ const handleCityChange = async(selectedOption) => {
         }
       }
     
+    await delay(200)
     setDistricts(districtsOptions);
+    if(districtsOptions.length > 0)
+    {
+      setDistrictSelectorEnable(true);
+    }
+    else
+    {
+      setDistrictSelectorEnable(false);
+    }
     setDistrictIdAndPostalCodes(districtIdAndPostals);
     setPostalCode('');
     //PopulateDistrict(districts)
@@ -1659,7 +1748,10 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <>
                                   <Label label={"จังหวัด"} />
                                   <div className="relative">
-                                    <Select options={provinces} onChange={handleProvinceChange}/>
+                                    <Select options={provinces} 
+                                    isDisabled={!isProvinceEnable}
+                                    defaultValue={{ label: provinceLabel, value: provinceId }} 
+                                    onChange={handleProvinceChange}/>
                                   </div>
                                 </>
                                   /* <ProvinceFormSelect register={register}
@@ -1698,7 +1790,10 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <>
                                   <Label label={"เขต/อำเภอ"} />
                                   <div className="relative">
-                                    <Select options={cities} onChange={handleCityChange}/>
+                                    <Select options={cities} 
+                                    isDisabled={!isCityEnable}
+                                    defaultValue={{ label: cityLabel, value: cityId }} 
+                                    onChange={handleCityChange}/>
                                   </div>
                                 </>
                                 
@@ -1738,7 +1833,10 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <>
                                   <Label label={"แขวง/ตำบล"} />
                                   <div className="relative">
-                                    <Select options={districts} onChange={handleDistrictChange}/>
+                                    <Select options={districts} 
+                                    isDisabled={!isDistrictEnable}
+                                    defaultValue={{ label: districtLabel, value: districtId }} 
+                                    onChange={handleDistrictChange}/>
                                   </div>
                                 </>
                                 

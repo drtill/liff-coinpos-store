@@ -22,6 +22,8 @@ import Label from '@component/form/Label';
 import Uploader from '@component/image-uploader/Uploader';
 import EditableCustomerInput from '@component/form/EditableCustomerInput';
 
+import { notifyError, notifySuccess } from '@utils/toast';
+
 import { UserContext } from '@context/UserContext';
 
 const UserModal = ({ userModalOpen, setUserModalOpen, loading}) => {
@@ -42,6 +44,8 @@ const UserModal = ({ userModalOpen, setUserModalOpen, loading}) => {
   const [countryText, setCountryText] = useState('');
 
   const [dataPath, setDataPath] = useState('');
+
+  const [companyCode,setCompanyCode] = useState('');
 
   const router = useRouter();
   const {
@@ -79,6 +83,8 @@ const UserModal = ({ userModalOpen, setUserModalOpen, loading}) => {
 
 const handleLogOut = async () => {
   dispatch({ type: 'USER_LOGOUT' });
+
+  notifySuccess('Logout Success!')
   Cookies.remove('userInfo');
   Cookies.remove('couponInfo');
   localStorage.removeItem('userInfo');
@@ -86,17 +92,17 @@ const handleLogOut = async () => {
   var liffData = '';
   if(sessionStorage.getItem('catalogLiffId'))
   {
-    alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
+    //alert('Get liffData = ' + sessionStorage.getItem('catalogLiffId'));
     liffData = sessionStorage.getItem('catalogLiffId');
   }
   
-  alert("liffData log out = " + liffData);
+  //alert("liffData log out = " + liffData);
   if(liffData)
   {
-    alert("To Liff Logout")
+    //alert("To Liff Logout")
     const liff = (await import('@line/liff')).default
     try {
-      alert("Liff init")
+      //alert("Liff init")
       await liff.init({ liffId:liffData });
     } catch (error) {
       console.error('liff init error', error.message)
@@ -104,12 +110,12 @@ const handleLogOut = async () => {
 
     if (liff.isLoggedIn())
     {
-      alert("Liff log out")
+      //alert("Liff log out")
       liff.logout();
     }
   }
   
-  alert("dataPath log out = " + dataPath);
+  //alert("dataPath log out = " + dataPath);
   router.push('/' + dataPath);
   setUserModalOpen(false);
 };
@@ -122,6 +128,13 @@ useEffect(() =>
       var dataPathData = sessionStorage.getItem('dataPath'); 
       //alert('dataPathData = ' + dataPathData)
       setDataPath(dataPathData);  
+    }
+    if(sessionStorage.getItem('companyCode'))
+    {
+      var companyCodeData = sessionStorage.getItem('companyCode'); 
+      //alert('companyCodeData = ' + companyCodeData);
+      setCompanyCode(companyCodeData);
+            
     }
   if(sessionStorage.getItem('customerFirstName'))
   {
@@ -199,7 +212,7 @@ useEffect(() =>
                       className="flex-shrink-0 h-4 w-4"
                       aria-hidden="true"
                     />
-                    <Link href={item.href}>
+                    <Link href={item.href.replace("{companyCode}",companyCode)}>
                       <a className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600">
                         {item.title}
                       </a>

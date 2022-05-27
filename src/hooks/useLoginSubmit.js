@@ -62,7 +62,7 @@ const useLoginSubmit = (setModalOpen) => {
         router.push(redirect || '/' + userLogin.paramPath);
             //router.push(redirect);
 
-            alert('1 = ' + userLogin.customerAddressId)
+            //alert('1 = ' + userLogin.customerAddressId)
         sessionStorage.setItem('customerId', userLogin.customerId);
         sessionStorage.setItem('customerFirstName', userLogin.firstName);
         sessionStorage.setItem('customerLastName', userLogin.lastName);
@@ -124,7 +124,7 @@ const useLoginSubmit = (setModalOpen) => {
         //router.push(redirect || '/' + userLogin.paramPath);
             //router.push(redirect);
 
-            alert('2 = ' + userLogin.customerAddressId)
+            //alert('2 = ' + userLogin.customerAddressId)
         sessionStorage.setItem('customerId', userLogin.customerId);
         sessionStorage.setItem('customerFirstName', userLogin.firstName);
         sessionStorage.setItem('customerLastName', userLogin.lastName);
@@ -245,7 +245,7 @@ const useLoginSubmit = (setModalOpen) => {
         
     }
     if (name && email && password) {
-      alert("Name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId);
+      //alert("Name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId);
       //return;
       var dataPath = '';
       if(sessionStorage.getItem('dataPath'))
@@ -254,7 +254,7 @@ const useLoginSubmit = (setModalOpen) => {
         
               
       }
-      alert('dataPath = ' + dataPath);
+      //alert('dataPath = ' + dataPath);
       UserServices.fetchVerifyCoinPOSEmailAddress({ name, email, password, companyName, locationEmail, companyId, locationId, dataPath })
         .then((res) => {
           //alert('then = ' + res)
