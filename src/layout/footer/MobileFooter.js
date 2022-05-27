@@ -24,6 +24,7 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
   const [companyCode,setCompanyCode] = useState('');
   useEffect(() => 
   {
+    //alert("Mobile Footer")
     if(sessionStorage.getItem('companyFacebook'))
     {
           

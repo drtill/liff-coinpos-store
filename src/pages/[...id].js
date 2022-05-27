@@ -101,6 +101,9 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
           const [discountDataDetails,setDiscountDetail] = useState('');
           const [promotionCode,setPromotionCode] = useState('');
 
+          const [categotyJson,setCategotyJson] = useState('');
+
+
           const [catalogPromotionId,setCatalogPromotionId] = useState(0);
           const [catalogPromotionName,setCatalogPromotionName] = useState('');
           const [catalogDiscountPercentage,setCatalogDiscountPercentage] = useState(0);
@@ -170,6 +173,9 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             sessionStorage.setItem('shippings', JSON.stringify(shippingServices));
             sessionStorage.setItem('bankNameAndAccounts', JSON.stringify(bankNameAndAccounts));
             sessionStorage.setItem('categories', JSON.stringify(categories));
+
+            setCategotyJson(JSON.stringify(categories));
+
             sessionStorage.setItem('currencySign', currencySign);
             sessionStorage.setItem('linePOSId', linePOSIdData);
             sessionStorage.setItem('liffId', liffData);
@@ -1334,7 +1340,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       <Layout title={title} description={description} dataPath={dataPath} companyName={companyName} locationName={locationName} companyLogo={companyLogo} 
       locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
       locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-      locationEmail={locationEmail} locationTel={locationTel}
+      locationEmail={locationEmail} locationTel={locationTel} 
       RefreshProductList={SearchProduct} FilterProduct={FilterProduct} page='product'>
         <div className="min-h-screen">
           <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>

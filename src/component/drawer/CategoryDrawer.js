@@ -18,7 +18,7 @@ const CategoryDrawer = ({companyLogo,companyName, dataPath,FilterProduct}) => {
       placement={'left'}
     >
       
-      <Category companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} FilterProduct={FilterProduct}/>
+      <Category companyLogo={companyLogo} companyName={companyName} dataPath={dataPath} FilterProduct={FilterProduct} />
     </Drawer>
   );
 };

@@ -19,7 +19,7 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
   // ); 
 
   const [categories,setCategoryList] = useState([]);
-  const [loading,setLoading] = useState(true); 
+  const [loading,setLoading] = useState(false); 
   
   var error = '';
   
@@ -27,7 +27,8 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
 
   useEffect(() => 
   {
-    //alert("Page = " + page);
+    setLoading(true);
+    //alert("categotyJson = " + categotyJson);
     if(sessionStorage.getItem('categories'))
     {
       //alert("Get Category");
@@ -39,18 +40,30 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
         try
         {
           var categoriesData = JSON.parse(categoriesJson);
+          //alert(JSON.stringify(categoriesData));
           setCategoryList(categoriesData);
-          //alert(JSON.stringify(categories));
+          
           setLoading(false);
+          //alert(JSON.stringify(categoriesData))
         }
         catch(ex)
         {
-          alert("Catagory error : " + ex.message)
+          //alert("Catagory error : " + ex.message)
           
         }
         
       }
+      else
+      {
+        //alert("no Get Category = " + categoriesJson);
+        setLoading(false);
+      }
       
+    }
+    else
+    {
+      alert("Not Get Category");
+      setLoading(false);
     }
 
   },[]);
@@ -106,7 +119,7 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
       <div className="overflow-y-scroll scrollbar-hide w-full max-h-full">
         {categoryDrawerOpen && (
           <h2 className="font-semibold font-serif text-lg m-0 text-heading flex align-center border-b px-8 py-3">
-            All Categories
+            หมวดหมู่ทั้งหมด
           </h2>
         )}
         {error ? (
@@ -115,9 +128,15 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
           </p>
         ) : 
         //data.length === 0
+        loading
+        ?
+          <Loading loading={loading} />
+        :
         categories.length === 0 
         ? (
-          <Loading loading={loading} />
+          <p className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-cyan-600">
+            {"ไม่พบข้อมูลหมวดหมู่สินค้า กรุณารอสักคู่ แล้วโหลดใหม่อีกครั้ง"}
+          </p>
         ) 
         : 
         (

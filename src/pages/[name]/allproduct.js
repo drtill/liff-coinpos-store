@@ -114,13 +114,14 @@ const AllProduct = () => {
     const router1 = useRouter();
     useEffect(async () => {
       //const {query} = this.props.router;
-      //var q = query.q;
+      var q = query.q;
       var p = router.query.p;
       //var c = router.query.c;
       
 
       //const {category} = query;
       //alert(JSON.stringify(router1.query));
+      //alert('q = ' + q);
       //alert('Product = ' + p);
         var companyId = 0;
         var locationId = 0;
@@ -182,7 +183,7 @@ const AllProduct = () => {
         {
             var dataPathData = sessionStorage.getItem('dataPath');
             
-            alert('dataPathData = ' + dataPathData)
+            //alert('dataPathData = ' + dataPathData)
             setDataPath(dataPathData);
                 
         }
@@ -252,7 +253,7 @@ const AllProduct = () => {
             setCurrencySign(currencySignData);
             
         }
-        await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','',p);
+        await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,q,'',p);
 
         setLoading(false);
         setPromotionLoading(false);
@@ -273,6 +274,12 @@ const AllProduct = () => {
       promotionId,customerTypeId,page,itemPerPage,query,category,product) =>
     {
       //alert('locationId = ' + locationId);
+      if(product === 'all')
+      {
+        product = '';
+        category = '';
+        query = '';
+      }
       const products = await ProductServices.fetchGetCoinPOSProductService({
         liffId,
         lineUserId,
@@ -355,6 +362,22 @@ const AllProduct = () => {
       setProductList(productVariants);
 
       
+      if(category !== undefined)
+      {
+        setProductListHeader('รายการสินค้า ในหมวดหมู่ "' + category + '"');
+      }
+      if(product !== undefined)
+      {
+        setProductListHeader('รายการสินค้า ในกลุ่ม "' + product + '"');
+      }
+      if(query !== undefined)
+      {
+        setProductListHeader('รายการสินค้า ค้นหาโดยคำ "' + query + '"');
+      }
+      else
+      {
+        setProductListHeader('สินค้าทั้งหมด สำหรับการช็อปปิ้งของคุณ');
+      }
 
     
 
@@ -546,11 +569,24 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       var customerTypeId = sessionStorage.getItem('customerTypeId') ? Number(sessionStorage.getItem('customerTypeId')) : 9;//Default Customer
       var promotionId = sessionStorage.getItem('promotionId') ? Number(sessionStorage.getItem('promotionId')) : 0;
       //alert("promotionId = " + promotionId + ", customerTypeId = " + customerTypeId);
-      RefreshProductList("","","","",orderId === undefined ? 0 : orderId,
-      companyId,companyCode,
-      locationId === undefined ? 0 : locationId ,
-      catalogName,
-      '','',promotionId,customerTypeId,1,itemPerPage,'',category,product,'product')
+      
+      if(category === 0 && product === 0)
+      {
+        RefreshProductList("","","","",orderId === undefined ? 0 : orderId,
+          companyId,companyCode,
+          locationId === undefined ? 0 : locationId ,
+          catalogName,
+          '','',promotionId,customerTypeId,1,itemPerPage,'',category,product,'all')
+      }
+      else
+      {
+        RefreshProductList("","","","",orderId === undefined ? 0 : orderId,
+          companyId,companyCode,
+          locationId === undefined ? 0 : locationId ,
+          catalogName,
+          '','',promotionId,customerTypeId,1,itemPerPage,'',category,product,'product')
+      }
+      
     }
     const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,companyCode,locationId,catalogName,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product,refreshMode) =>
     {
@@ -767,60 +803,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       updateProfileClick={handleUpdateProfileClick}>
         <div className="min-h-screen">
           <StickyCart discountDetails={discountDataDetails} currencySign={currencySign}/>
-          <div className="bg-white">
-            <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
-              {catalogPromotionId === 0 
-              ?
-                promotionLoading ?
-                  <div className="bg-gray-100 lg:py-16 py-10">
-                    <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
-                    
-                      <div className="mb-10 flex justify-center">
-                        <div className="text-center w-full lg:w-2/5">
-                          <Loading loading={promotionLoading} />
-                          <p className="text-base font-sans text-gray-600 leading-6">
-                          กำลังปรับปรุงส่วนลด กรุณารอสักครู่
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                
-                :
-                  <OfferCard promotions={promotions} selectedPromotion={promotionCode} companyId={companyId} catalogName={catalogName} ApplyPromotionCode={ApplyPromotionCode} CancelPromotionCode={CancelPromotionCode}/>
-                
-                
-                 
-                
-              :
-                <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 lg:block">
-                  <Banner promotionName={catalogPromotionName} discountPercentage={catalogDiscountPercentage} promotionIsAllProduct={catalogPromotionIsAllProduct} 
-                      minimumAmount={catalogMinimumAmount} currencySign={currencySign} productType={catalogProductType}/>
-                </div>
-                  /* <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 hidden lg:block">
-                      <Banner promotionName={catalogPromotionName} discountPercentage={catalogDiscountPercentage} promotionIsAllProduct={catalogPromotionIsAllProduct} 
-                      minimumAmount={catalogMinimumAmount} currencySign={currencySign} productType={catalogProductType}/>
-                    </div> */}
-              {/* <div className="flex w-full"> */}
-                {/* {dataPath} */}
-                
-                
-                {/* <div className="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-2">
-                  
-                  <OfferCard promotions={promotions} companyId={catalogCompanyId} ApplyPromotionCode={ApplyPromotionCode}/>
-                </div> */}
-                {/* <div className="flex-shrink-0 xl:pr-6 lg:block w-full lg:w-3/5">
-                  <MainCarousel />
-                </div> */}
-                {/* <div className="w-full lg:flex">
-                  <OfferCard promotions={promotions} companyId={catalogCompanyId} ApplyPromotionCode={ApplyPromotionCode}/>
-                </div> */}
-              {/* </div> */}
-              {/* <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 hidden lg:block">
-                <Banner />
-              </div> */}
-            </div>
-          </div>
+          
 
           
           {/* feature category's */}
@@ -904,6 +887,60 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
           </div>
 
           {/* promotional banner card */}
+          <div className="bg-white">
+            <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
+              {catalogPromotionId === 0 
+              ?
+                promotionLoading ?
+                  <div className="bg-gray-100 lg:py-16 py-10">
+                    <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
+                    
+                      <div className="mb-10 flex justify-center">
+                        <div className="text-center w-full lg:w-2/5">
+                          <Loading loading={promotionLoading} />
+                          <p className="text-base font-sans text-gray-600 leading-6">
+                          กำลังปรับปรุงส่วนลด กรุณารอสักครู่
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                :
+                  <OfferCard promotions={promotions} selectedPromotion={promotionCode} companyId={companyId} catalogName={catalogName} ApplyPromotionCode={ApplyPromotionCode} CancelPromotionCode={CancelPromotionCode}/>
+                
+                
+                 
+                
+              :
+                <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 lg:block">
+                  <Banner promotionName={catalogPromotionName} discountPercentage={catalogDiscountPercentage} promotionIsAllProduct={catalogPromotionIsAllProduct} 
+                      minimumAmount={catalogMinimumAmount} currencySign={currencySign} productType={catalogProductType}/>
+                </div>
+                  /* <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 hidden lg:block">
+                      <Banner promotionName={catalogPromotionName} discountPercentage={catalogDiscountPercentage} promotionIsAllProduct={catalogPromotionIsAllProduct} 
+                      minimumAmount={catalogMinimumAmount} currencySign={currencySign} productType={catalogProductType}/>
+                    </div> */}
+              {/* <div className="flex w-full"> */}
+                {/* {dataPath} */}
+                
+                
+                {/* <div className="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-2">
+                  
+                  <OfferCard promotions={promotions} companyId={catalogCompanyId} ApplyPromotionCode={ApplyPromotionCode}/>
+                </div> */}
+                {/* <div className="flex-shrink-0 xl:pr-6 lg:block w-full lg:w-3/5">
+                  <MainCarousel />
+                </div> */}
+                {/* <div className="w-full lg:flex">
+                  <OfferCard promotions={promotions} companyId={catalogCompanyId} ApplyPromotionCode={ApplyPromotionCode}/>
+                </div> */}
+              {/* </div> */}
+              {/* <div className="bg-orange-100 px-10 py-6 rounded-lg mt-6 hidden lg:block">
+                <Banner />
+              </div> */}
+            </div>
+          </div>
           {/* <div className="block mx-auto max-w-screen-2xl">
             <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
               <div className="lg:p-16 p-6 bg-emerald-500 shadow-sm border rounded-lg">

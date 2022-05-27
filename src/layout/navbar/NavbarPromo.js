@@ -150,6 +150,12 @@ const NavbarPromo = ({FilterProduct, page, dataPath}) => {
                       className="md:flex space-x-10 items-center"
                     >
                       
+                      <Link href={"/" + dataPath}>
+                        <a className="font-serif mx-4 py-2 text-sm font-medium hover:text-cyan-600">
+                          หน้าแรก
+                        </a>
+                      </Link>
+
                       <Popover className="relative font-serif">
                         <Popover.Button className="group inline-flex items-center py-2 hover:text-cyan-600 focus:outline-none">
                           <span className="font-serif text-sm font-medium">
@@ -177,7 +183,13 @@ const NavbarPromo = ({FilterProduct, page, dataPath}) => {
                           </Popover.Panel>
                         </Transition>
                       </Popover>
-
+                      
+                      
+                      <div onClick={() => FilterProduct(0,0)}>
+                        <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
+                          สินค้าทั้งหมด
+                        </a>
+                      </div>
                       
                       <Link href="/contact-us">
                         <a className="font-serif mx-4 py-2 text-sm font-medium hover:text-cyan-600">

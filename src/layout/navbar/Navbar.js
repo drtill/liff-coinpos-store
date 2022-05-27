@@ -39,6 +39,9 @@ const Navbar = ({companyLogo, companyName, dataPath, RefreshProductList, FilterP
     e.preventDefault();
     if (searchText) {
       RefreshProductList(searchText);
+      router.push(
+        `/${companyCode}/allproduct?q=${searchText}`
+      );
       //router.push(`/search?query=${searchText}`, null, { scroll: false });
       setSearchText('');
     } else {

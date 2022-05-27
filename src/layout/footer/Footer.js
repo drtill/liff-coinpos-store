@@ -37,6 +37,7 @@ const Footer = ({companyLogo,dataPath, companyName, locationName, locationAddres
 
   useEffect(() => 
   {
+    //alert("Footer")
     //alert("dataPath = " + dataPath)
     if(sessionStorage.getItem('companyFacebook'))
     {
