@@ -582,7 +582,7 @@ const useLoginSubmit = (setModalOpen) => {
 
             var userLogin = res;
 
-            alert('6 = ' + userLogin.customerAddressId)
+            //alert('6 = ' + userLogin.customerAddressId)
             sessionStorage.removeItem('targetPage');
             
             sessionStorage.setItem('customerId', userLogin.customerId);

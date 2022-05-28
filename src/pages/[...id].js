@@ -215,7 +215,53 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             {
               if(isLiffLogin === true)
               {
-                //alert('liffData = ' + coinPOSLiffData)
+                coinPOSLiffData = coinPOSLiffData.replaceAll("%3D","=");
+                coinPOSLiffData = coinPOSLiffData.replaceAll("%3A",":");
+                coinPOSLiffData = coinPOSLiffData.replaceAll("%26","&");
+                coinPOSLiffData = coinPOSLiffData.replaceAll("%3F","?");
+                coinPOSLiffData = coinPOSLiffData.replaceAll("%2F","/");
+                //alert('is liff Login = ' + coinPOSLiffData)
+                var splitLiffData = coinPOSLiffData.split('?');
+                //alert('splitLiffData = ' + JSON.stringify(splitLiffData));
+
+                splitLiffData.forEach(item => 
+                {
+                  if(item.includes('&'))
+                  {
+                    var allItemData = item.split('&');
+                    allItemData.forEach(x => 
+                    {
+                      var itemData = x.split('=');
+                      if(itemData.length == 2)
+                      {
+                        if(itemData[0] === 'companycode')
+                        {
+                          companyCode = itemData[1];
+                        }
+                        else if(itemData[0] === 'catalog')
+                        {
+                          catalogName = itemData[1];
+                        }
+                        
+                      }  
+
+                    })
+                  }
+                  else
+                  {
+                    var itemData = item.split('=');
+                    if(itemData.length == 2)
+                    {
+                      if(itemData[0] === 'liffId')
+                      {
+                        liffData = itemData[1];
+                      }
+                      
+                    }
+                  }
+                    
+                });
+
                 if(liffData.length === 0 && !companyCode)
                 {
                   //alert("Liff Data is not found.");
@@ -223,6 +269,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                 }
                 const liff = (await import('@line/liff')).default
                 try {
+                  //alert('liffData = ' + liffData);
                   await liff.init({ liffId:liffData });
                 } catch (error) {
                   //alert('liff init error' + error.message)
@@ -241,7 +288,28 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                   }
                   else
                   {
-                    var url = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+                    var url = '';
+                    //alert('linePOSId = ' + linePOSId + ' groupId = ' + groupId)
+                    if(linePOSId.length > 0 && groupId.length > 0)
+                    {
+                      //alert('Has linePOSId')
+                      url = liffEndpoint + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId;
+                    }
+                    else
+                    {
+                      if(catalogName.length > 0)
+                      {
+                        //alert('got Catalog')
+                        url = liffEndpoint + '/' + companyCode + '/' + catalogName;
+                      }
+                      else
+                      {
+                        //alert('no Catalog')
+                        url = liffEndpoint + '/' + companyCode;
+                      }
+                      
+                    }
+                    
                     //var url = liffEndpoint + '/liffId=1656555843-E6WV7arj?linePOSId=U5bcb2afaf17c20551ab5afdcfec5c1d3&groupId=C2930285a261eeeb4b095a3219a32a7b7&orderId=4938&companyId=2&locationId=2&process=product'
                     //alert(url);
                     liff.login({ redirectUri: url});
@@ -338,69 +406,92 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             {
               
               //alert('To company and Liff')
-              
+              if(linePOSId.length > 0 && groupId.length > 0)
+              {
                 router.push('/' + companyCode + '/liffId=' + liffData + '?linePOSId=' + linePOSId + "&groupId=" + groupId + '&orderId=' + liffOrderId + '&companyId=' + liffCompanyId + '&locationId=' + liffLocationId);
-                return;
-              /*var userLocalJson = localStorage.getItem('userInfo');
-                  if(userLocalJson === null)
-                  {
-                    dispatch({ type: 'USER_LOGOUT' });
-                    Cookies.remove('userInfo');
-                    Cookies.remove('couponInfo');
-                  }
-                  else
-                  {
-                    GetCoinPOSOrder(liffId,lineUserId,linePOSId,groupId,liffOrderId,liffCompanyId,liffLocationId,targetPage, userLocalJson)
-                    Cookies.set('userInfo', userLocalJson);
-
-                    var userLocal = JSON.parse(userLocalJson)
-
-                    dispatch({ type: 'USER_LOGIN', payload: userLocal });
-
-                    //alert('userLocal = ' + JSON.stringify(userLocal));
-
-                    sessionStorage.setItem('customerId', userLocal.customerId); 
-                    sessionStorage.setItem('customerFirstName', userLocal.firstName);
-                    sessionStorage.setItem('customerLastName', userLocal.lastName);
-                    sessionStorage.setItem('customerEmail', userLocal.email);
-                    sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
-
-                    sessionStorage.setItem('address1', userLocal.address1);
-                    sessionStorage.setItem('countryId', userLocal.countryId);
-                    sessionStorage.setItem('provinceId', userLocal.provinceId);
-                    sessionStorage.setItem('cityId', userLocal.cityId);
-                    sessionStorage.setItem('districtId', userLocal.districtId);
-                    sessionStorage.setItem('postalcode', userLocal.postalcode);
-
-                    sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
-                    sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+              }
+              else
+                    {
+                      if(catalogName.length > 0)
+                      {
+                        //alert('got Catalog')
+                        var url = liffEndpoint + '/' + companyCode + '/' + catalogName;
+                        router.push(url);
+                      }
+                      else
+                      {
+                        //alert('no Catalog')
+                        var url = liffEndpoint + '/' + companyCode;
+                        router.push(url);
+                      }
+                      
+                    }
                     
-                    sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
-                    sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
-                  }
-
-                  var companyId = liffCompanyId;
-                  var locationId = liffLocationId;
-                  var companyName = '';
-                  var locationName = '';
+                    var userLocalJson = localStorage.getItem('userInfo');
+                    if(userLocalJson === null)
+                    {
+                      dispatch({ type: 'USER_LOGOUT' });
+                      Cookies.remove('userInfo');
+                      Cookies.remove('couponInfo');
+                    }
+                    else
+                    {
+                      Cookies.set('userInfo', userLocalJson);
+  
+                      var userLocal = JSON.parse(userLocalJson)
+  
+                      dispatch({ type: 'USER_LOGIN', payload: userLocal });
+  
+                      //alert('userLocal = ' + JSON.stringify(userLocal));
+  
+                      sessionStorage.setItem('customerId', userLocal.customerId); 
+                      sessionStorage.setItem('customerFirstName', userLocal.firstName);
+                      sessionStorage.setItem('customerLastName', userLocal.lastName);
+                      sessionStorage.setItem('customerEmail', userLocal.email);
+                      sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
+  
+  
+                      sessionStorage.setItem('customerAddressId', userLocal.customerAddressId);
+                      sessionStorage.setItem('address1', userLocal.address1);
+                      sessionStorage.setItem('countryId', userLocal.countryId);
+                      sessionStorage.setItem('provinceId', userLocal.provinceId);
+                      sessionStorage.setItem('cityId', userLocal.cityId);
+                      sessionStorage.setItem('districtId', userLocal.districtId);
+                      sessionStorage.setItem('postalcode', userLocal.postalcode);
+  
+                      sessionStorage.setItem('countrys', JSON.stringify(userLocal.countrys));
+                      sessionStorage.setItem('provinces', JSON.stringify(userLocal.provinces));
+                      
+                      sessionStorage.setItem('cities', JSON.stringify(userLocal.cities));
+                      sessionStorage.setItem('districts', JSON.stringify(userLocal.districts));
+                    }
+  
+                    //alert('Redirect or Get Product')
+                    var companyId = liffCompanyId;
+                    var locationId = liffLocationId;
+                    var companyName = '';
+                    var locationName = '';
+                    
+                    if(targetPage.length > 0)
+                    {
+                      //alert('Redirect')
+                      RedirectPageManager(targetPage,userLocalJson,catalogName);
+              
+                    }
+                    else
+                    {
+                      //alert('Get Product')
+                      await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
+                    }
+  
+                    
                   
-                  if(targetPage.length > 0)
-                  {
-                    //alert('Go');
-                    RedirectPageManager(targetPage,userLocalJson,catalogName);
-            
-                  }
-                  else
-                  {
-                    await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,'','','');
-                  }
-
-                  
-                
-                  setPromotionLoading(false);
-                  setCategoryLoading(false);
-                  setNewProductLoading(false);
-                  setLoading(false);*/
+                    setPromotionLoading(false);
+                    setCategoryLoading(false);
+                    setNewProductLoading(false);
+                    setRecommentProductLoading(false);
+                    setSliderImageLoading(false);
+                    setLoading(false);
             }
             else
             {
