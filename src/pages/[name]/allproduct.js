@@ -253,8 +253,32 @@ const AllProduct = () => {
             setCurrencySign(currencySignData);
             
         }
-        await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,q,'',p);
 
+        var customerTypeId = sessionStorage.getItem('customerTypeId') ? Number(sessionStorage.getItem('customerTypeId')) : 9;//Default Customer
+        var promotionId = sessionStorage.getItem('promotionId') ? Number(sessionStorage.getItem('promotionId')) : 0;
+      
+        var refreshMode = '';
+        //alert('p = ' + p + ' q = ' + q);
+        if(p === 'all')
+        {
+          //alert('all');
+          refreshMode = 'all'
+          p = '';
+          //c = '';
+          q = '';
+        }
+        if(p !== undefined && q == undefined)
+        {
+          //alert('product');
+          refreshMode = 'product'
+        }
+        if(p === undefined && q !== undefined)
+        {
+          //alert('query');
+          refreshMode = 'query';
+        }
+        //await GetProductData('','','','',0,companyId,locationId,companyName,locationName,companyCode,catalogName,0,9,1,itemPerPage,q,'',p);
+        await RefreshProductList('','','','',0,companyId,companyCode,locationId,catalogName,companyName,locationName,promotionId,customerTypeId,1,itemPerPage,q,'',p,refreshMode)
         setLoading(false);
         setPromotionLoading(false);
     }, [])
@@ -295,7 +319,7 @@ const AllProduct = () => {
         promotionId,customerTypeId,page,itemPerPage,query,category,product
       });
 
-      //alert(JSON.stringify(products));
+      alert(JSON.stringify(products));
       //alert(JSON.stringify(products.catalogCouponCode));
       if(products.catalogCouponCode !== undefined)
       {
@@ -590,6 +614,8 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
     }
     const RefreshProductList = async (liffId, lineUserId, linePOSId, groupId, orderId,companyId,companyCode,locationId,catalogName,companyName, locationName, promotionId,customerTypeId,page,itemPerPage,query,category,product,refreshMode) =>
     {
+      //alert('refreshMode = ' + refreshMode);
+
       setLoading(true);
       
       query = query === undefined ? 'null' : query;
@@ -647,6 +673,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
           }
         }
 
+        
         if(refreshMode === 'category')
         {
           setProductListHeader('รายการสินค้า ในหมวดหมู่ "' + products.categoryName + '"');
@@ -667,7 +694,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       
       
 
-      pagingManager();
+      pagingManager(currentPage,countPage);
       setProductList(productVariants);
 
 

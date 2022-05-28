@@ -420,7 +420,7 @@ const Catalog = ({params,targetPage,companyCode,dataPath,title,description,count
       sessionStorage.setItem('dataPath',dataPath);
       
       sessionStorage.setItem('liffOrderId',liffOrderId);
-      alert('JSON.stringify(promotions) = ' + JSON.stringify(promotions))
+      //alert('JSON.stringify(promotions) = ' + JSON.stringify(promotions))
       sessionStorage.setItem('promotions',JSON.stringify(promotions));
 
       sessionStorage.setItem('catalogName',catalogName);

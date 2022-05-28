@@ -63,7 +63,7 @@ const MobileFooter = ({companyLogo, companyName, dataPath, RefreshProductList, F
             <FiAlignLeft className="w-6 h-6 drop-shadow-xl" />
           </span>
         </button>
-        <Link href={"/" + companyCode + "/" + dataPath}>
+        <Link href={ "/" + dataPath}>
           <a className="text-xl text-white" rel="noreferrer" aria-label="Home">
             {' '} 
             <FiHome className="w-6 h-6 drop-shadow-xl" />

@@ -106,6 +106,8 @@ const Checkout = () => {
   const [cityLoading, setCityLoading] = useState(true);
   const [provinceLoading, setProvinceLoading] = useState(true);
   const [countryLoading, setCountryLoading] = useState(true);
+
+  const [address1Loading, setAddress1Loading] = useState(true);
   
 
   const [catalogName, setCatalogName] = useState('');
@@ -173,6 +175,7 @@ const Checkout = () => {
   const [provinceText, setProvinceText] = useState('');
   const [changePostalcode, setChangePostalCode] = useState(false);
   const [shippingServices, setShippings] = useState([]);
+  const [shippingIdAndCost, setShippingIdAndCost] = useState([]);
 
   const [countryLabel, setCountryLabel] = useState('Select Country');
   const [provinceLabel, setProvinceLabel] = useState('Select Province');
@@ -183,7 +186,7 @@ const Checkout = () => {
   const [isDistrictEnable, setDistrictSelectorEnable] = useState(false);
   const [isProvinceEnable, setProvinceSelectorEnable] = useState(false);
   const [isCityEnable, setCitySelectorEnable] = useState(false);
-
+  const [isPostalCodeEnable, setPostalCodeEnable] = useState(false);
 
 
 
@@ -192,7 +195,31 @@ const Checkout = () => {
   const [cityId, setCityId] = useState(0);
   const [provinceId,setProvinceId] = useState(0);
   const [districtId,setDistrictId] = useState(0);
+
+  const [defaultFirstName,setDefaultCustomerFirstName] = useState('');
+  const [defaultLastName,setDefaultCustomerLastName] = useState('');
+  const [defaultEmail,setDefaultCustomerEmail] = useState('');
+  const [defaultPhoneNumber,setDefaultCustomerPhoneNumber] = useState('');
+  const [defaultAddress1,setDefaultCustomerAddress] = useState('');
+
+  const [defaultProvinces, setDefaultProvinces] = useState([]);
+  const [defaultCountrys,setDefaultCountry] = useState([]);
+  const [defaultCities, setDefaultCities] = useState([]);
+  const [defaultDistricts, setDefaultDistricts] = useState([]);
   
+  const [defaultCountryId, setDefaultCountryId] = useState(0);
+  const [defaultCityId, setDefaultCityId] = useState(0);
+  const [defaultProvinceId,setDefaultProvinceId] = useState(0);
+  const [defaultDistrictId,setDefaultDistrictId] = useState(0);
+  const [defaultPostalcode, setDefaultPostalCode] = useState('');
+
+  
+  const [defaultDistrictText, setDefaultDistrictText] = useState('');
+  const [defaultCityText, setDefaultCityText] = useState('');
+  const [defaultProvinceText, setDefaultProvinceText] = useState('');
+  const [defaultCountryText, setDefaultCountryText] = useState('');
+
+  const [defaultIsInputAddress,setDefaultIsInputAddress] = useState(false);
 
   const [qrShow, setQRShow] = useState(false);
   const [bankShow, setBankShow] = useState(false);
@@ -237,6 +264,7 @@ const Checkout = () => {
   const [customerAddress1, setCustomerAddress1] = useState('');
 
   const [shippingId, setShippingId] = useState(0);
+  const [shippingLabel, setShippingLabel] = useState('Select Shipping');
   
   const [currencySign, setCurrencySign] = useState('');
   const [profileImageUrl, setProfileImage] = useState('');
@@ -401,12 +429,15 @@ const Checkout = () => {
       var countryIdData = Number(sessionStorage.getItem('countryId')); 
       //alert('countryIdData = ' + countryIdData)
       setCountryId(countryIdData);
+      setDefaultCountryId(countryIdData)
+      setCountrySelectorEnable(false);
       
       var country = countryLists.filter((item) => item.value === countryIdData);
 
       if(country.length > 0)
       {
         setCountryLabel(country[0].label);
+        setDefaultCountryText(country[0].label);
       }
         
     }
@@ -416,21 +447,25 @@ const Checkout = () => {
       //alert()
       var isInputAddressData = true;
       setIsInputAddress(isInputAddressData);
+      setDefaultIsInputAddress(isInputAddressData);
       if(sessionStorage.getItem('city'))
       {
         var cityTextData = sessionStorage.getItem('city'); 
         setCityText(cityTextData);
+        setDefaultCityText(cityTextData)
           
       }
       if(sessionStorage.getItem('district'))
       {
         var districtTextData = sessionStorage.getItem('district'); 
         setDistrictText(districtTextData);
+        setDefaultDistrictText(districtTextData);
       }
       if(sessionStorage.getItem('province'))
       {
         var provinceTextData = sessionStorage.getItem('province'); 
         setProvinceText(provinceTextData);
+        setDefaultProvinceText(provinceTextData);
       }
       
       //alert('not thai')
@@ -454,6 +489,7 @@ const Checkout = () => {
   if(sessionStorage.getItem('dataPath'))
   {
     var dataPathData = sessionStorage.getItem('dataPath'); 
+    //alert(dataPathData);
     setDataPath(dataPathData);
           
   }
@@ -476,7 +512,7 @@ const Checkout = () => {
     }
     else
     {
-      setCustomerAddressId(false);
+      setDisableCustomerInfo(false);
     }
   }
   else
@@ -695,21 +731,26 @@ const Checkout = () => {
     var customerFirstNameData = sessionStorage.getItem('customerFirstName'); 
     //alert(customerFirstNameData);
     setCustomerFirstName(customerFirstNameData);
+    setDefaultCustomerFirstName(customerFirstNameData)
+    
   }
   if(sessionStorage.getItem('customerLastName'))
   {
     var customerLastNameData = sessionStorage.getItem('customerLastName'); 
     setCustomerLastName(customerLastNameData);
+    setDefaultCustomerLastName(customerLastNameData);
   }
   if(sessionStorage.getItem('customerEmail'))
   {
     var customerEmailData = sessionStorage.getItem('customerEmail'); 
     setCustomerEmail(customerEmailData);
+    setDefaultCustomerEmail(customerEmailData);
   }
   if(sessionStorage.getItem('customerPhoneNumber'))
   {
     var customerPhoneNumberData = sessionStorage.getItem('customerPhoneNumber');
     setCustomerPhoneNumber(customerPhoneNumberData);
+    setDefaultCustomerPhoneNumber(customerPhoneNumberData);
       
   }
 
@@ -717,6 +758,7 @@ const Checkout = () => {
   {
     var customerAddress1Data = sessionStorage.getItem('address1'); 
     setCustomerAddress(customerAddress1Data);
+    setDefaultCustomerAddress(customerAddress1Data)
       
   }
   
@@ -724,13 +766,16 @@ const Checkout = () => {
   {
     var provinceIdData = Number(sessionStorage.getItem('provinceId')); 
     setProvinceId(provinceIdData);
+    setDefaultProvinceId(provinceIdData);
+    
 
     var province = provinceLists.filter((item) => item.value === provinceIdData);
 
       if(province.length > 0)
       {
         setProvinceLabel(province[0].label);
-        setProvinceSelectorEnable(true);
+        setDefaultProvinceText(province[0].label);
+        setProvinceSelectorEnable(false);
       }
   }
   
@@ -740,24 +785,28 @@ const Checkout = () => {
   {
     var cityIdData = Number(sessionStorage.getItem('cityId')); 
      setCityId(cityIdData); 
+     setDefaultCityId(cityIdData);
      var city = cityLists.filter((item) => item.value === cityIdData);
 
      if(city.length > 0)
      {
        setCityLabel(city[0].label);
-       setCitySelectorEnable(true);
+       setDefaultCityText(city[0].label);
+       setCitySelectorEnable(false);
      }
   }
   if(sessionStorage.getItem('districtId'))
   {
     var districtIdData = Number(sessionStorage.getItem('districtId')); 
     setDistrictId(districtIdData);
+    setDefaultDistrictId(districtIdData);
     var district = districtLists.filter((item) => item.value === districtIdData);
 
      if(district.length > 0)
      {
        setDistrictLabel(district[0].label);
-       setDistrictSelectorEnable(true);
+       setDefaultDistrictText(district[0].label);
+       setDistrictSelectorEnable(false);
      }
   }
   
@@ -765,12 +814,25 @@ const Checkout = () => {
   {
     var postalCodeData = sessionStorage.getItem('postalcode'); 
     setPostalCode(postalCodeData);
+    setDefaultPostalCode(postalCodeData);
   }
 
   if(sessionStorage.getItem('shippingId'))
   {
     var shippingIdData = Number(sessionStorage.getItem('shippingId')); 
     setShippingId(shippingIdData)
+
+    var shippingsJson = sessionStorage.getItem('shippings'); 
+    var shippingsList = JSON.parse(shippingsJson);
+
+    var shipping = shippingsList.filter((item) => item.value === shippingIdData);
+
+     if(shipping.length > 0)
+     {
+       setShippingLabel(shipping[0].label);
+       
+       
+     }
   }
 
   
@@ -778,7 +840,25 @@ const Checkout = () => {
   {
     var shippingsJson = sessionStorage.getItem('shippings'); 
     var shippingsList = JSON.parse(shippingsJson);
-    setShippings(shippingsList);
+
+    var shippingOptions = [];
+      var shippingIdAndCosts = [];
+      
+      for(var i=0;i<shippingsList.length;i++)
+      {
+        var item = shippingsList[i];
+        if(item !== undefined)
+        {
+          var shippingName = item.serviceName + ":" + item.serviceChargeDisplay;
+          var shippingId = item.providerId;
+          var shippingCost = item.serviceCharge;
+          shippingOptions.push({ value: shippingId, label: shippingName })
+          shippingIdAndCosts.push({ value: shippingId, label: shippingCost })
+        }
+      }
+
+    setShippings(shippingOptions);
+    setShippingIdAndCost(shippingIdAndCosts);
   }
 
   if(sessionStorage.getItem('companyLogo'))
@@ -1090,24 +1170,30 @@ const Checkout = () => {
     setCustomerLastName(event.target.value)
   }
 
-  const handleShippingChange = async(event) => {
-    console.log(event.target.value);
+  const handleShippingChange = async(selectedOption) => {
+    //console.log(event.target.value);
     //alert('shipping Id = ' + event.target.name);
-    var shippingData = event.target.value;
-    var shippingDatas = shippingData.split(':');
-
+    var shippingData = selectedOption.value;
+    var shippingDatas = shippingIdAndCost.filter((x) => x.value === shippingData); //shippingData.split(':');
+    //alert(shippingData)
+    //return;
     var shippingCost = 0.00;
-    if(shippingDatas.length > 1)
+    if(shippingDatas.length > 0)
     {
-      shippingCost = parseFloat(shippingDatas[1]);
+      shippingCost = parseFloat(shippingDatas[0].label);
     }
     
     //alert('shipping cost = ' + shippingCost);
     handleShippingCost(shippingCost);
     
-    handleShippingId(Number(shippingDatas[0]))
+    handleShippingId(Number(shippingDatas[0].value))
     var shippingName = '';
-    for(var i = 0; i<shippingServices.length;i++)
+    var shipping = shippingServices.filter((x) => x.value === shippingData);
+    if(shipping.length > 0)
+    {
+      shippingName = shipping.label;
+    }
+    /*for(var i = 0; i<shippingServices.length;i++)
     {
        if(shippingServices[i].providerId == Number(shippingDatas[0]))
        {
@@ -1115,7 +1201,7 @@ const Checkout = () => {
          shippingName = shippingServices[i].serviceName;
          //alert('shippingName = ' + shippingName)
        }
-    }
+    }*/
     handleShippingName(shippingName)
 
     //alert("liffId = " + lineLiffId);
@@ -1123,11 +1209,11 @@ const Checkout = () => {
     {
       if(lineLiffId.length > 0)
       {
-        var shippingLabel = '';
-        if(shippingDatas.length > 3)
+        var shippingLabel = shippingName;
+        /*if(shippingDatas.length > 3)
         {
           shippingLabel = shippingDatas[2] + ":" + shippingDatas[3];
-        }
+        }*/
         //alert("updateSocialPOSShipping " + shippingDatas[2] + ":" + shippingDatas[3])
         updateSocialPOSShipping(Number(shippingDatas[0]), shippingLabel, shippingCost);
       }
@@ -1353,12 +1439,96 @@ const EditCustomerInfo = async () =>
   setEditCustomerInfo(true);
   setDisableCustomerInfo(false);
   setApproveCustomerInfo(false);
+
+  setCountrySelectorEnable(true);
+  setDistrictSelectorEnable(true);
+  setCitySelectorEnable(true);
+  setProvinceSelectorEnable(true);
 }
 const CancelCustomerInfo = async () =>
 {
-  setEditCustomerInfo(false);
-  setDisableCustomerInfo(true);
-  setApproveCustomerInfo(false);
+  setAddress1Loading(true);
+  setCountryLoading(true);
+  setProvinceLoading(true);
+  setCityLoading(true);
+  setDistrictLoading(true);
+  setPostalCodeLoading(true);
+
+  setCustomerFirstName(defaultFirstName);
+  setCustomerLastName(defaultLastName);
+  setCustomerEmail(defaultEmail);
+  setCustomerPhoneNumber(defaultPhoneNumber);
+  setCustomerAddress(defaultAddress1);
+  setCountryId(defaultCountryId);
+    
+
+  await delay(200)
+
+  var defaultProvince = allProvinces.filter(x => x.value === defaultProvinceId);
+
+    //alert('defaultProvince = ' + JSON.stringify(defaultProvince));
+    if(defaultProvince.length > 0)
+    {
+      setProvinceLabel(defaultProvince[0].label)
+    }
+    else
+    {
+      setProvinceLabel('');
+    }
+    
+    setProvinceId(defaultProvinceId);
+    //setProvinces(defaultProvinces);
+
+    var defaultCity = allCitys.filter(x => x.value === defaultCityId);
+    if(defaultCity.length > 0)
+    {
+      setCityLabel(defaultCity[0].label);
+    }
+    else
+    {
+      setCityLabel('');
+    }
+    setCityId(defaultCityId);
+    //setCities(defaultCities);
+
+    var defaultDistrict = allDistricts.filter(x => x.value === defaultDistrictId);
+    if(defaultDistrict.length > 0)
+    {
+      setDistrictLabel(defaultDistrict[0].label);
+    }
+    else
+    {
+      setDistrictLabel('');
+    }
+    setDistrictId(defaultDistrictId);
+    //setDistricts(defaultDistricts);
+
+    setPostalCode(defaultPostalcode);
+
+    setProvinceText(defaultProvinceText);
+    setCityText(defaultCityText);
+    setDistrictText(defaultDistrictText);
+
+    setIsInputAddress(defaultIsInputAddress);
+
+    //alert('defaultFirstName = ' + defaultFirstName + ' firstName = ' + firstName);
+
+    setEditCustomerInfo(false);
+    setDisableCustomerInfo(true);
+    setApproveCustomerInfo(false);
+
+    setPostalCodeEnable(false);
+    setDistrictSelectorEnable(false);
+    setCitySelectorEnable(false);
+    setProvinceSelectorEnable(false);
+    setCountrySelectorEnable(false);
+
+    setAddress1Loading(false);
+    setCountryLoading(false);
+    setProvinceLoading(false);
+    setCityLoading(false);
+    setDistrictLoading(false);
+    setPostalCodeLoading(false);
 }
 const SaveCustomerInfo = async (companyId) =>
 {
@@ -1618,6 +1788,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                             type="text"
                             placeholder="ชื่อต้น"
                             dataValue={firstName}
+                            disable={!IsEditCustomerInfo}
                             handleDataChange={handleFirstNameChange}
                           />
                             
@@ -1632,6 +1803,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               type="text"
                               placeholder="ชื่อสกุล"
                               dataValue={lastName}
+                              disable={!IsEditCustomerInfo}
                               handleDataChange={handleLastNameChange}
                             />
                             
@@ -1645,6 +1817,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 type="email"
                                 placeholder="youremail@gmail.com"
                                 dataValue={email}
+                                disable={!IsEditCustomerInfo}
                                 handleDataChange={handleEmailChange}
                               />
                             
@@ -1659,6 +1832,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   type="tel"
                                   placeholder="+062-6532956"
                                   dataValue={phoneNumber}
+                                  disable={!IsEditCustomerInfo}
                                   handleDataChange={handleContactChange}
                                 />
                             
@@ -1683,6 +1857,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   type="text"
                                   placeholder="บ้านเลขที่ ซอย ถนน"
                                   dataValue={address1}
+                                  disable={!IsEditCustomerInfo}
                                   handleDataChange={handleAddress1Change}
                                 />
                             
@@ -1701,6 +1876,8 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               <div className="relative">
                                 
                                   <Select options={countrys} 
+                                  isDisabled={!isCountryEnable}
+                                  
                                     defaultValue={{ label: countryLabel, value: countryId }} 
                                     onChange={handleCountryChange}/>
 
@@ -1869,6 +2046,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                               placeholder="รหัสไปรษณีย์"
                               dataValue={postalcode}
                               handleDataChange={handlePostalCodeChange}
+                              disable={!IsEditCustomerInfo}
                               />
                             
                             
@@ -1914,20 +2092,6 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 <button
                                   type="button"
                                   disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => CancelCustomerInfo()}
-                                  className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
-                                >
-                                  ยกเลิก{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoCloseCircleOutline />
-                                  </span>
-                                </button>
-                              </div>
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="button"
-                                  disabled={isEmpty || isCheckoutSubmit}
                                   onClick={() => SaveCustomerInfo(lineCompanyId)}
                                   className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                                 >
@@ -1938,24 +2102,26 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   </span>
                                 </button>
                               </div>
-                            </div>
-                          :
-                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                              
                               <div className="col-span-6 sm:col-span-3">
                                 <button
                                   type="button"
                                   disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => AcceptCustomerInfo()}
-                                  className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                  onClick={() => CancelCustomerInfo()}
+                                  className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
                                 >
-                                  อนุมัติข้อมูลลูกค้า{' '}
+                                  ยกเลิก{' '}
                                   <span className="text-xl ml-2">
                                     {' '}
-                                    <IoCheckboxOutline />
+                                    <IoCloseCircleOutline />
                                   </span>
                                 </button>
                               </div>
+                              
+                            </div>
+                          :
+                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                              
+                              
                               <div className="col-span-6 sm:col-span-3">
                                 <button
                                   type="button"
@@ -1970,6 +2136,20 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                   </span>
                                 </button>
                               </div>
+                              <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => AcceptCustomerInfo()}
+                                  className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  อนุมัติข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCheckboxOutline />
+                                  </span>
+                                </button>
+                              </div>
                             </div>
                         
                         
@@ -1979,7 +2159,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                         <>
                           <br/>
                           <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย {customerAddressId}
                           </h2>
                         </> 
                       : 
@@ -1987,7 +2167,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                           <>
                             <br/>
                             <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
+                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย {customerAddressId}
                             </h2>
                           </>
                         :
@@ -1998,12 +2178,16 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                                 </h2>
                                 <div className="grid grid-cols-6 gap-6">
                                   <div className="col-span-6 sm:col-span-3">
-                                  <ShippingFormSelect register={register}
+                                  <Select options={shippingServices} 
+                                    
+                                    defaultValue={{ label: shippingLabel, value: shippingId }} 
+                                    onChange={handleShippingChange}/>
+                                  {/* <ShippingFormSelect register={register}
                                     label="Shipping"
                                     name="shippingOption"
                                     type="text"
                                     handleItemChange={handleShippingChange} 
-                                    dataList={shippingServices} selectedId={shippingId}/>
+                                    dataList={shippingServices} selectedId={shippingId}/> */}
                                   </div>
                                   
                                   
@@ -2013,7 +2197,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
           
                               <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
                                 <div className="col-span-6 sm:col-span-3">
-                                  <Link href={dataPath}>
+                                  <Link href={"/" + dataPath}>
                                     <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
                                       <span className="text-xl mr-2">
                                         <IoReturnUpBackOutline />
@@ -2040,385 +2224,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                         </>
                       }
                     </>
-                  /* <>
-                    <div className="form-group">
-                      <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                        01. ข้อมูลส่วนบุคคล
-                      </h2>
-                      <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          
-                          
-                          <EditableCustomerInput register={register}
-                          label="ชื่อต้น" 
-                          name="firstName"
-                          type="text"
-                          placeholder="ชื่อต้น"
-                          isDisable={IsDisableCustomerInfo}
-                            dataValue={firstName}
-                            canAutoChange={true}
-                          handleDataChange={handleFirstNameChange}
-                          />
-                          <Error errorName={firstNameError} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3">
-                          
-                          <EditableCustomerInput register={register}
-                          label="นามสกุล" 
-                          name="lastName"
-                          type="text"
-                          placeholder="ชื่อสกุล"
-                          isDisable={IsDisableCustomerInfo}
-                            dataValue={lastName}
-                            canAutoChange={true}
-                          handleDataChange={handleLastNameChange}
-                          />
-                          <Error errorName={lastNameError} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3">
-                          
-                          <EditableCustomerInput register={register}
-                          label="Email address"
-                          name="email"
-                          type="email"
-                          placeholder="youremail@gmail.com"
-                          isDisable={IsDisableCustomerInfo}
-                          dataValue={email}
-
-                          canAutoChange={true}
-                          handleDataChange={handleEmailChange}
-                          />
-                          <Error errorName={emailError} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3">
-                          
-                          <EditableCustomerInput register={register}
-                          label="เบอร์ติดต่อ"
-                          name="contact"
-                          type="tel"
-                          placeholder="+062-6532956"
-                          isDisable={IsDisableCustomerInfo}
-                          dataValue={phoneNumber}
-                          canAutoChange={true}
-                          handleDataChange={handleContactChange}
-                          />
-
-                          <Error errorName={contactError} />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group mt-12">
-                      <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                        02. ที่อยู่ขนส่ง
-                      </h2>
-
-                      <div className="grid grid-cols-6 gap-6 mb-8">
-                        <div className="col-span-6">
-                          
-                          <EditableCustomerInput register={register}
-                          label="บ้านเลขที่ ซอย ถนน"
-                          name="address"
-                          type="text"
-                          placeholder="บ้านเลขที่ ซอย ถนน"
-                          isDisable={IsDisableCustomerInfo}
-                          dataValue={address1}
-                          canAutoChange={true}
-                          handleDataChange={handleAddress1Change}
-                          />
-                          <Error errorName={address1Error} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                          
-                          
-                          <CountryFormSelect register={register}
-                            label="ประเทศ"
-                            name="province1"
-                            type="text"
-                            isDisable={IsDisableCustomerInfo}
-                            handleItemChange={handleCountryChange}
-                            dataList={countrys} selectedId={countryId}
-                            />
-                          
-                          <Error errorName={countryError} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                          
-                          {
-                            isInputAddress === true 
-                            ?
-                              
-                              <EditableCustomerInput register={register}
-                                  id="province"
-                                  label="จังหวัด"
-                                  name="province"
-                                  type="input"
-                                  placeholder="Please insert state/province."
-                                  isDisable={IsDisableCustomerInfo}
-                                  dataValue={provinceText}
-                                  changeData={changePostalcode}
-                                  canAutoChange={true}
-                                  handleDataChange={handleProvinceTextChange}
-                                  />
-                            :
-                            
-                              <ProvinceFormSelect register={register}
-                              label="จังหวัด"
-                              name="province"
-                              type="text"
-                              isDisable={IsDisableCustomerInfo}
-                              handleItemChange={handleProvinceChange}
-                              dataList={provinces} selectedId={provinceId}
-                              />
-                          }
-                          
-                          <Error errorName={provinceError} />
-                        </div>
-
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                          
-                          {
-                            isInputAddress === true 
-                            ?
-                              
-                              <EditableCustomerInput register={register}
-                                id="city"
-                                label="เขต/อำเภอ"
-                                name="province2"
-                                type="input"
-                                placeholder="Please insert city."
-                                isDisable={IsDisableCustomerInfo}
-                                dataValue={cityText}
-                                changeData={changePostalcode}
-                                canAutoChange={true}
-                                handleDataChange={handleCityTextChange}
-                                />
-                            :
-                            <CityFormSelect register={register}
-                            label="เขต/อำเภอ"
-                            name="province2"
-                            type="text"
-                            isDisable={IsDisableCustomerInfo}
-                            handleItemChange={handleCityChange}
-                            dataList={cities} selectedId={cityId}
-                            />
-                          }
-                          
-                          <Error errorName={cityError} />
-                        </div>
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                          
-                          {isInputAddress === true 
-                          ?
-                            
-                            <EditableCustomerInput register={register}
-                            id="district"
-                            label="แขวง/ตำบล"
-                            name="district"
-                            type="input"
-                            placeholder="Please insert district."
-                            isDisable={IsDisableCustomerInfo}
-                            dataValue={districtText}
-                            changeData={changePostalcode}
-                            canAutoChange={true}
-                            handleDataChange={handleDistrictTextChange}
-                            />
-                          :
-                            <DistrictFormSelect register={register}
-                              label="แขวง/ตำบล"
-                              name="district"
-                              type="text"
-                              isDisable={IsDisableCustomerInfo}
-                              handleItemChange={handleDistrictChange}
-                              dataList={districts} selectedId={districtId}
-                              />
-                          }
-                          
-                          <Error errorName={districtError} />
-                        </div>
-                        <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                          
-                          <EditableCustomerInput register={register}
-                          id="postalCode"
-                          label="รหัสไปรษณีย์"
-                          name="zipCode"
-                          type="input"
-                          placeholder="รหัสไปรษณีย์"
-                          isDisable={IsDisableCustomerInfo}
-                          dataValue={postalcode}
-                          changeData={changePostalcode}
-                          canAutoChange={true}
-                          handleDataChange={handlePostalCodeChange}
-                          />
-                          
-                          <Error errorName={postalCodeError} />
-                        </div>
-                      </div>
-
-                      
-                      
-                    </div>
-                    {
-                      customerAddressId === 0 ?
-                        <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                          <div className="col-span-6 sm:col-span-3">
-                            
-                          </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <button
-                              type="button"
-                              disabled={isEmpty || isCheckoutSubmit}
-                              onClick={() => SaveCustomerInfo(lineCompanyId)}
-                              className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                            >
-                              บันทึกข้อมูลลูกค้า{' '}
-                              <span className="text-xl ml-2">
-                                {' '}
-                                <IoSaveOutline />
-                              </span>
-                            </button>
-                          </div>
-                        </div>
-                      :
-                        
-                          IsEditCustomerInfo === true ?
-                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                            
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="button"
-                                  disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => CancelCustomerInfo()}
-                                  className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
-                                >
-                                  ยกเลิก{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoCloseCircleOutline />
-                                  </span>
-                                </button>
-                              </div>
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="button"
-                                  disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => SaveCustomerInfo(lineCompanyId)}
-                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                >
-                                  บันทึกข้อมูลลูกค้า{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoSaveOutline />
-                                  </span>
-                                </button>
-                              </div>
-                            </div>
-                          :
-                            <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                              
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="button"
-                                  disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => AcceptCustomerInfo()}
-                                  className="bg-orange-500 hover:bg-orange-600 border border-orange-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                >
-                                  อนุมัติข้อมูลลูกค้า{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoCheckboxOutline />
-                                  </span>
-                                </button>
-                              </div>
-                              <div className="col-span-6 sm:col-span-3">
-                                <button
-                                  type="button"
-                                  disabled={isEmpty || isCheckoutSubmit}
-                                  onClick={() => EditCustomerInfo()}
-                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                >
-                                  แก้ไขข้อมูลลูกค้า{' '}
-                                  <span className="text-xl ml-2">
-                                    {' '}
-                                    <IoCreateOutline />
-                                  </span>
-                                </button>
-                              </div>
-                            </div>
-                        
-                        
-                    }
-                    {
-                      customerAddressId === 0 ? 
-                        <>
-                          <br/>
-                          <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
-                          </h2>
-                        </> 
-                      : 
-                        IsApproveCustomerInfo === false ?
-                          <>
-                            <br/>
-                            <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย
-                            </h2>
-                          </>
-                        :
-                        <>
-                          <div className="form-group mt-12">
-                                <h2 className="font-semibold font-serif text-base text-gray-700 pb-3">
-                                  03. รูปแบบขนส่ง
-                                </h2>
-                                <div className="grid grid-cols-6 gap-6">
-                                  <div className="col-span-6 sm:col-span-3">
-                                  <ShippingFormSelect register={register}
-                                    label="Shipping"
-                                    name="shippingOption"
-                                    type="text"
-                                    handleItemChange={handleShippingChange} 
-                                    dataList={shippingServices} selectedId={shippingId}/>
-                                  </div>
-                                  
-                                  
-                                </div>
-                                
-                              </div>
-          
-                              <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
-                                <div className="col-span-6 sm:col-span-3">
-                                  <Link href={dataPath}>
-                                    <a className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full">
-                                      <span className="text-xl mr-2">
-                                        <IoReturnUpBackOutline />
-                                      </span>
-                                      ช็อบต่อ
-                                    </a>
-                                  </Link>
-                                </div>
-                                <div className="col-span-6 sm:col-span-3">
-                                  <button
-                                    type="button"
-                                    onClick={()=> submitContact()}
-                                    disabled={isEmpty || isCheckoutSubmit}
-                                    className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                                  >
-                                    อนุมัติ คำสั่งขาย{' '}
-                                    <span className="text-xl ml-2">
-                                      {' '}
-                                      <IoArrowForward />
-                                    </span>
-                                  </button>
-                                </div>
-                              </div>
-                        </>
-                      }
-                  </> */
+                  
                   
                   
                 }

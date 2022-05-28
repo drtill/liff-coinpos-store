@@ -438,7 +438,7 @@ const useLoginSubmit = (setModalOpen) => {
 
         var userLogin = res;
 
-        alert('5 = ' + userLogin.customerAddressId)
+        //alert('5 = ' + userLogin.customerAddressId)
         sessionStorage.removeItem('targetPage');
         
         sessionStorage.setItem('customerId', userLogin.customerId);

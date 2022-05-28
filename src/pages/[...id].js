@@ -193,6 +193,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             sessionStorage.setItem('customerEmail', customerEmail);
             sessionStorage.setItem('customerPhoneNumber', customerPhoneNumber);
       
+
             sessionStorage.setItem('address1', address1);
             sessionStorage.setItem('countryId', countryId);
             sessionStorage.setItem('provinceId', provinceId);
@@ -456,6 +457,8 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                     sessionStorage.setItem('customerEmail', userLocal.email);
                     sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
 
+
+                    sessionStorage.setItem('customerAddressId', userLocal.customerAddressId);
                     sessionStorage.setItem('address1', userLocal.address1);
                     sessionStorage.setItem('countryId', userLocal.countryId);
                     sessionStorage.setItem('provinceId', userLocal.provinceId);
@@ -527,6 +530,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
                     sessionStorage.setItem('customerEmail', userLocal.email);
                     sessionStorage.setItem('customerPhoneNumber', userLocal.phone);
 
+                    sessionStorage.setItem('customerAddressId', userLocal.customerAddressId);
                     sessionStorage.setItem('address1', userLocal.address1);
                     sessionStorage.setItem('countryId', userLocal.countryId);
                     sessionStorage.setItem('provinceId', userLocal.provinceId);

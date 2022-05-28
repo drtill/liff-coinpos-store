@@ -62,7 +62,7 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
     }
     else
     {
-      alert("Not Get Category");
+      //alert("Not Get Category");
       setLoading(false);
     }
 
