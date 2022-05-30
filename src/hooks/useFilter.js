@@ -18,7 +18,8 @@ const useFilter = (data) => {
   const productData = useMemo(() => {
     let services = data;//data.orders;
     //filter user order
-    if (router.pathname === '/user/dashboard') {
+    //alert(router.pathname);
+    if (router.pathname === '/[name]/user/dashboard') {
       //alert(JSON.stringify(services));
       /*if(services !== undefined)
       {

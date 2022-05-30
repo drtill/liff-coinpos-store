@@ -11,6 +11,8 @@ import { SidebarContext } from '@context/SidebarContext';
 import CategoryServices from '@services/CategoryServices';
 import CategoryCard from '@component/category/CategoryCard';
 
+import ProductServices from '@services/ProductServices';
+
 const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
   const { categoryDrawerOpen, closeCategoryDrawer } =
     useContext(SidebarContext);
@@ -19,6 +21,8 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
   // ); 
 
   const [categories,setCategoryList] = useState([]);
+  const [companyCode,setCompanyCode] = useState('');
+  const [catalogName,setCatalogName] = useState('');
   const [loading,setLoading] = useState(false); 
   
   var error = '';
@@ -55,14 +59,40 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
       }
       else
       {
-        //alert("no Get Category = " + categoriesJson);
+        
+        alert("no Get Category = " + categoriesJson);
+        /*alert('companyName = ' + companyName)
+        
+        var companyCodeData = '';
+        var catalogNameData = '';
+        if(sessionStorage.getItem('companyCode'))
+        {
+              
+          companyCodeData = sessionStorage.getItem('companyCode');
+          setCompanyCode(companyCodeData); 
+        }
+
+        if(sessionStorage.getItem('catalogName'))
+        {
+              
+          catalogNameData = sessionStorage.getItem('catalogName');
+          setCatalogName(catalogNameData); 
+        }
+        alert('companyCodeData = ' + companyCodeData);
+        alert('catalogNameData = ' + catalogNameData);*/
+
+        //const productCategorys = await ProductServices.fetchGetProductCategoryService({
+        //  companyCode,
+        //  catalogName
+          
+        //});
         setLoading(false);
       }
       
     }
     else
     {
-      //alert("Not Get Category");
+      alert("Not Get Category");
       setLoading(false);
     }
 

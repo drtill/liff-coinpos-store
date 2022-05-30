@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { Transition, Popover } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
+import { useRouter } from 'next/router'
 //internal import
 import { pages } from '@utils/data';
 import Category from '@component/category/Category';
 
 const NavbarPromo = ({FilterProduct, page, dataPath}) => {
 
+  const router = useRouter();
   const [companyCode, setCompanyCode] = useState('');
   const [currentPage,setPage] = useState(page);
   useState(() => 
@@ -196,6 +198,16 @@ const NavbarPromo = ({FilterProduct, page, dataPath}) => {
                           ติดต่อเรา
                         </a>
                       </Link>
+                      <div onClick={() => handleDashBoardClick()}>
+                        <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
+                          แดชบอร์ด
+                        </a>
+                      </div>
+                      <div onClick={() => handleMyOrdersClick()}>
+                        <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
+                          ใบสั่งขายของฉัน
+                        </a>
+                      </div>
                       
 
                     
@@ -253,6 +265,16 @@ const NavbarPromo = ({FilterProduct, page, dataPath}) => {
                             ติดต่อเรา
                           </a>
                         </Link>
+                        <div onClick={() => handleDashBoardClick()}>
+                          <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
+                          แดชบอร์ด
+                          </a>
+                        </div>
+                        <div onClick={() => handleMyOrdersClick()}>
+                          <a className="text-gray-600 inline-block w-full hover:text-cyan-500 cursor-pointer">
+                          ใบสั่งขายของฉัน
+                          </a>
+                        </div>
 
                       
                         {/* <Link href="/offer">

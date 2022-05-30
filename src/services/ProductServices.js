@@ -729,6 +729,39 @@ const ProductServices = {
         return "Error: " + err.message
     }
   },
+  async fetchGetProductCategoryService(body){
+    try
+    {
+      //alert("Fetch")
+      var productList = null;
+      const products = await fetch(serviceUrl + 'GetOnlyLiffProductCategoryList',//fetch('http://localhost:5002/simple-cors3', 
+        { 
+          method:'POST',
+          //credentials:"include",
+          headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
+          body:`{
+          "CatalogName":"${body.catalogName}","CompanyCode":"${body.companyCode}"}`
+          
+        }).then(function(response) {
+          return response.text();
+        }).then(function(data) {
+
+          console.log("GetData = " + data)
+          var obj = JSON.parse(data);
+          //alert('data = ' + data);
+          var pvJson = obj.ProductVariantListJson
+          productList = JSON.parse(pvJson)
+          
+          
+        });
+      
+
+        return productList;
+    }
+    catch(err) {
+        return "Error: " + err.message
+    }
+  },
   async fetchCancelPromotionCode(body) {
     try
     {

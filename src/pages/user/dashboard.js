@@ -137,7 +137,7 @@ const Dashboard = ({ title, description, children}) => {
   };
 
   useEffect(async() => {
-    //alert('Login 0');
+    alert('Login 0');
     if(sessionStorage.getItem('dataPath'))
     {
       var dataPathData = sessionStorage.getItem('dataPath'); 

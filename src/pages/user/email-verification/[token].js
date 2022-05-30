@@ -16,36 +16,62 @@ const EmailVerification = ({ params }) => {
   const router = useRouter();
   const { dispatch } = useContext(UserContext);
 
-  useEffect(() => {
+  useEffect(async () => {
 
     
     setLoading(true);
-    UserServices.fetchCoinposUserRegister(params?.token)
-      .then((res) => {
-        //alert('res = ' + JSON.stringify(res));
-        if(res !== undefined)
-        {
-          //router.push('/');
-          //router.push('/catalog/2-MyCustomer');
-          router.push('/' + res.dataPath);
-          setLoading(false);
-          setSuccess(res.message);
-          notifySuccess('Register Success!');
-          dispatch({ type: 'USER_LOGIN', payload: res });
-          Cookies.set('userInfo', JSON.stringify(res));
-        }
-        else
-        {
-          alert('error res = ' + res);
-          setError(res.message);
-        }
-        
-      })
-      .catch((err) => {
-        //alert('catch')
+    //alert('params?.token = ' + params?.token)
+    const regisRes = await UserServices.fetchCoinposUserRegister(params?.token);
+    if(regisRes)
+    {
+      if(regisRes.isError)
+      {
+        //alert('error res = ' + res);
+        setError(regisRes.message);
+      }
+      else
+      {
+        router.push('/' + regisRes.dataPath);
         setLoading(false);
-        setError(err ? err.message : err.message);
-      });
+        setSuccess(regisRes.message);
+        notifySuccess('Register Success!');
+        dispatch({ type: 'USER_LOGIN', payload: regisRes });
+        Cookies.set('userInfo', JSON.stringify(regisRes));
+      }
+      
+    }
+    else
+    {
+      //alert("false");
+      alert('error res = ' + res);
+      setError("ไม่สามารถดึงข้อมูลลงทะเบียนได้ กรุณารอสักครู่และลองใหม่อีกครั้ง");
+    }
+    /*.then((res) => {
+      alert('res = ' + JSON.stringify(res));
+      if(res !== undefined)
+      {
+        //router.push('/');
+        //router.push('/catalog/2-MyCustomer');
+        router.push('/' + res.dataPath);
+        setLoading(false);
+        setSuccess(res.message);
+        notifySuccess('Register Success!');
+        dispatch({ type: 'USER_LOGIN', payload: res });
+        Cookies.set('userInfo', JSON.stringify(res));
+      }
+      else
+      {
+        alert('error res = ' + res);
+        setError(res.message);
+      }
+      
+    })
+    .catch((err) => {
+      //alert('catch')
+      setLoading(false);
+      setError(err ? err.message : err.message);
+    });*/
+      
   }, []);
 
   return (

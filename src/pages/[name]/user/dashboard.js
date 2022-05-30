@@ -18,6 +18,8 @@ import UserServices from '@services/UserServices';
 import ProductServices from '@services/ProductServices';
 import RecentOrder from '@pages/user/recent-order';
 
+import Loading from '@component/preloader/Loading';
+
 const Dashboard = ({ title, description, children}) => {
   const router = useRouter();
   const {
@@ -84,7 +86,7 @@ const Dashboard = ({ title, description, children}) => {
       
   }
   
-  const { data } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
+  const { data, loading } = useAsync(() => ProductServices.fetchGetDashboardOrderByUserId(
     {
       companyId,
       liffId,
@@ -328,6 +330,9 @@ const Dashboard = ({ title, description, children}) => {
       {
         alert("error = " + e.message);
       }
+
+
+      //alert("init completed")
     /*if (!userInfo) {
       router.push('/');
       
@@ -403,32 +408,41 @@ const Dashboard = ({ title, description, children}) => {
                 <h2 className="text-xl font-serif font-semibold mb-5">
                   แดชบอร์ด
                 </h2>
-                <div className="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-4">
-                  <Card
-                    title="ใบสั่งขาย รวม"
-                    Icon={FiShoppingCart}
-                    quantity={allOrderCount}//{data?.orders?.length}
-                    className="text-red-600  bg-red-200"
-                  />
-                  <Card
-                    title="ใบสั่งขาย รอดำเนินการ"
-                    Icon={FiRefreshCw}
-                    quantity={pendingOrderCount}//{pending.length}
-                    className="text-orange-600 bg-orange-200"
-                  />
-                  <Card
-                    title="ใบสั่งขาย กำลังดำเนินการ"
-                    Icon={FiTruck}
-                    quantity={processingOrderCount}//{processing.length}
-                    className="text-indigo-600 bg-indigo-200"
-                  />
-                  <Card
-                    title="ใบสั่งขาย เสร้จสิ้นแล้ว"
-                    Icon={FiCheck}
-                    quantity={deliveredOrderCount}//{delivered.length}
-                    className="text-emerald-600 bg-emerald-200"
-                  />
-                </div>
+                {
+                  loading 
+                  ?
+                  (
+                    <Loading loading={loading} />
+                  ) 
+                  :
+                  <div className="grid gap-4 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    <Card
+                      title="ใบสั่งขาย รวม"
+                      Icon={FiShoppingCart}
+                      quantity={allOrderCount}//{data?.orders?.length}
+                      className="text-red-600  bg-red-200"
+                    />
+                    <Card
+                      title="ใบสั่งขาย รอดำเนินการ"
+                      Icon={FiRefreshCw}
+                      quantity={pendingOrderCount}//{pending.length}
+                      className="text-orange-600 bg-orange-200"
+                    />
+                    <Card
+                      title="ใบสั่งขาย กำลังดำเนินการ"
+                      Icon={FiTruck}
+                      quantity={processingOrderCount}//{processing.length}
+                      className="text-indigo-600 bg-indigo-200"
+                    />
+                    <Card
+                      title="ใบสั่งขาย เสร้จสิ้นแล้ว"
+                      Icon={FiCheck}
+                      quantity={deliveredOrderCount}//{delivered.length}
+                      className="text-emerald-600 bg-emerald-200"
+                    />
+                  </div>
+                }
+                
                 <RecentOrder />
               </div>
             )}

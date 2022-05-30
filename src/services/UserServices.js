@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 const {tokenForVerify } = require('../config/auth');
 
 //const serviceUrl = 'https://coinpos-prod.azurewebsites.net/lineliff/';
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const JWT_SECRET_FOR_VERIFY = 'lfjfjasjfr09ri09wrilfdjdjgdfgd';
 const JWT_SECRET = 'fgdfgdfgdfgfgfdgdfgdfgfgfgtrgrtg5455454y4646hhgdfg';
 
@@ -33,7 +33,18 @@ const UserServices = {
     //alert("name = " + name + " email = " + email + " password = " + password + " companyId = " + companyId + " dataPath = " + dataPath); 
     
     const isAdded = await findCoinPOSEmail(companyId,email);
+
+    const newUserJson = await RegisterCoinPOSCustomerAccount(companyId,email,password,name);
     
+    //alert('newUser = ' + newUserJson);
+    const newUser = JSON.parse(newUserJson)
+
+    var newUserName = newUser.name;
+    var newUserEmail = newUser.email;
+
+    //alert('newUserName1 = ' + newUserName);
+    //alert('newUserEmail1 = ' + newUserEmail);
+
     if (isAdded) {
       //alert('isAdded');
       return ({
@@ -47,16 +58,22 @@ const UserServices = {
 
     if (token) {
       //alert('verify');
-      jwt.verify(token, JWT_SECRET_FOR_VERIFY, (err, decoded) => {
+      
+
+      var isError = true;
+      var resMsg = '';
+      jwt.verify(token, JWT_SECRET_FOR_VERIFY, async(err, decoded) => {
         if (err) {
+          isError = true;
+          resMsg = err.message;
           //alert('reeor = ' + err.message);
-          return ({
+          /*return ({
             token,
             name: 'newUser.name',
             email: 'newUser.email',
             dataPath:'dataPath',
             message: 'Email Verified, Please Login Now!',
-          });
+          });*/
         } else {
           /*const newUser = new User({
             name,
@@ -64,17 +81,34 @@ const UserServices = {
             password: bcrypt.hashSync(password),
           });
           newUser.save();*/
-          const newUser = RegisterCoinPOSCustomerAccount(companyId,email,password,name);
-          //alert('istoken');
-          return({
+          //alert('newUserName12 = ' + newUserName);
+          //alert('newUserEmail3 = ' + newUserEmail);
+          //alert('token3 = ' + token);
+          //alert('dataPath = ' + dataPath);
+
+          isError = false;
+          resMsg = 'Email Verified, Please Login Now!';
+          
+          //alert('istoken = ' + JSON.stringify(newUser));
+          /*return({
             token,
-            name: newUser.name,
-            email: newUser.email,
+            name: newUserName,
+            email: newUserEmail,
             dataPath:dataPath,
             message: 'Email Verified, Please Login Now!',
-          });
+          });*/
         }
       });
+
+      return ({
+        token,
+        isError:isError,
+        name: newUserName,
+        email: newUserEmail,
+        dataPath:dataPath,
+        message: resMsg//'Email Verified, Please Login Now!',
+      });
+      
     }
   },
   signUpWithProvider(body) {
@@ -135,7 +169,7 @@ const UserServices = {
   },
   async fetchCoinposUserLogin(body) {
     try {
-      const userJson = await findCoinPOSCustomerAccount(body.companyId,body.registerEmail,body.password);
+      const userJson = await findCoinPOSCustomerAccount(body.companyId,body.registerEmail,body.password, body.companyCode, body.catalogName);
       
       
       if(userJson != 'null')
@@ -174,6 +208,8 @@ const UserServices = {
           province: user.province,
           city: user.city,
           district: user.district,
+          isError:user.isError,
+          errorMessage:user.errorMessage
           
   
   
@@ -599,7 +635,7 @@ const UserServices = {
   });
 } */
 
-const findCoinPOSCustomerAccount = async(companyId, email, password) => 
+const findCoinPOSCustomerAccount = async(companyId, email, password,companyCode, catalogName) => 
 {
   try
   {
@@ -609,7 +645,7 @@ const findCoinPOSCustomerAccount = async(companyId, email, password) =>
       method:'POST',
       //credentials:"include",
       headers: {'Content-Type': 'application/json','x-security-lock':'0241CCFF2D40AF7AF8A4FC02272C47A30D15DBDFB36E3266D1296212574F328E'},
-      body:`{"CompanyId":${companyId},"Email":"${email}", "Password":"${password}"}`
+      body:`{"CompanyId":${companyId},"Email":"${email}", "Password":"${password}", "CompanyCode":"${companyCode}","CatalogName":"${catalogName}"}`
       }).then(function(response) {
         return response.text();
       }).then(function(data) {
@@ -708,6 +744,7 @@ const resetCustomerAccountPassword = async(companyId, email, password) =>
 };
 const RegisterCoinPOSCustomerAccount = async(companyId, email, password, name) =>
 {
+  var productList = null;
   try
   {
     await fetch(serviceUrl + 'RegisterCustomerAccount',//fetch('http://localhost:5002/simple-cors3', 

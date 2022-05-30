@@ -169,11 +169,28 @@ const useLoginSubmit = (setModalOpen) => {
     else if (registerEmail && password) {
       //alert("Email " + registerEmail + " password " + password + " paramPath = " + paramPath );
       //return;
+      var companyCode = '';
+      var catalogName = '';
+      if(sessionStorage.getItem('companyCode'))
+      {
+        companyCode = sessionStorage.getItem('companyCode'); 
+        //alert('companyCode = ' + companyCode);
+              
+      }
+      if(sessionStorage.getItem('catalogName'))
+      {
+        catalogName = sessionStorage.getItem('catalogName'); 
+        //alert('catalogName = ' + catalogName);
+              
+      }
+
       var userLogin = await UserServices.fetchCoinposUserLogin({
         registerEmail,
         password,
         companyId,
-        paramPath
+        paramPath,
+        companyCode,
+        catalogName
 
       });
       //if()
@@ -200,41 +217,51 @@ const useLoginSubmit = (setModalOpen) => {
             //router.push(redirect);
 
             //alert('customerId = ' + userLogin.customerId)
-            
-        sessionStorage.removeItem('targetPage');
+            //alert('userLogin.isError = ' + userLogin.isError);
+        if(userLogin.isError === true)
+        {
+          //alert('Error = ' + userLogin.errorMessage);
+          notifyError(userLogin.errorMessage);
+        }
+        else
+        {
+          sessionStorage.removeItem('targetPage');
         
-        sessionStorage.setItem('customerId', userLogin.customerId);
-        sessionStorage.setItem('customerFirstName', userLogin.firstName);
-        sessionStorage.setItem('customerLastName', userLogin.lastName);
-        sessionStorage.setItem('customerEmail', userLogin.email);
-        sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
+          sessionStorage.setItem('customerId', userLogin.customerId);
+          sessionStorage.setItem('customerFirstName', userLogin.firstName);
+          sessionStorage.setItem('customerLastName', userLogin.lastName);
+          sessionStorage.setItem('customerEmail', userLogin.email);
+          sessionStorage.setItem('customerPhoneNumber', userLogin.phone);
 
-        sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
+          sessionStorage.setItem('customerAddressId', userLogin.customerAddressId);
 
 
-        sessionStorage.setItem('address1', userLogin.address1);
-        sessionStorage.setItem('country', userLogin.country);
-        sessionStorage.setItem('province', userLogin.province);
-        sessionStorage.setItem('city', userLogin.city);
-        sessionStorage.setItem('district', userLogin.district);
+          sessionStorage.setItem('address1', userLogin.address1);
+          sessionStorage.setItem('country', userLogin.country);
+          sessionStorage.setItem('province', userLogin.province);
+          sessionStorage.setItem('city', userLogin.city);
+          sessionStorage.setItem('district', userLogin.district);
 
-        sessionStorage.setItem('countryId', userLogin.countryId);
-        sessionStorage.setItem('provinceId', userLogin.provinceId);
-        sessionStorage.setItem('cityId', userLogin.cityId);
-        sessionStorage.setItem('districtId', userLogin.districtId);
-        sessionStorage.setItem('postalcode', userLogin.postalcode);
+          sessionStorage.setItem('countryId', userLogin.countryId);
+          sessionStorage.setItem('provinceId', userLogin.provinceId);
+          sessionStorage.setItem('cityId', userLogin.cityId);
+          sessionStorage.setItem('districtId', userLogin.districtId);
+          sessionStorage.setItem('postalcode', userLogin.postalcode);
 
-        sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
-        sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
-        sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
-        sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
+          sessionStorage.setItem('countrys', JSON.stringify(userLogin.countrys));
+          sessionStorage.setItem('provinces', JSON.stringify(userLogin.provinces));
+          sessionStorage.setItem('cities', JSON.stringify(userLogin.cities));
+          sessionStorage.setItem('districts', JSON.stringify(userLogin.districts));
 
-        //alert('Login Success!3')
-        notifySuccess('Login Success!');
-        dispatch({ type: 'USER_LOGIN', payload: userLogin });
-        Cookies.set('userInfo', JSON.stringify(userLogin));
+          //alert('Login Success!3')
+          notifySuccess('Login Success!');
+          dispatch({ type: 'USER_LOGIN', payload: userLogin });
+          Cookies.set('userInfo', JSON.stringify(userLogin));
 
-        localStorage.setItem('userInfo', JSON.stringify(userLogin));
+          localStorage.setItem('userInfo', JSON.stringify(userLogin));
+        }
+            
+        
       }
       else
       {
@@ -352,7 +379,7 @@ const useLoginSubmit = (setModalOpen) => {
 
         
         var userLogin = res;
-        alert('4 = ' + userLogin.customerAddressId)
+        //alert('4 = ' + userLogin.customerAddressId)
         sessionStorage.removeItem('targetPage');
         
         sessionStorage.setItem('customerId', userLogin.customerId);

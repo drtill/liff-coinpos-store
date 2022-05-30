@@ -172,9 +172,9 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
       
             sessionStorage.setItem('shippings', JSON.stringify(shippingServices));
             sessionStorage.setItem('bankNameAndAccounts', JSON.stringify(bankNameAndAccounts));
-            sessionStorage.setItem('categories', JSON.stringify(categories));
+            //sessionStorage.setItem('categories', JSON.stringify(categories));
 
-            setCategotyJson(JSON.stringify(categories));
+            //setCategotyJson(JSON.stringify(categories));
 
             sessionStorage.setItem('currencySign', currencySign);
             sessionStorage.setItem('linePOSId', linePOSIdData);
