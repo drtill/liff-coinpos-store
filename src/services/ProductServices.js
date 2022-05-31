@@ -1,8 +1,8 @@
 import requests from './httpServices';
 
 //const serviceUrl = 'https://coinpos-prod.azurewebsites.net/lineliff/';
-const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
-//const serviceUrl = 'http://localhost:41781/lineliff/';
+//const serviceUrl = 'https://coinpos-uat.azurewebsites.net/lineliff/';
+const serviceUrl = 'http://localhost:41781/lineliff/';
 const ProductServices = {
   getShowingProducts() {
     return requests.get('/products/show');

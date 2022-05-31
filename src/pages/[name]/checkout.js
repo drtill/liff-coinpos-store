@@ -1609,6 +1609,17 @@ const SaveCustomerInfo = async (companyId) =>
         setCustomerAddressId(customerAddressId);
         setEditCustomerInfo(false);
         setDisableCustomerInfo(true);
+
+        setCountryLabel(countryString);
+        setProvinceLabel(provinceString);
+        setDistrictLabel(districtString);
+        setCityLabel(cityString);
+
+        setCountrySelectorEnable(false);
+        setProvinceSelectorEnable(false);
+        setCitySelectorEnable(false);
+        setDistrictSelectorEnable(false);
+
         clearErrorMessage();
     }
 
@@ -2063,25 +2074,60 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                         
                       </div>
                       {
-                      customerAddressId === 0 ?
+                      customerAddressId === 0 
+                      ?
+                        IsEditCustomerInfo === true ?
+                          <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
+                      
+                            <div className="col-span-6 sm:col-span-3">
+                              <button
+                                type="button"
+                                disabled={isEmpty || isCheckoutSubmit}
+                                onClick={() => SaveCustomerInfo(lineCompanyId)}
+                                className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                              >
+                                บันทึกข้อมูลลูกค้า{' '}
+                                <span className="text-xl ml-2">
+                                  {' '}
+                                  <IoSaveOutline />
+                                </span>
+                              </button>
+                            </div>
+                            <div className="col-span-6 sm:col-span-3">
+                              <button
+                                type="button"
+                                disabled={isEmpty || isCheckoutSubmit}
+                                onClick={() => CancelCustomerInfo()}
+                                className="bg-indigo-50 border border-indigo-100 rounded py-3 text-center text-sm font-medium text-gray-700 hover:text-gray-800 hover:border-gray-300 transition-all flex justify-center font-serif w-full"
+                              >
+                                ยกเลิก{' '}
+                                <span className="text-xl ml-2">
+                                  {' '}
+                                  <IoCloseCircleOutline />
+                                </span>
+                              </button>
+                            </div>
+                        
+                          </div>
+                        :
                         <div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
                           <div className="col-span-6 sm:col-span-3">
                             
                           </div>
-                          <div className="col-span-6 sm:col-span-3">
-                            <button
-                              type="button"
-                              disabled={isEmpty || isCheckoutSubmit}
-                              onClick={() => SaveCustomerInfo(lineCompanyId)}
-                              className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
-                            >
-                              บันทึกข้อมูลลูกค้า{' '}
-                              <span className="text-xl ml-2">
-                                {' '}
-                                <IoSaveOutline />
-                              </span>
-                            </button>
-                          </div>
+                            <div className="col-span-6 sm:col-span-3">
+                                <button
+                                  type="button"
+                                  disabled={isEmpty || isCheckoutSubmit}
+                                  onClick={() => EditCustomerInfo()}
+                                  className="bg-cyan-500 hover:bg-cyan-600 border border-cyan-500 transition-all rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                                >
+                                  แก้ไขข้อมูลลูกค้า{' '}
+                                  <span className="text-xl ml-2">
+                                    {' '}
+                                    <IoCreateOutline />
+                                  </span>
+                                </button>
+                              </div>
                         </div>
                       :
                         

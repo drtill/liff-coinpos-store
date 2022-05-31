@@ -543,7 +543,7 @@ const Order = ({ params }) => {
               <>
                 <Invoice data={data} printRef={printRef} companyName={companyName} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
                   locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-                  locationName={locationName} currencySign={data.currencySign} dataPath={dataPath}/>
+                  locationName={locationName} currencySign={data.currencySign} dataPath={dataPath} />
                         <div className="bg-white p-8 rounded-b-xl">
                           <div className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between">
                             {/* <p>{JSON.stringify(data)}</p>
@@ -551,7 +551,7 @@ const Order = ({ params }) => {
                             <PDFDownloadLink
                               document={<InvoiceForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
                               locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-                              locationName={locationName} companyName={companyName}/>}
+                              locationName={locationName} companyName={companyName} locationEmail={locationEmail} locationTel={locationTel}/>}
                               fileName="Invoice"
                             >
                               {({ blob, url, loading, error }) =>

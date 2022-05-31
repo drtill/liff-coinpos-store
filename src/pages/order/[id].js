@@ -238,7 +238,7 @@ const Order = ({ params }) => {
     useEffect(async () => {
       
       setLoading(true);
-      //alert('Login 0');
+      alert('Login 0');
       var companyId = 0;
       if(sessionStorage.getItem('companyId'))
       {
@@ -248,6 +248,7 @@ const Order = ({ params }) => {
       if(sessionStorage.getItem('catalogName'))
       {
         var catalogNameData = sessionStorage.getItem('catalogName'); 
+        
         setCatalogName(catalogNameData);
               
       }
@@ -277,6 +278,7 @@ const Order = ({ params }) => {
       if(sessionStorage.getItem('locationName'))
       {
         var locationNameData = sessionStorage.getItem('locationName'); 
+        alert('locationNameData = ' + locationNameData)
         setLocationName(locationNameData);
       }
       if(sessionStorage.getItem('locationAddress1'))
@@ -312,11 +314,13 @@ const Order = ({ params }) => {
       if(sessionStorage.getItem('locationEmail'))
       {
         var locationEmailData = sessionStorage.getItem('locationEmail'); 
+        alert('locationEmailData = ' + locationEmailData);
         setLocationEmail(locationEmailData);
       }
       if(sessionStorage.getItem('locationTel'))
       {
         var locationTelData = sessionStorage.getItem('locationTel'); 
+        alert('locationTelData = ' + locationTelData);
         setLocationTel(locationTelData);
       }
       if(sessionStorage.getItem('liffId'))
@@ -551,7 +555,7 @@ const Order = ({ params }) => {
                             <PDFDownloadLink
                               document={<InvoiceForDownload data={data} currencySign={data.currencySign} locationAddress1={locationAddress1} locationAddress2={locationAddress2} locationCity={locationCity}
                               locationStateOrProvince={locationStateOrProvince} locationCountry={locationCountry} locationPostalCode={locationPostalCode}
-                              locationName={locationName} companyName={companyName}/>}
+                              locationName={locationName} companyName={companyName} locationTel={locationTel} locationEmail={locationEmail}/>}
                               fileName="Invoice"
                             >
                               {({ blob, url, loading, error }) =>

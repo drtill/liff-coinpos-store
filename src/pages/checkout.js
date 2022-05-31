@@ -149,7 +149,7 @@ const Checkout = () => {
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
   const [provinceId,setProvinceId] = useState(0);
-  const [districtId,setDistrictId] = useState(0);
+  const [Srikosak,setDistrictId] = useState(0);
   
 
   const [qrShow, setQRShow] = useState(false);
@@ -1067,6 +1067,7 @@ const SaveCustomerInfo = async (companyId) =>
         //alert(JSON.stringify(customerData));
         var customerAddressId = customerData.customerAddressId;
         setCustomerAddressId(customerAddressId);
+        setCityId(2);
         setEditCustomerInfo(false);
         setDisableCustomerInfo(true);
         clearErrorMessage();
