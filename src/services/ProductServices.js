@@ -732,9 +732,9 @@ const ProductServices = {
   async fetchGetProductCategoryService(body){
     try
     {
-      alert('body = ' + JSON.stringify(body))
-      alert("body.catalogName = " + body.catalogName)
-      alert("body.companyCode = " + body.companyCode)
+      //alert('body = ' + JSON.stringify(body))
+      //alert("body.catalogName = " + body.catalogName)
+      //alert("body.companyCode = " + body.companyCode)
 
       var productList = null;
       const products = await fetch(serviceUrl + 'GetOnlyLiffProductCategoryList',//fetch('http://localhost:5002/simple-cors3', 
@@ -751,7 +751,7 @@ const ProductServices = {
 
           console.log("GetData = " + data)
           var obj = JSON.parse(data);
-          alert('data = ' + data);
+          //alert('data = ' + data);
           var pvJson = obj.ProductVariantListJson
           productList = JSON.parse(pvJson)
           
