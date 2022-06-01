@@ -29,7 +29,7 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
   
   
 
-  useEffect(() => 
+  useEffect(async() => 
   {
     setLoading(true);
     //alert("categotyJson = " + categotyJson);
@@ -60,8 +60,8 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
       else
       {
         
-        alert("no Get Category = " + categoriesJson);
-        /*alert('companyName = ' + companyName)
+        //alert("no Get Category = " + categoriesJson);
+        //alert('companyName = ' + companyName)
         
         var companyCodeData = '';
         var catalogNameData = '';
@@ -78,21 +78,95 @@ const Category = ({companyLogo, companyName, dataPath,FilterProduct, page}) => {
           catalogNameData = sessionStorage.getItem('catalogName');
           setCatalogName(catalogNameData); 
         }
-        alert('companyCodeData = ' + companyCodeData);
-        alert('catalogNameData = ' + catalogNameData);*/
+        //alert('companyCodeData = ' + companyCodeData);
+        //alert('catalogNameData = ' + catalogNameData);
 
-        //const productCategorys = await ProductServices.fetchGetProductCategoryService({
-        //  companyCode,
-        //  catalogName
+        const productCategorys = await ProductServices.fetchGetProductCategoryService({
+          companyCode,
+          catalogName
           
-        //});
+        });
+        //alert('category = ' + JSON.stringify(productCategorys))
         setLoading(false);
       }
       
     }
     else
     {
-      alert("Not Get Category");
+      //alert("Not Get Category");
+      //alert('companyName = ' + companyName)
+        
+        var companyCodeData = '';
+        var catalogNameData = '';
+        if(sessionStorage.getItem('companyCode'))
+        {
+              
+          companyCodeData = sessionStorage.getItem('companyCode');
+          setCompanyCode(companyCodeData); 
+        }
+
+        if(sessionStorage.getItem('catalogName'))
+        {
+              
+          catalogNameData = sessionStorage.getItem('catalogName');
+          setCatalogName(catalogNameData); 
+        }
+        //alert('companyCodeData = ' + companyCodeData);
+        //alert('catalogNameData = ' + catalogNameData);
+
+        const productCategorys = await ProductServices.fetchGetProductCategoryService({
+          companyCode:companyCodeData,
+          catalogName:catalogNameData
+          
+        });
+        //alert('category = ' + JSON.stringify(productCategorys))
+
+        var productCategories = [];
+        if(productCategorys.productCategoryPresenters !== undefined)
+          {
+            for(var j = 0;j < productCategorys.productCategoryPresenters.length; j++)
+            {
+    
+            
+              var nests = [];
+              for(var k = 0;k < productCategorys.productCategoryPresenters[j].Products.length; k++)
+              {
+                var children = {};
+                children['_id'] = Number(productCategorys.productCategoryPresenters[j].Products[k].ProductId);
+                children['title'] = productCategorys.productCategoryPresenters[j].Products[k].Name;
+                nests.push(children);
+              }
+              
+    
+              
+              var productCategory = {};
+              productCategory['_id'] = Number(productCategorys.productCategoryPresenters[j].CategoryId);
+              productCategory['parent'] = productCategorys.productCategoryPresenters[j].Name;
+              productCategory['icon'] = productCategorys.productCategoryPresenters[j].ImageUrl;
+              productCategory['children'] = nests;
+    
+              productCategories.push(productCategory);
+    
+    
+            }
+          }
+          sessionStorage.setItem('categories', JSON.stringify(productCategories));
+          try
+          {
+            var categoriesData = productCategories;
+            //alert(JSON.stringify(categoriesData));
+            setCategoryList(categoriesData);
+            
+            setLoading(false);
+            //alert(JSON.stringify(categoriesData))
+          }
+          catch(ex)
+          {
+            //alert("Catagory error : " + ex.message)
+            
+          }
+
+        setLoading(false);
       setLoading(false);
     }
 

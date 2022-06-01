@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom:5
   },
-  invoiceiInfo: {
+  invoiceInfo: {
     fontSize: 10,
     color: '#374151',
     fontFamily: 'Sarabun',
@@ -560,7 +560,7 @@ const InvoiceForDownload = ({ data, currencySign,companyName, locationName, loca
             </View>
             <View>
               <Text style={styles.title}>หมายเลขใบเรียกเก็บเงิน</Text>
-              <Text style={styles.invoiceiInfo}>#{data.invoiceNumber}</Text>
+              <Text style={styles.invoiceInfo}>#{data.invoiceNumber}</Text>
             </View>
             
             
@@ -618,7 +618,7 @@ const InvoiceForDownload = ({ data, currencySign,companyName, locationName, loca
 
           <View style={styles.invoiceSecond2}>
             <View>
-              <Text style={styles.employeeTitle}>พนักงานขาย {data.employeeName}</Text>
+              <Text style={styles.employeeTitle}>พนักงานขาย {data.orderEmployee}</Text>
               {/* <Text style={styles.info}>
                 {data.orderDate !== undefined && (
                   <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
@@ -704,7 +704,7 @@ const InvoiceForDownload = ({ data, currencySign,companyName, locationName, loca
                   <View style={styles.summaryListTableCol2}>
                     <Text style={styles.summaryCell1}>
                       {' '}
-                      <span style={styles.summaryBold}>subtotal</span>{' '}
+                      <span style={styles.summaryBold}>ยอดขาย</span>{' '}
                     </Text>
                   </View>
 

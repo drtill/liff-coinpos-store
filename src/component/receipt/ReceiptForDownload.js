@@ -28,7 +28,18 @@ Font.register({ family: 'Kanit',
       src: 'https://fonts.gstatic.com/s/kanit/v11/nKKX-Go6G5tXcr72GwU.ttf',
     }
   ]  });
-
+Font.register({ family: 'Sarabun',
+  fonts:[
+    {
+      src: 'https://fonts.gstatic.com/s/sarabun/v13/DtVjJx26TKEr37c9WBI.ttf',
+    }
+  ]  });
+Font.register({ family: 'SarabunBold',
+  fonts:[
+    {
+      src: 'https://fonts.gstatic.com/s/sarabun/v13/DtVmJx26TKEr37c9YK5sulw.ttf',
+    }
+  ]  });
 Font.register({
   family: 'DejaVu Sans',
   fonts: [
@@ -51,14 +62,163 @@ const styles = StyleSheet.create({
     paddingRight: 60,
     lineHeight: 1.5,
   },
+  paymentTable: {
+    display: 'table',
+    width: 'auto',
+    borderColor: '#d1d5db',
+    marginTop:10
+    
+  },
+  paymentMethodHeaderTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  paymentMethodListTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  approvedByHeaderTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  approvedByListTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  dueDateHeaderTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  dueDateListTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  payAmountHeaderTableCol: {
+    width: '40%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  payAmountListTableCol: {
+    width: '40%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+   addressTable: {
+    display: 'table',
+    width: 'auto',
+    borderColor: '#d1d5db',
+    
+  },
+  addressTableRow: {
+    margin: 'auto',
+    flexDirection: 'row',
+    color: '#B9D1EA',
+    backgroundColor:'#B9D1EA',
+    marginLeft:0,
+    marginRight:0
+  },
+  addressTableInfoRow: {
+    margin: 'auto',
+    flexDirection: 'row',
+    marginLeft:0,
+    marginRight:0
+  },
+  
+  addressTableCol: {
+    width: '50%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#C0C0C0',
+  },
+  addressTableCell: {
+    margin: 'auto',
+    marginTop: 5,
+    fontSize: 10,
+    fontFamily: 'Sarabun',
+  },
+  addressHeader: {
+    color:'#696969',
+    fontSize: 11,
+    fontFamily: 'Sarabun',
+    fontWeight: 'bold',
+    paddingLeft:5,
+    marginLeft:5
+  },
+  addressInfo: {
+    //color:'#000000',
+    fontSize: 10,
+    fontFamily: 'Sarabun',
+    paddingTop:2,
+    paddingLeft:5,
+    
+  },
+  
   table: {
     display: 'table',
     width: 'auto',
     borderColor: '#d1d5db',
     color: '#4b5563',
   },
+  summaryTable: {
+    display: 'table',
+    width: 'auto',
+    
+  },
   tableRow: {
     margin: 'auto',
+    flexDirection: 'row',
+  },
+  summaryTableRow: {
     flexDirection: 'row',
   },
   tableCol: {
@@ -69,45 +229,212 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderColor: '#d1d5db',
   },
+
+  summaryListTableCol1: {
+    width: '60%',
+    borderStyle:'solid',
+    borderWidth: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth:0,
+    borderRightWidth:0,
+    
+  },
+  summaryListTableCol2: {
+    width: '20%',
+    borderStyle:'solid',
+    borderWidth: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth:0,
+    borderRightWidth:0,
+    
+  },
+  summaryListTableCol3: {
+    width: '20%',
+    borderStyle:'solid',
+    borderWidth: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth:0,
+    borderRightWidth:0,
+    
+  },
+  orderDetailHeaderTableRow: {
+    margin: 'auto',
+    flexDirection: 'row',
+    color: '#c0c0c0',
+    backgroundColor:'#c0c0c0',
+    marginLeft:0,
+    marginRight:0
+  },
+  orderHeaderTableCol: {
+    width: '15%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  orderListTableCol: {
+    width: '15%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+
+  productHeaderTableCol: {
+    width: '30%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  productListTableCol: {
+    width: '30%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  qtyHeaderTableCol: {
+    width: '15%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  qtyListTableCol: {
+    width: '15%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  unitPriceHeaderTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  unitPriceListTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
+  amountHeaderTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+    
+    
+  },
+  amountPriceListTableCol: {
+    width: '20%',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth:1,
+    borderRightWidth:1,
+    borderColor: '#d1d5db',
+  },
   tableCell: {
     margin: 'auto',
     marginTop: 5,
     fontSize: 10,
     fontFamily: 'Kanit',
   },
+  orderDetailTableCell: {
+    margin: 'auto',
+    marginTop: 5,
+    fontSize: 10,
+    fontFamily: 'Sarabun',
+  },
 
-  invoiceFirst: {
+  receiptFirst: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 20,
+    paddingBottom: 5,
     borderBottom: 0.5,
   },
-  invoiceSecond: {
+  receiptSecond: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
-  invoiceThird: {
+  receiptSecond1: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 50,
-    paddingBottom: 20,
+    paddingTop: 0,
+    paddingBottom: 5,
+  },
+  receiptSecond2: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  receiptThird: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 5,
+    paddingBottom: 0,
   },
   logo: {
-    width: 30,
-    height: 30,
-    bottom: 5,
+    width: 96,
+    height: 96,
+    paddingTop:'flex-start',
+    alignItems:'flex-start',
+    alignContent:'flex-start',
+    alignSelf:'flex-start'
   },
   title: {
     color: '#111827',
-    fontFamily: 'Kanit',
+    fontFamily: 'Sarabun',
     fontWeight: 'bold',
     fontSize: 13,
   },
@@ -117,9 +444,69 @@ const styles = StyleSheet.create({
     fontFamily: 'Kanit',
     
   },
+
+  companyNameInfo: {
+    fontSize: 16,
+    color: '#000000',
+    fontFamily: 'SarabunBold',
+    fontWeight: 'bold',
+    paddingBottom:5
+  },
+  locationInfo: {
+    fontSize: 12,
+    color: '#000000',
+    fontFamily: 'Sarabun',
+    paddingTop:0,
+    paddingBottom:0
+  },
+  receiptTitle: {
+    fontSize: 20,
+    color: '#000000',
+    fontFamily: 'SarabunBold',
+    fontWeight: 'bold',
+    textAlign:'left',
+    paddingTop: 5,
+    paddingBottom:5
+  },
+  receiptInfo: {
+    fontSize: 10,
+    color: '#374151',
+    fontFamily: 'Sarabun',
+    textAlign:'right',
+    
+  },
+  barcode: {
+    width: 192,
+    height: 48,
+    bottom: 5,
+  },
+  dateTitle: {
+    fontSize: 10,
+    color: '#000000',
+    fontFamily: 'Sarabun',
+    paddingTop:0,
+    paddingBottom:0
+  },
+  employeeTitle: {
+    fontSize: 10,
+    color: '#696969',
+    fontFamily: 'Sarabun',
+    paddingTop:0,
+    paddingLeft:5,
+    paddingBottom:0
+  },
+  statusTitle: {
+    fontSize: 12,
+    color: '#000000',
+    fontFamily: 'Sarabun',
+    fontWeight: 'bold',
+    paddingTop:0,
+    paddingLeft:5,
+    paddingBottom:0
+  },
   amount: {
     fontSize: 10,
-    fontFamily: 'Kanit',
+    fontFamily: 'Sarabun',
     color: '#ef4444',
   },
   status: {
@@ -128,21 +515,59 @@ const styles = StyleSheet.create({
   quantity: {
     color: '#1f2937',
   },
+  summaryBold: {
+    color: '#1f2937',
+    fontFamily: 'Sarabun',
+    fontWeight:'bold'
+  },
+  summary: {
+    color: '#1f2937',
+    fontFamily: 'Sarabun',
+    
+  },
   header: {
     color: '#111827',
     fontSize: 11,
-    fontFamily: 'Kanit',
+    fontFamily: 'Sarabun',
     fontWeight: 'bold',
+  },
+  orderDetailHeader: {
+    color: '#696969',
+    fontSize: 11,
+    fontFamily: 'Sarabun',
+    fontWeight: 'bold',
+  },
+  orderDetailCell: {
+    
+    margin: 'auto',
+    marginTop: 5,
+    fontSize: 10,
+    fontFamily: 'Sarabun',
+  },
+  summaryCell1: {
+    
+    textAlign:'right',
+    marginTop: 5,
+    fontSize: 10,
+    fontFamily: 'Sarabun',
+  },
+  summaryCell2: {
+    
+    textAlign:'right',
+    marginTop: 5,
+    marginRight:2,
+    fontSize: 10,
+    fontFamily: 'Sarabun',
   },
 
   thanks: {
     color: '#22c55e',
-    fontFamily: 'Kanit',
+    fontFamily: 'Sarabun',
   },
 });
 
 const ReceiptForDownload = ({ data, currencySign,companyName, locationName, locationAddress1,locationAddress2,locationCity,locationStateOrProvince,locationCountry,locationPostalCode,
-  locationEmail,locationTel }) => {
+  locationEmail,locationWebsite,locationTel }) => {
 
     const [companyLogo,setCompanyLogo] = useState('')
   useEffect(() =>
@@ -159,134 +584,279 @@ const ReceiptForDownload = ({ data, currencySign,companyName, locationName, loca
     <>
       <Document>
         <Page size="A4" style={styles.page}>
-          <View style={styles.invoiceFirst}>
+        <View style={styles.receiptFirst}>
             <View>
-              <Text style={{ fontFamily: 'Kanit', fontWeight: 'bold' }}>
-                ใบเสร็จรับเงิน
+              <Text style={styles.companyNameInfo}>
+                {companyName}
               </Text>
-              <Text style={styles.info}>
-                สถานะ :{' '}
-                {data.orderStatus === 'Draft' && (
-                  <span style={{ color: '#eab308' }}>{data.orderStatus}</span>
-                )}
-                {data.orderStatus === 'Active' && (
-                  <span style={{ color: '#14b8a6' }}>{data.orderStatus}</span>
-                )}
-                {data.orderStatus === 'Finalized' && (
-                  <span style={{ color: '#14b8a6' }}>{data.orderStatus}</span>
-                )}
-                {data.orderStatus === 'Fulfilled' && (
-                  <span style={{ color: '#22c55e' }}>{data.orderStatus}</span>
-                )}
-                {data.orderStatus === 'Canceled' && (
-                  <span style={{ color: '#f43f5e' }}>{data.orderStatus}</span>
-                )}
+              <Text style={styles.locationInfo}>
+                สาขา: {locationName}
               </Text>
+              <Text style={styles.locationInfo}>
+                เลขประจำตัวผู้เสียภาษีอากร: {locationName}
+              </Text>
+              <Text style={styles.locationInfo}>
+                {locationAddress1} {locationAddress2} {locationCity} {locationStateOrProvince}
+              </Text>
+
+              <Text style={styles.locationInfo}> {locationCountry} {locationPostalCode}</Text>
+              <Text style={styles.locationInfo}> Phone: {locationTel}</Text>
+              <Text style={styles.locationInfo}> e-mail: {locationEmail}</Text>
+              <Text style={styles.locationInfo}> Website: {locationWebsite}</Text>
+
+
             </View>
             <View>
               <Image style={styles.logo} src={companyLogo} />
 
-              <Text style={styles.info}>
-                {companyName}
-              </Text>
-              <Text style={styles.info}>
-                สาขา: {locationName}
-              </Text>
-              <Text style={styles.info}>
-                {locationAddress1} {locationAddress2} {locationCity} {locationStateOrProvince}
-              </Text>
-
-              <Text style={styles.info}> {locationCountry} {locationPostalCode}</Text>
-              <Text style={styles.info}> {locationEmail} {locationTel}</Text>
             </View>
           </View>
 
-          <View style={styles.invoiceSecond}>
+          <View style={styles.receiptSecond}>
             <View>
-              <Text style={styles.title}>วันที่</Text>
-              <Text style={styles.info}>
-                {data.orderDate !== undefined && (
-                  <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
-                )}
+              <Text style={styles.receiptTitle}>
+                RECEIPT/ใบเสร็จรับเงิน
               </Text>
             </View>
             <View>
               <Text style={styles.title}>หมายเลขใบเสร็จรับเงิน</Text>
-              <Text style={styles.info}>#{data.receiptNumber}</Text>
+              <Text style={styles.receiptInfo}>#{data.receiptNumber}</Text>
+            </View>
+            
+            
+          </View>
+
+          <View style={styles.receiptSecond1}>
+            <View>
+              <Text style={styles.dateTitle}>วันที่ {data.orderDate !== undefined && (
+                  <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
+                )}</Text>
+              {/* <Text style={styles.info}>
+                {data.orderDate !== undefined && (
+                  <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
+                )}
+              </Text> */}
+            </View>
+            
+            
+          </View>
+
+          <View style={styles.addressTable}>
+            <View style={styles.addressTableRow}>
+              <View style={styles.addressTableCol}>
+                <Text style={styles.addressTableCell}>
+                  <span style={styles.addressHeader}>ที่อยู่เรียกเก็บเงิน </span>
+                </Text>
+              </View>
+              <View style={styles.addressTableCol}>
+                <Text style={styles.addressTableCell}>
+                  <span style={styles.addressHeader}>ที่อยู่จัดส่ง</span>
+                </Text>
+              </View>
+              
+            </View>
+            <View style={styles.addressTableInfoRow}>
+                <View style={styles.addressTableCol}>
+                  <Text style={styles.addressInfo}>{data.customerName}</Text>
+                  <Text style={styles.addressInfo}>{data.customerMobile}</Text>
+                  <Text style={styles.addressInfo}>{data.shippingAddress === null ? "" : (data.shippingAddress === undefined ? "" : data.shippingAddress)}</Text>
+                  <Text style={styles.addressInfo}>
+                    {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
+                  </Text>
+                  
+                </View>
+                <View style={styles.addressTableCol}>
+                  <Text style={styles.addressInfo}>{data.customerName}</Text>
+                  <Text style={styles.addressInfo}>{data.customerMobile}</Text>
+                  <Text style={styles.addressInfo}>{data.shippingAddress === null ? "" : (data.shippingAddress === undefined ? "" : data.shippingAddress)} </Text>
+                  <Text style={styles.addressInfo}>
+                    {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
+                  </Text>
+                </View>
+                
+              </View>
+            
+          </View>
+
+          <View style={styles.receiptSecond2}>
+            <View>
+               <Text style={styles.employeeTitle}>พนักงานขาย {data.orderEmployee}</Text>
+              {/* <Text style={styles.info}>
+                {data.orderDate !== undefined && (
+                  <span>{dayjs(data?.orderDate).format('MMMM D, YYYY')}</span>
+                )}
+              </Text> */}
             </View>
             <View>
-              <Text style={styles.title}>ที่อยู่เรียกเก็บเงิน</Text>
-              <Text style={styles.info}>{data.customerName}</Text>
-              {/* <Text style={styles.info}> {data.shippingToAddress === null ? "" : (data.shippingToAddress === undefined ? "" : data.shippingToAddress.substring(0, 25))}</Text> */}
-              <Text style={styles.info}> {data.shippingAddress === null ? "" : (data.shippingAddress === undefined ? "" : data.shippingAddress.substring(0, 25))}</Text>
-              <br/>
-              <Text style={styles.info}>
-                {data.shippingCity}, {data.shippingCountry}, {data.shippingZipCode}
-              </Text>
+              <Text style={styles.statusTitle}>สถานะ: {data.orderStatus}</Text>
             </View>
+            
+            
           </View>
+
           <View style={styles.table}>
-            <View style={styles.tableRow}>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  <span style={styles.header}>ลำดับ </span>
+            <View style={styles.orderDetailHeaderTableRow}>
+              <View style={styles.orderHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>ลำดับ </span>
                 </Text>
               </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  <span style={styles.header}>ชื่อสินค้า</span>
+              <View style={styles.productHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>รายการ</span>
                 </Text>
               </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  <span style={styles.header}>จำนวน </span>
+              <View style={styles.qtyHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>หน่วย </span>
                 </Text>
               </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
-                  <span style={styles.header}>ราคาต่อหน่วย</span>
+              <View style={styles.unitPriceHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>ราคาต่อหน่วย</span>
                 </Text>
               </View>
 
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>
+              <View style={styles.amountHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  
                   {' '}
-                  <span style={styles.header}>ยอดรวม</span>
+                  <span style={styles.orderDetailHeader}>รวม</span>
                 </Text>
               </View>
             </View>
             {data?.orderDetails?.map((item, i) => (
               <View key={i} style={styles.tableRow}>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{i + 1} </Text>
+                <View style={styles.orderListTableCol}>
+                  <Text style={styles.orderDetailCell}>{i + 1} </Text>
                 </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{item.productVariantName} </Text>
+                <View style={styles.productListTableCol}>
+                  <Text style={styles.orderDetailCell}>{item.productVariantName} </Text>
                 </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>
+                <View style={styles.qtyListTableCol}>
+                  <Text style={styles.orderDetailCell}>
                     {' '}
                     <span style={styles.quantity}>{item.quantity}</span>{' '}
                   </Text>
                 </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>
+                <View style={styles.unitPriceListTableCol}>
+                  <Text style={styles.orderDetailCell}>
                     {' '}
-                    <span style={styles.quantity}>${item.productVariantPrice}.00</span>{' '}
+                    <span style={styles.quantity}>{currencySign}{item.productVariantPrice}.00</span>{' '}
                   </Text>
                 </View>
 
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>
-                    <span style={styles.amount}>${parseInt(item.quantity) * parseFloat(item.productVariantPrice)}.00</span>{' '}
+                <View style={styles.amountPriceListTableCol}>
+                  <Text style={styles.orderDetailCell}>
+                    <span style={styles.amount}>{currencySign}{parseInt(item.quantity) * parseFloat(item.productVariantPrice)}.00</span>{' '}
                   </Text>
                 </View>
               </View>
             ))}
           </View>
+          
+          
 
-          <View style={styles.invoiceThird}>
+          <View style={styles.receiptThird}>
+            <View style={styles.summaryTable}>
+              
+                <View style={styles.summaryTableRow}>
+                  <View style={styles.summaryListTableCol1}>
+                  
+                  </View>
+                
+                  <View style={styles.summaryListTableCol2}>
+                    <Text style={styles.summaryCell1}>
+                      {' '}
+                      <span style={styles.summaryBold}>ยอดขาย</span>{' '}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryListTableCol3}>
+                    <Text style={styles.summaryCell2}>
+                      <span style={styles.summaryBold}>{currencySign}{Math.round(data.subTotal)}.00</span>{' '}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.summaryTableRow}>
+                  <View style={styles.summaryListTableCol1}>
+                  
+                  </View>
+                
+                  <View style={styles.summaryListTableCol2}>
+                    <Text style={styles.summaryCell1}>
+                      {' '}
+                      <span style={styles.summary}>ส่วนลด</span>{' '}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryListTableCol3}>
+                    <Text style={styles.summaryCell2}>
+                      <span style={styles.summary}>{currencySign}{Math.round(data.totalDiscount)}.00</span>{' '}
+                    </Text>
+                  </View>
+                </View>
+                
+                <View style={styles.summaryTableRow}>
+                  <View style={styles.summaryListTableCol1}>
+                  
+                  </View>
+                
+                  <View style={styles.summaryListTableCol2}>
+                    <Text style={styles.summaryCell1}>
+                      {' '}
+                      <span style={styles.summary}>ภาษี{'(' + data.taxRate + '%)'}</span>{' '}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryListTableCol3}>
+                    <Text style={styles.summaryCell2}>
+                      <span style={styles.summary}>{currencySign}{Math.round(data.taxAmount)}.00</span>{' '}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.summaryTableRow}>
+                  <View style={styles.summaryListTableCol1}>
+                  
+                  </View>
+                
+                  <View style={styles.summaryListTableCol2}>
+                    <Text style={styles.summaryCell1}>
+                      {' '}
+                      <span style={styles.summary}>ค่าขนส่งและอื่นๆ</span>{' '}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryListTableCol3}>
+                    <Text style={styles.summaryCell2}>
+                      <span style={styles.summary}>{currencySign}{Math.round(data.shippingFee)}.00</span>{' '}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.summaryTableRow}>
+                  <View style={styles.summaryListTableCol1}>
+                  
+                  </View>
+                
+                  <View style={styles.summaryListTableCol2}>
+                    <Text style={styles.summaryCell1}>
+                      {' '}
+                      <span style={styles.summaryBold}>รวมที่ต้องชำระ</span>{' '}
+                    </Text>
+                  </View>
+
+                  <View style={styles.summaryListTableCol3}>
+                    <Text style={styles.summaryCell2}>
+                      <span style={styles.summaryBold}>{currencySign}{Math.round(data.orderTotal)}.00</span>{' '}
+                    </Text>
+                  </View>
+                </View>
+              </View>
             <View>
+              
+            </View>
+            
+            {/* <View>
               <Text style={styles.title}>รูปแบบชำระเงิน {' '}</Text>
               <Text style={styles.info}> {data.paymentMethod} </Text>
             </View>
@@ -304,9 +874,63 @@ const ReceiptForDownload = ({ data, currencySign,companyName, locationName, loca
             <View>
               <Text style={styles.title}>ยอดชำระรวม {' '}</Text>
               <Text style={styles.amount}>{currencySign}{Math.round(data.orderTotal)}.00</Text>
-            </View>
+            </View> */}
           </View>
 
+          <View style={styles.paymentTable}>
+            <View style={styles.orderDetailHeaderTableRow}>
+              <View style={styles.paymentMethodHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>วิธีการชำระเงิน </span>
+                </Text>
+              </View>
+              <View style={styles.approvedByHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>ผู้รับเงิน/อนุมัติโดย</span>
+                </Text>
+              </View>
+              <View style={styles.dueDateHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>กำหนดชำระเงิน  </span>
+                </Text>
+              </View>
+              <View style={styles.payAmountHeaderTableCol}>
+                <Text style={styles.orderDetailTableCell}>
+                  <span style={styles.orderDetailHeader}>ยอดที่ชำระ  </span>
+                </Text>
+              </View>
+
+              
+            </View>
+            {data?.paymentDetails?.map((item, i) => (
+              <View key={i} style={styles.tableRow}>
+                <View style={styles.paymentMethodListTableCol}>
+                  <Text style={styles.orderDetailCell}>{item.paymentMethod} </Text>
+                </View>
+                <View style={styles.approvedByListTableCol}>
+                  <Text style={styles.orderDetailCell}>{item.approveBy} </Text>
+                </View>
+                <View style={styles.dueDateListTableCol}>
+                  <Text style={styles.orderDetailCell}>
+                    {' '}
+                    <span style={styles.quantity}>
+                      {item.dueDate !== undefined && (
+                        dayjs(item.dueDate).format('MMMM D, YYYY')
+                     )}
+                    </span>{' '}
+                  </Text>
+                </View>
+                <View style={styles.payAmountListTableCol}>
+                  <Text style={styles.orderDetailCell}>
+                    {' '}
+                    <span style={styles.quantity}>{currencySign}{item.paymentAmount}.00</span>{' '}
+                  </Text>
+                </View>
+
+                
+              </View>
+            ))}
+          </View>
           <View
             style={{
               textAlign: 'center',
