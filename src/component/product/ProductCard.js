@@ -8,6 +8,7 @@ import ProductServices from '@services/ProductServices';
 import Price from '@component/common/Price';
 import Discount from '@component/common/Discount';
 import ProductModal from '@component/modal/ProductModal';
+
 //import { order } from 'tailwindcss/defaulttheme';
 
 const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId, companyId, companyCode, locationId, pictureUrl }) => {
@@ -337,16 +338,17 @@ const ProductCard = ({ product, liffId, lineUserId, linePOSId, groupId, orderId,
         >
           {product.quantity <= 0 && (
             <span className="absolute inline-flex items-center justify-center px-2 py-1 bg-red-100 text-red-600 border-0 rounded-full text-xs font-semibold font-serif z-10 left-4 top-4">
-              Stock Out
+              Out of stock
             </span>
           )}
           {/* <Discount product={product} /> */}
 
           <Image
-            src={product.image}
+            src={product.image ? product.image : '/icon-512x512.png'}
             width={160}
             height={160}
             alt={product.title}
+            //onError={}
             className="object-cover transition duration-150 ease-linear transform group-hover:scale-105"
           />
         </div>

@@ -134,6 +134,7 @@ const AllProduct = () => {
         {
             var lineCompanyIdData = sessionStorage.getItem('companyId');
             companyId = lineCompanyIdData;
+            //alert('lineCompanyIdData = ' + lineCompanyIdData)
             setCompanyId(lineCompanyIdData);
         }
         if(sessionStorage.getItem('locationId'))
@@ -381,7 +382,7 @@ const AllProduct = () => {
       
 
       
-      pagingManager(currentPage,countPage);
+      pagingManager(currentPage,countPage, companyId, locationId);
       
       setProductList(productVariants);
 
@@ -616,6 +617,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
     {
       //alert('refreshMode = ' + refreshMode);
 
+      //alert('companyId = ' + companyId);
       setLoading(true);
       
       query = query === undefined ? 'null' : query;
@@ -642,8 +644,14 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       currentPage = products.currentPage;
       countPage = products.countPage;
       var productVariants = [];//products.productVariantPresenters;
+
+      //alert("products.productVariantPresenters = " + JSON.stringify(products.productVariantPresenters))
       if(products !== undefined)
       {
+        //if(products.productVariantPresenters === 'undefined')
+        //{
+          //alert('products.productVariantPresenters is null');
+        //}
         if(products.productVariantPresenters !== undefined)
         {
           for(var i = 0;i < products.productVariantPresenters.length; i++)
@@ -694,7 +702,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       
       
 
-      pagingManager(currentPage,countPage);
+      pagingManager(currentPage,countPage, companyId, locationId);
       setProductList(productVariants);
 
 
@@ -703,7 +711,7 @@ const SetPromotionData = (promotionCode,promotionEndTime,promotionMinimumAmount,
       setLoading(false);
     }
 
-    const pagingManager = (currentPage,countPage) =>
+    const pagingManager = (currentPage,countPage, companyId, locationId) =>
     {
       var allPage = countPage;
       var startPage = 1;

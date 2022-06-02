@@ -213,6 +213,7 @@ const Details = ({params,targetPage,dataPath,title,description, liffEndpoint,lif
             var lineLiffUserId = '';
             if(coinPOSLiffData.includes('liffId'))
             {
+              alert('liffId = ' + coinPOSLiffData)
               if(isLiffLogin === true)
               {
                 coinPOSLiffData = coinPOSLiffData.replaceAll("%3D","=");
@@ -1712,12 +1713,12 @@ export const getServerSideProps = async ({req, res,params }) => {
     const description = "CoinPOS Ecommerce Platform - All-in-one, heavy-duty, cost-effective and modern ecommerce platform for business of all sizes.";
 
 
-    //coinPOSLiffData = coinPOSLiffData.replaceAll("%3D","=");
-    //coinPOSLiffData = coinPOSLiffData.replaceAll("%26","&");
-    //coinPOSLiffData = coinPOSLiffData.replaceAll("%3F","?");
-    //coinPOSLiffData = coinPOSLiffData.replaceAll("%2F","/");
+    coinPOSLiffData = coinPOSLiffData.replaceAll("%3D","=");
+    coinPOSLiffData = coinPOSLiffData.replaceAll("%26","&");
+    coinPOSLiffData = coinPOSLiffData.replaceAll("%3F","?");
+    coinPOSLiffData = coinPOSLiffData.replaceAll("%2F","/");
 
-    console.log('coinPOSLiffData = ' + coinPOSLiffData);
+    console.log('...coinPOSLiffData = ' + coinPOSLiffData);
   if(coinPOSLiffData.length > 0)
   {
     if(!coinPOSLiffData.includes('liffId'))
@@ -1970,6 +1971,13 @@ export const getServerSideProps = async ({req, res,params }) => {
 
 
   console.log('compile completed liffId = ' + liffId);
+  console.log('compile completed groupId = ' + groupId);
+  console.log('compile completed liffCompanyId = ' + liffCompanyId);
+  console.log('compile completed linePOSID = ' + linePOSId);
+  console.log('compile completed lineUSERID = ' + lineUserId);
+
+
+
   if(liffId.length > 0)
   {
 
@@ -1988,6 +1996,7 @@ export const getServerSideProps = async ({req, res,params }) => {
   {
     dataPath = coinPOSLiffData;
   }
+  console.log('compile completed dataPath = ' + dataPath);
   return {
     props: {
         params: dataParam,

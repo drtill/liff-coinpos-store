@@ -1481,7 +1481,7 @@ export const getServerSideProps = async ({req, res,params }) => {
     var liffCompanyId = 0;
     var liffLocationId = 0;
 
-    //console.log('dataParam = ' + dataParam);
+    console.log('dataParam = ' + dataParam);
     //console.log('req.url = ' + req.url);
 
     if(coinPOSData.length > 0)

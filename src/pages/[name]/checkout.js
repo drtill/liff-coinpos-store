@@ -1191,7 +1191,7 @@ const Checkout = () => {
     var shipping = shippingServices.filter((x) => x.value === shippingData);
     if(shipping.length > 0)
     {
-      shippingName = shipping.label;
+      shippingName = shipping[0].label;
     }
     /*for(var i = 0; i<shippingServices.length;i++)
     {
@@ -2205,7 +2205,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                         <>
                           <br/>
                           <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย {customerAddressId}
+                            กรุณาบันทึกข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย 
                           </h2>
                         </> 
                       : 
@@ -2213,7 +2213,7 @@ const checkValid = (firstName, lastName, email, phoneNumber, address1, countryId
                           <>
                             <br/>
                             <h2 className="font-semibold font-serif text-base text-center text-gray-700 pb-3">
-                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย {customerAddressId}
+                              กรุณาอนุมัติข้อมูลลูกค้า ก่อนอนุมัติคำสั่งขาย 
                             </h2>
                           </>
                         :
